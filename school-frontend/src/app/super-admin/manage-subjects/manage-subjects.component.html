@@ -1,0 +1,174 @@
+<div class="module-wrapper">
+
+  <!-- ── Page Header ──────────────────────────────────────── -->
+  <div class="module-header">
+    <div class="module-title">
+      <span class="material-icons">menu_book</span>
+      <div>
+        <h2>Manage Subjects</h2>
+        <p>Configure and assign academic subjects and course codes</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="meta-badge mr-2">
+        <span class="material-icons">import_contacts</span>
+        {{ subjects.length }} Total
+      </div>
+      <button (click)="openSubjectModal()" class="action-btn btn-admit">
+        <span class="material-icons">add</span>
+        Add Subject
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Filter Bar ────────────────────────────────────────── -->
+  <div class="filter-bar">
+
+    <!-- Search -->
+    <div class="filter-search">
+      <span class="material-icons search-icon">search</span>
+      <input type="text" placeholder="Search by subject name, code, or class…" [(ngModel)]="searchText" class="search-input" />
+      @if (searchText) {
+      <button class="clear-input" (click)="searchText = ''">
+        <span class="material-icons">close</span>
+      </button>
+      }
+    </div>
+
+    <!-- Results count + Clear -->
+    <div class="filter-actions">
+      <span class="result-count">
+        <strong>{{ filteredSubjects.length }}</strong> of {{ subjects.length }} records
+      </span>
+      @if (hasActiveFilter) {
+      <button class="btn-clear-all" (click)="clearFilters()">
+        <span class="material-icons">filter_alt_off</span>
+        Clear Filters
+      </button>
+      }
+    </div>
+  </div>
+
+  <!-- ── Table ─────────────────────────────────────────────── -->
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Subject Code</th>
+          <th>Subject Name</th>
+          <th>Assigned Class</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (s of filteredSubjects; track s.id; let i = $index) {
+        <tr class="data-row">
+          <td class="row-index">{{ i + 1 }}</td>
+          <td class="mono font-bold">{{ s.code }}</td>
+          <td class="student-cell">
+            <div class="avatar-name">
+              <div class="avatar-circle">{{ s.name?.charAt(0) }}</div>
+              <span>{{ s.name }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="class-chip">
+              {{ s.Class ? s.Class.name + ' – ' + s.Class.section : 'Unassigned' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button class="action-btn btn-admit" title="Edit Subject" (click)="openSubjectModal(s)">
+              <span class="material-icons">edit</span>
+              Edit
+            </button>
+            <button class="action-btn btn-reject" title="Delete Subject" (click)="delete.emit(s.id)">
+              <span class="material-icons">delete</span>
+              Delete
+            </button>
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="5" class="empty-state">
+            <span class="material-icons">
+              {{ hasActiveFilter ? 'search_off' : 'menu_book' }}
+            </span>
+            <p>{{ hasActiveFilter ? 'No subjects match your filters.' : 'No academic subjects registered yet.' }}</p>
+            @if (hasActiveFilter) {
+            <button class="btn-clear-empty" (click)="clearFilters()">Clear Filters</button>
+            }
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SUBJECT MODAL -->
+@if (activeModal === 'subject') {
+  <div class="modal-overlay" (click)="setModal.emit(null)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">{{ selectedSubject() ? 'edit' : 'add' }}</span>
+          </div>
+          <div>
+            <h3>{{ selectedSubject() ? 'Edit Subject Details' : 'Create New Subject' }}</h3>
+            <p>{{ selectedSubject() ? subjectForm.name + ' (' + subjectForm.code + ')' : 'Fill in the details to setup a new subject' }}</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="setModal.emit(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="submitSubject()">
+          <div class="form-row mb-3">
+            <div class="form-group">
+              <label>
+                <span class="material-icons">menu_book</span>
+                Subject Name
+              </label>
+              <input type="text" class="form-control" placeholder="e.g. Mathematics" [(ngModel)]="subjectForm.name" name="s_name" required />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <span class="material-icons">vpn_key</span>
+                Subject Code
+              </label>
+              <input type="text" class="form-control" placeholder="e.g. MATH101" [(ngModel)]="subjectForm.code" name="s_code" required />
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label>
+              <span class="material-icons">class</span>
+              Assign to Academic Class
+            </label>
+            <select class="form-control" [(ngModel)]="subjectForm.class_id" name="s_class" required>
+              @for (c of classes; track c.id) {
+                <option [value]="c.id">{{ c.name }} – {{ c.section }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" (click)="setModal.emit(null)">
+              <span class="material-icons">close</span> Cancel
+            </button>
+            <button type="submit" class="btn-confirm">
+              <span class="material-icons">save</span> Save Subject
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+}

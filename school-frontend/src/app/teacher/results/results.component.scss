@@ -1,0 +1,251 @@
+// ── Tokens ──────────────────────────────────────────────────
+$g900: #052e16;
+$g800: #14532d;
+$g700: #15803d;
+$g600: #16a34a;
+$g500: #22c55e;
+$g400: #4ade80;
+$g100: #dcfce7;
+$g50:  #f0fdf4;
+
+$text:        #0f172a;
+$text-sub:    #475569;
+$text-muted:  #94a3b8;
+$border:      #e2e8f0;
+$border-g:    rgba(22, 163, 74, 0.18);
+$white:       #ffffff;
+
+// ═══════════════════════════════════════════════════════════
+// FILTER BAR
+// ═══════════════════════════════════════════════════════════
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  background: $white;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  box-shadow: 0 1px 6px rgba(15,23,42,0.05);
+  margin-bottom: 1.25rem;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+
+  .result-count {
+    font-size: 0.78rem;
+    color: $text-muted;
+    white-space: nowrap;
+
+    strong { color: $text-sub; font-weight: 700; }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// MODULE WRAPPER
+// ═══════════════════════════════════════════════════════════
+.module-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+// ═══════════════════════════════════════════════════════════
+// TABLE
+// ═══════════════════════════════════════════════════════════
+.table-wrapper {
+  background: $white;
+  border: 1px solid $border;
+  border-radius: 14px;
+  overflow-x: auto;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  // ── Header ──────────────────────────────────────────────
+  thead tr {
+    background: linear-gradient(135deg, $g800 0%, $g700 100%);
+
+    th {
+      padding: 0.7rem 0.85rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.95);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      border: none;
+
+      display: table-cell;
+      vertical-align: middle;
+
+      .material-icons {
+        font-size: 0.9rem;
+        vertical-align: middle;
+        margin-right: 0.3rem;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  // ── Body rows ───────────────────────────────────────────
+  tbody {
+    .data-row {
+      border-bottom: 1px solid $border;
+      transition: background 0.15s;
+
+      &:last-child { border-bottom: none; }
+      &:hover { background: $g50; }
+
+      td {
+        padding: 0.65rem 0.85rem;
+        font-size: 0.83rem;
+        color: $text-sub;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  // ── Row index ───────────────────────────────────────────
+  .row-index {
+    color: $text-muted;
+    font-size: 0.78rem;
+    font-weight: 600;
+    width: 36px;
+  }
+
+  // ── Student cell with avatar ─────────────────────────────
+  .student-cell { min-width: 140px; }
+
+  .avatar-name {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+
+    .avatar-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, $g700, $g500);
+      color: $white;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+
+    span {
+      font-weight: 600;
+      color: $text;
+      font-size: 0.83rem;
+    }
+  }
+
+  // ── Monospace cells ──────────────────────────────────────
+  .mono {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+  }
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+
+  .material-icons { font-size: 1rem; }
+
+  &.btn-admit {
+    background: linear-gradient(135deg, $g700, $g600);
+    color: $white;
+    box-shadow: 0 3px 10px rgba(22, 163, 74, 0.3);
+
+    &:hover {
+      background: linear-gradient(135deg, $g800, $g700);
+      box-shadow: 0 5px 16px rgba(22, 163, 74, 0.4);
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      background: $text-muted;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+}
+
+// ── Empty state ──────────────────────────────────────────────
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem !important;
+  color: $text-muted;
+
+  .material-icons {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    opacity: 0.4;
+  }
+
+  p {
+    font-size: 0.9rem;
+    margin: 0;
+    color: #64748b !important;
+  }
+}
+
+// ── Overrides for filters spacing and inline layout ──────────
+.filter-bar {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.5rem !important;
+  flex-wrap: wrap !important;
+
+  .form-group {
+    margin-bottom: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+
+    label {
+      margin-bottom: 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.25rem !important;
+    }
+
+    .form-control {
+      width: auto !important;
+      color: #0f172a !important;
+      background-color: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+
+      option {
+        color: #0f172a !important;
+        background-color: #ffffff !important;
+      }
+    }
+  }
+}
+

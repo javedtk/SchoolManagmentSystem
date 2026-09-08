@@ -1,0 +1,129 @@
+<div class="assignments-summary-card mb-4">
+  <div class="summary-left">
+    <h3>Assignments & Homework</h3>
+    <p>Track, download, and submit your academic tasks</p>
+  </div>
+  <div class="summary-right">
+    <span class="badge-active badge-total">Total: {{ totalAssignmentsCount }}</span>
+    <span class="badge-active badge-submitted-count">Submitted: {{ submittedCount }}</span>
+    <span class="badge-active badge-pending-count">Pending: {{ pendingCount }}</span>
+  </div>
+</div>
+
+<div class="table-container">
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Assignment Title</th>
+        <th>Due Date</th>
+        <th>Syllabus File</th>
+        <th>Submission Status</th>
+        <th>Feedback Remarks</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (a of assignments; track a.id) {
+        <tr>
+          <td class="font-semibold">{{ a.Subject?.name }}</td>
+          <td>{{ a.title }}</td>
+          <td>{{ a.due_date | date:'mediumDate' }}</td>
+          <td>
+            @if (a.attachment) {
+              <a [href]="'http://localhost:5000/' + a.attachment" target="_blank" class="btn-download">
+                <span class="material-icons">download</span> Download
+              </a>
+            } @else {
+              <span class="text-muted small-text">No syllabus</span>
+            }
+          </td>
+          <td>
+            <span class="badge-active" 
+                  [ngClass]="{
+                    'status-present': getSubmissionStatus(a.id) === 'graded',
+                    'status-submitted': getSubmissionStatus(a.id) === 'submitted',
+                    'status-pending': getSubmissionStatus(a.id) === 'unsubmitted'
+                  }">
+              {{ (getSubmissionStatus(a.id) === 'unsubmitted' ? 'Pending' : getSubmissionStatus(a.id)) | uppercase }}
+            </span>
+          </td>
+          <td>
+            <span [class.text-muted]="getSubmissionRemarks(a.id) === 'N/A' || getSubmissionRemarks(a.id) === 'No remarks yet.'">
+              {{ getSubmissionRemarks(a.id) }}
+            </span>
+          </td>
+          <td>
+            @if (!hasSubmitted(a.id)) {
+              <button (click)="openSubmitModal(a.id)" class="btn-submit-action">
+                <span class="material-icons">publish</span> Submit
+              </button>
+            } @else {
+              <span class="badge-success-chip">
+                <span class="material-icons">check_circle</span> Submitted
+              </span>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="7" class="text-center">No assignments posted for your class term.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- SUBMIT HOMEWORK MODAL -->
+@if (activeModal() === 'submit-homework') {
+  <div class="modal-overlay">
+    <div class="modal-content-premium">
+      <div class="modal-header-premium">
+        <div class="header-title">
+          <span class="material-icons header-icon">assignment_returned</span>
+          <div>
+            <h3>Submit Assignment</h3>
+            <p>Upload your completed file/archive to the portal</p>
+          </div>
+        </div>
+        <button class="close-modal-btn" (click)="activeModal.set(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <form (ngSubmit)="submitHomework()" class="modal-form">
+        <div class="modal-body-premium">
+          <div class="form-group-premium">
+            <label class="form-label-premium">Attach Homework Document</label>
+            <div class="file-dropzone" [class.file-selected]="selectedHomeworkFile">
+              <input type="file" id="homework-file-input" (change)="onHomeworkFileSelected($event)" required accept=".pdf,.zip,.png,.jpg,.jpeg" />
+              <label for="homework-file-input" class="dropzone-label">
+                <span class="material-icons cloud-icon">cloud_upload</span>
+                @if (selectedHomeworkFile) {
+                  <span class="file-name">{{ selectedHomeworkFile.name }}</span>
+                  <span class="file-size">({{ (selectedHomeworkFile.size / 1024 / 1024).toFixed(2) }} MB)</span>
+                  <span class="change-prompt">Click to change selected file</span>
+                } @else {
+                  <span class="main-prompt">Drag & Drop or click to upload file</span>
+                  <span class="sub-prompt">Supported formats: PDF, ZIP, PNG, JPG, JPEG</span>
+                }
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer-premium">
+          <button type="button" class="btn-cancel" (click)="activeModal.set(null)">Cancel</button>
+          <button type="submit" class="btn-submit" [disabled]="submitLoading() || !selectedHomeworkFile">
+            @if (submitLoading()) {
+              <span class="material-icons spinning">refresh</span>
+              <span>Uploading...</span>
+            } @else {
+              <span class="material-icons">cloud_done</span>
+              <span>Submit Assignment</span>
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+

@@ -1,0 +1,185 @@
+<div class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-header">
+      <span class="material-icons logo-icon">school</span>
+      <span class="logo-text">aether<span>portal</span></span>
+    </div>
+
+    <div class="user-brief">
+      <div class="user-avatar">
+        @if (auth.currentUser()?.profile_image) {
+          <img [src]="'http://localhost:5000/' + auth.currentUser().profile_image" alt="Profile" />
+        } @else {
+          <span class="material-icons">account_circle</span>
+        }
+      </div>
+      <div class="user-info">
+        <h4>{{ auth.currentUser()?.name }}</h4>
+        <p>Faculty Member</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a [class.active]="activeTab() === 'dashboard'" (click)="setTab('dashboard')">
+        <span class="material-icons">dashboard</span><span>Dashboard</span>
+      </a>
+      <a [class.active]="activeTab() === 'classes'" (click)="setTab('classes')">
+        <span class="material-icons">class</span><span>My Classes</span>
+      </a>
+      <a [class.active]="activeTab() === 'attendance'" (click)="setTab('attendance')">
+        <span class="material-icons">fact_check</span><span>Mark Attendance</span>
+      </a>
+      <a [class.active]="activeTab() === 'assignments'" (click)="setTab('assignments')">
+        <span class="material-icons">assignment</span><span>Assignments</span>
+      </a>
+      <a [class.active]="activeTab() === 'results'" (click)="setTab('results')">
+        <span class="material-icons">emoji_events</span><span>Enter Marks</span>
+      </a>
+      <a [class.active]="activeTab() === 'timetable'" (click)="setTab('timetable')">
+        <span class="material-icons">calendar_today</span><span>Timetable</span>
+      </a>
+      <a [class.active]="activeTab() === 'profile'" (click)="setTab('profile')">
+        <span class="material-icons">person</span><span>My Profile</span>
+      </a>
+      <a [class.active]="activeTab() === 'guide'" (click)="setTab('guide')">
+        <span class="material-icons">help</span><span>User Guide</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button (click)="logout()" class="logout-btn">
+        <span class="material-icons">logout</span><span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Body Content -->
+  <main class="dashboard-main">
+    <!-- Top Header -->
+    <app-header 
+      [isPublic]="false" 
+      [title]="'FACULTY ' + (activeTab() | uppercase)" 
+      [user]="auth.currentUser()">
+    </app-header>
+
+    <!-- Alert Messages Banner -->
+    <app-custom-alert 
+      [message]="alertMsg()?.text || ''" 
+      [type]="alertMsg()?.type === 'error' ? 'error' : (alertMsg()?.type === 'success' ? 'success' : 'info')"
+      (close)="alertMsg.set(null)">
+    </app-custom-alert>
+
+    <!-- TAB CONTAINER -->
+    <div class="tab-panel-content">
+
+      <!-- DASHBOARD OVERVIEW -->
+      @if (activeTab() === 'dashboard') {
+        <app-teacher-overview
+          [stats]="stats()"
+          [todayTimetable]="todayTimetable()"
+          (viewWeekly)="viewTimetable()">
+        </app-teacher-overview>
+      }
+
+      <!-- MY CLASSES & STUDENTS LIST -->
+      @if (activeTab() === 'classes') {
+        <app-teacher-assigned-class
+          [classSubjects]="classSubjects()"
+          [students]="students()"
+          (classSelected)="onClassSelectedForStudents($event)">
+        </app-teacher-assigned-class>
+      }
+
+      <!-- ATTENDANCE MARKING -->
+      @if (activeTab() === 'attendance') {
+        <app-teacher-attendance
+          [classSubjects]="classSubjects()"
+          [attendanceRecords]="attendanceRecords"
+          [selectedClassId]="selectedClassId()"
+          [selectedDate]="selectedDate()"
+          (classChanged)="selectedClassId.set($event); loadAttendanceSheet()"
+          (dateChanged)="selectedDate.set($event); loadAttendanceSheet()"
+          (submit)="submitAttendance()">
+        </app-teacher-attendance>
+      }
+
+      <!-- ASSIGNMENTS CRUD -->
+      @if (activeTab() === 'assignments') {
+        <app-teacher-assignments
+          [assignments]="assignments()"
+          [classSubjects]="classSubjects()"
+          (reload)="loadAssignmentsAndClasses()">
+        </app-teacher-assignments>
+      }
+
+      <!-- ENTER MARKS / RESULTS -->
+      @if (activeTab() === 'results') {
+        <app-teacher-results
+          [exams]="exams()"
+          [classSubjects]="classSubjects()"
+          [marksRecords]="marksRecords()"
+          [selectedClassId]="selectedClassId()"
+          [selectedSubjectId]="selectedSubjectId()"
+          [selectedExamId]="selectedExamId()"
+          (filterChanged)="selectedExamId.set($event.examId); selectedClassId.set($event.classId); selectedSubjectId.set($event.subjectId); loadMarksSheet()"
+          (submit)="submitMarks()">
+        </app-teacher-results>
+      }
+
+      <!-- TIMETABLE SCHEDULE -->
+      @if (activeTab() === 'timetable') {
+        <app-teacher-timetable
+          [timetable]="timetable()">
+        </app-teacher-timetable>
+      }
+
+      <!-- PROFILE PASSWORD CHANGE -->
+      @if (activeTab() === 'profile') {
+        <app-teacher-settings
+          (updatePassword)="changePassword($event)">
+        </app-teacher-settings>
+      }
+
+      <!-- USER GUIDE -->
+      @if (activeTab() === 'guide') {
+        <app-teacher-user-guide></app-teacher-user-guide>
+      }
+
+    </div>
+  </main>
+</div>
+
+<!-- ── VIEW WEEKLY TIMETABLE MODAL ───────────────────────────────── -->
+@if (activeModal() === 'view-timetable') {
+<div class="modal-overlay" (click)="activeModal.set(null)">
+  <div class="modal-box" (click)="$event.stopPropagation()" style="max-width: 800px; width: 90%;">
+
+    <div class="modal-header">
+      <div class="modal-title-group">
+        <div class="modal-icon" style="background: rgba(22, 163, 74, 0.08); color: #16a34a;"><span class="material-icons">calendar_today</span></div>
+        <div>
+          <h3>My Weekly Timetable Schedule</h3>
+          <p>Assigned classes, timings, and subjects for the entire week</p>
+        </div>
+      </div>
+      <button class="modal-close" (click)="activeModal.set(null)">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+
+    <div class="modal-body" style="max-height: 70vh; overflow-y: auto; padding: 1.5rem;">
+      <app-teacher-timetable
+        [timetable]="timetable()">
+      </app-teacher-timetable>
+    </div>
+
+     <div class="modal-footer" style="display: flex; justify-content: flex-end; padding: 1.25rem 1.5rem 1.5rem 1.5rem; border-top: 1px solid #E2E8F0;">
+      <button type="button" class="btn-confirm" (click)="activeModal.set(null)" style="display: inline-flex; align-items: center; gap: 0.35rem; border: none; background: linear-gradient(135deg, #16a34a, #047857); color: #FFF; padding: 0.6rem 1.25rem; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);">
+        <span class="material-icons" style="font-size: 1.1rem;">close</span> Close
+      </button>
+    </div>
+
+  </div>
+</div>
+}

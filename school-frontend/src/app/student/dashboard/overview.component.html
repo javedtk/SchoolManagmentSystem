@@ -1,0 +1,147 @@
+<div class="dashboard-summary">
+  <!-- Stats Summary Grid -->
+  <div class="grid-4 summary-grid">
+    
+    <!-- Attendance Card (Green Gradient) -->
+    <div class="summary-card stat-card-green">
+      <div class="card-icon">
+        <span class="material-icons">fact_check</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.attendancePercentage }}%</h3>
+        <p>Attendance Rate</p>
+        <span class="card-badge">
+          <span class="material-icons">trending_up</span> Present
+        </span>
+      </div>
+      <div class="card-watermark material-icons">fact_check</div>
+    </div>
+
+    <!-- Pending Fees Card (White Card with green hover/border) -->
+    <div class="summary-card stat-card-white">
+      <div class="card-icon">
+        <span class="material-icons">money_off</span>
+      </div>
+      <div class="card-body">
+        <h3>Rs.{{ stats.pendingFees }}</h3>
+        <p>Pending Fees</p>
+        @if (stats.pendingFees > 0) {
+          <span class="card-badge badge-orange">
+            <span class="material-icons">warning</span> Pending
+          </span>
+        } @else {
+          <span class="card-badge badge-green">
+            <span class="material-icons">verified</span> Paid
+          </span>
+        }
+      </div>
+    </div>
+
+    <!-- Class Assignment Card (Teal Gradient) -->
+    <div class="summary-card stat-card-teal">
+      <div class="card-icon">
+        <span class="material-icons">class</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.className }}</h3>
+        <p>Active Class Assignment</p>
+        <span class="card-badge badge-teal">
+          <span class="material-icons">school</span> Academic
+        </span>
+      </div>
+      <div class="card-watermark material-icons">class</div>
+    </div>
+
+    <!-- Pending Assignments Card (Amber Gradient) -->
+    <div class="summary-card stat-card-amber">
+      <div class="card-icon">
+        <span class="material-icons">assignment</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.pendingAssignments }}</h3>
+        <p>Pending Homework</p>
+        @if (stats.pendingAssignments > 0) {
+          <span class="card-badge badge-amber">
+            <span class="material-icons">hourglass_empty</span> Due
+          </span>
+        } @else {
+          <span class="card-badge badge-green">
+            <span class="material-icons">verified</span> Done
+          </span>
+        }
+      </div>
+      <div class="card-watermark material-icons">assignment</div>
+    </div>
+
+  </div>
+
+  <!-- Dynamic Student Charts Grid -->
+  <app-student-charts [charts]="charts"></app-student-charts>
+
+  <div class="grid-2 mt-4">
+    <!-- Upcoming Events list -->
+    <div class="glass-card">
+      <h3>Upcoming School Events</h3>
+      <div class="table-container mt-2">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Event Title</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (evt of upcomingEvents; track evt.id) {
+            <tr>
+              <td>{{ evt.event_date }}</td>
+              <td>{{ evt.title }}</td>
+              <td><span class="badge-active">{{ evt.category || 'General' }}</span></td>
+            </tr>
+            } @empty {
+            <tr>
+              <td colspan="3" class="text-center">No upcoming events listed for next few days.</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Latest Exam Results -->
+    <div class="glass-card">
+      <h3>Latest Exam Scores</h3>
+      <div class="table-container mt-2">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Exam</th>
+              <th>Subject</th>
+              <th>Marks</th>
+              <th>Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (res of latestResults; track res.id) {
+            <tr>
+              <td>{{ res.Exam?.name }}</td>
+              <td>{{ res.Subject?.name }}</td>
+              <td>{{ res.marks_obtained }} / {{ res.max_marks }}</td>
+              <td>
+                <span class="badge-active" [ngClass]="{
+                  'status-approved': res.grade === 'A' || res.grade === 'B' || res.grade === 'C',
+                  'status-rejected': res.grade === 'D' || res.grade === 'F' || !res.grade
+                }">{{ res.grade || 'F' }}</span>
+              </td>
+            </tr>
+            } @empty {
+            <tr>
+              <td colspan="4" class="text-center">No examination scores entered yet.</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

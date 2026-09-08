@@ -1,0 +1,264 @@
+<div class="settings-layout">
+
+  <!-- ── Internal Sidebar ────────────────────────────────── -->
+  <aside class="settings-sidebar">
+    <div class="settings-sidebar-header">
+      <span class="material-icons">settings</span>
+      <span>System Config</span>
+    </div>
+
+    <nav class="settings-nav">
+      <button
+        class="settings-nav-item"
+        [class.active]="activeSection === 'profile'"
+        (click)="activeSection = 'profile'">
+        <div class="nav-icon-wrap">
+          <span class="material-icons">business</span>
+        </div>
+        <div class="nav-text">
+          <span class="nav-label">School Profile</span>
+          <span class="nav-desc">Name, contact & academic year</span>
+        </div>
+        <span class="material-icons nav-arrow">chevron_right</span>
+      </button>
+
+      <button
+        class="settings-nav-item"
+        [class.active]="activeSection === 'password'"
+        (click)="activeSection = 'password'">
+        <div class="nav-icon-wrap">
+          <span class="material-icons">lock_reset</span>
+        </div>
+        <div class="nav-text">
+          <span class="nav-label">Change Password</span>
+          <span class="nav-desc">Update your login credentials</span>
+        </div>
+        <span class="material-icons nav-arrow">chevron_right</span>
+      </button>
+    </nav>
+
+    <div class="settings-sidebar-footer">
+      <span class="material-icons">verified_user</span>
+      <span>Admin Privileges</span>
+    </div>
+  </aside>
+
+  <!-- ── Main Content Panel ─────────────────────────────── -->
+  <div class="settings-panel">
+
+    <!-- ── School Profile Section ──────────────────────── -->
+    @if (activeSection === 'profile') {
+      <div class="section-card">
+
+        <div class="section-header">
+          <div class="section-title-group">
+            <div class="section-icon">
+              <span class="material-icons">business</span>
+            </div>
+            <div>
+              <h2>School Profile Configuration</h2>
+              <p>Manage your institution's name, contact information and active academic term.</p>
+            </div>
+          </div>
+        </div>
+
+        <form (ngSubmit)="submitSettings()" class="settings-form">
+
+          <div class="form-grid">
+
+            <div class="form-field">
+              <label>
+                <span class="material-icons">school</span>
+                School Name
+              </label>
+              <input
+                type="text"
+                [(ngModel)]="settingsForm.school_name"
+                name="school_name"
+                placeholder="e.g. Aether Academy"
+                required />
+            </div>
+
+            <div class="form-field">
+              <label>
+                <span class="material-icons">calendar_today</span>
+                Academic Year / Term
+              </label>
+              <input
+                type="text"
+                [(ngModel)]="settingsForm.academic_year"
+                name="academic_year"
+                placeholder="e.g. 2025–2026"
+                required />
+            </div>
+
+            <div class="form-field">
+              <label>
+                <span class="material-icons">email</span>
+                Official Email
+              </label>
+              <input
+                type="email"
+                [(ngModel)]="settingsForm.school_email"
+                name="school_email"
+                placeholder="admin@school.edu"
+                required />
+            </div>
+
+            <div class="form-field">
+              <label>
+                <span class="material-icons">phone</span>
+                Contact Phone
+              </label>
+              <input
+                type="text"
+                [(ngModel)]="settingsForm.school_phone"
+                name="school_phone"
+                placeholder="+91 00000 00000"
+                required />
+            </div>
+
+            <div class="form-field full-width">
+              <label>
+                <span class="material-icons">location_on</span>
+                Campus Address
+              </label>
+              <textarea
+                [(ngModel)]="settingsForm.school_address"
+                name="school_address"
+                rows="3"
+                placeholder="Full institutional address…"
+                required>
+              </textarea>
+            </div>
+
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-save">
+              <span class="material-icons">save</span>
+              Save Configuration
+            </button>
+          </div>
+
+        </form>
+      </div>
+    }
+
+    <!-- ── Change Password Section ─────────────────────── -->
+    @if (activeSection === 'password') {
+      <div class="section-card">
+
+        <div class="section-header">
+          <div class="section-title-group">
+            <div class="section-icon section-icon-violet">
+              <span class="material-icons">lock_reset</span>
+            </div>
+            <div>
+              <h2>Change Password</h2>
+              <p>Update your administrator login credentials. Use a strong password of at least 6 characters.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success message -->
+        @if (passwordSuccess) {
+          <div class="alert-success">
+            <span class="material-icons">check_circle</span>
+            Password changed successfully!
+          </div>
+        }
+
+        <!-- Error message -->
+        @if (passwordError) {
+          <div class="alert-error">
+            <span class="material-icons">error</span>
+            {{ passwordError }}
+          </div>
+        }
+
+        <form (ngSubmit)="submitPassword()" class="settings-form">
+
+          <div class="form-grid single-col">
+
+            <div class="form-field">
+              <label>
+                <span class="material-icons">lock</span>
+                Current Password
+              </label>
+              <div class="input-wrap">
+                <input
+                  type="password"
+                  [(ngModel)]="passwordForm.currentPassword"
+                  name="currentPassword"
+                  placeholder="Enter current password"
+                  required />
+                <span class="material-icons input-suffix">visibility_off</span>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label>
+                <span class="material-icons">lock_open</span>
+                New Password
+              </label>
+              <div class="input-wrap">
+                <input
+                  type="password"
+                  [(ngModel)]="passwordForm.newPassword"
+                  name="newPassword"
+                  placeholder="At least 6 characters"
+                  required />
+                <span class="material-icons input-suffix">visibility_off</span>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label>
+                <span class="material-icons">verified</span>
+                Confirm New Password
+              </label>
+              <div class="input-wrap" [class.mismatch]="passwordForm.confirmPassword && passwordForm.newPassword !== passwordForm.confirmPassword">
+                <input
+                  type="password"
+                  [(ngModel)]="passwordForm.confirmPassword"
+                  name="confirmPassword"
+                  placeholder="Re-enter new password"
+                  required />
+                <span class="material-icons input-suffix">
+                  {{ passwordForm.confirmPassword && passwordForm.newPassword === passwordForm.confirmPassword ? 'check_circle' : 'visibility_off' }}
+                </span>
+              </div>
+              @if (passwordForm.confirmPassword && passwordForm.newPassword !== passwordForm.confirmPassword) {
+                <span class="field-hint error">Passwords do not match</span>
+              }
+            </div>
+
+          </div>
+
+          @if (passwordForm.newPassword) {
+            <div class="password-strength">
+              <div class="strength-label">Password strength</div>
+              <div class="strength-bars">
+                <div class="bar" [class.active]="passwordForm.newPassword.length >= 1"></div>
+                <div class="bar" [class.active]="passwordForm.newPassword.length >= 4"></div>
+                <div class="bar" [class.active]="passwordForm.newPassword.length >= 6"></div>
+                <div class="bar" [class.active]="passwordForm.newPassword.length >= 8 && /[A-Z]/.test(passwordForm.newPassword)"></div>
+              </div>
+            </div>
+          }
+
+          <div class="form-actions">
+            <button type="submit" class="btn-save btn-violet"
+              [disabled]="!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword">
+              <span class="material-icons">lock_reset</span>
+              Update Password
+            </button>
+          </div>
+
+        </form>
+      </div>
+    }
+
+  </div>
+</div>

@@ -1,0 +1,119 @@
+<div class="module-wrapper">
+
+  <!-- ── Page Header ──────────────────────────────────────── -->
+  <div class="module-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+    <div class="module-title" style="display: flex; align-items: center; gap: 0.85rem;">
+      <span class="material-icons" style="font-size: 2rem; color: #16a34a; background: #f0fdf4; border: 1px solid rgba(22, 163, 74, 0.18); border-radius: 12px; padding: 0.4rem;">grade</span>
+      <div>
+        <h2 style="font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0; line-height: 1.2;">Enter Student Marks</h2>
+        <p style="font-size: 0.78rem; color: #94a3b8; margin: 0;">Select an exam term and class-subject worksheet to record grades</p>
+      </div>
+    </div>
+    <div class="header-actions" style="display: flex; gap: 0.5rem;">
+      <!-- Load Worksheet Button -->
+      <button (click)="filterChanged.emit({ examId: selectedExamId, classId: selectedClassId, subjectId: selectedSubjectId })" class="action-btn btn-admit" style="background: linear-gradient(135deg, #0284c7, #0369a1); box-shadow: 0 2px 8px rgba(3, 105, 161, 0.25);" [disabled]="!selectedExamId || !selectedClassId || !selectedSubjectId">
+        <span class="material-icons">downloading</span>
+        Load Worksheet
+      </button>
+      
+      <!-- Save Marks Button -->
+      <button (click)="submitMarks()" class="action-btn btn-admit" [disabled]="!selectedClassId || !selectedExamId || !marksRecords.length">
+        <span class="material-icons">check_circle</span>
+        Save Student Marks
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Filter Bar ────────────────────────────────────────── -->
+  <div class="filter-bar">
+    <div class="form-group flex-row align-items-center" style="flex-direction: row; gap: 0.5rem; margin-bottom: 0; align-items: center;">
+      <label style="white-space: nowrap; font-weight: 700; font-size: 0.8rem; color: #475569; margin: 0; display: flex; align-items: center; gap: 0.25rem;">
+        <span class="material-icons" style="font-size: 0.95rem; color: #16a34a;">assignment</span>
+        Exam Term:
+      </label>
+      <select class="form-control" [value]="selectedExamId || 'null'" (change)="onExamChange($event)" style="min-width: 220px; font-size: 0.83rem; padding: 0.45rem 0.75rem; border-radius: 8px;">
+        <option value="null">-- Select Exam --</option>
+        @for (e of exams; track e.id) {
+          <option [value]="e.id">{{ e.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group flex-row align-items-center" style="flex-direction: row; gap: 0.5rem; margin-bottom: 0; align-items: center;">
+      <label style="white-space: nowrap; font-weight: 700; font-size: 0.8rem; color: #475569; margin: 0; display: flex; align-items: center; gap: 0.25rem;">
+        <span class="material-icons" style="font-size: 0.95rem; color: #16a34a;">class</span>
+        Class/Subject:
+      </label>
+      <select class="form-control" [value]="selectedClassId && selectedSubjectId ? (selectedClassId + ':' + selectedSubjectId) : ''" (change)="onClassSubjectChange($event)" style="min-width: 260px; font-size: 0.83rem; padding: 0.45rem 0.75rem; border-radius: 8px;">
+        <option value="">-- Select Class/Subject --</option>
+        @for (cs of classSubjects; track cs.id) {
+          <option [value]="(cs.Class?.id || 0) + ':' + (cs.Subject?.id || 0)">
+            {{ cs.Class?.name || 'Unknown' }} - {{ cs.Class?.section || '' }} ({{ cs.Subject?.name || 'Unknown' }})
+          </option>
+        }
+      </select>
+    </div>
+
+    <!-- Worksheet Count -->
+    <div class="filter-actions" style="margin-left: auto;">
+      <span class="result-count" style="font-size: 0.78rem; color: #94a3b8;">
+        @if (selectedExamId && selectedClassId && marksRecords.length) {
+          Worksheet loads <strong>{{ marksRecords.length }}</strong> students
+        } @else {
+          Select filters to load worksheet
+        }
+      </span>
+    </div>
+  </div>
+
+  <!-- ── Table ─────────────────────────────────────────────── -->
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Admission No</th>
+          <th>Student Name</th>
+          <th>Marks Obtained</th>
+          <th>Max Marks Possible</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (record of marksRecords; track record.student_id; let i = $index) {
+          <tr class="data-row">
+            <td class="row-index">{{ i + 1 }}</td>
+            <td class="mono font-bold">{{ record.admission_no }}</td>
+            <td class="student-cell">
+              <div class="avatar-name">
+                <div class="avatar-circle">{{ record.student_name?.charAt(0) }}</div>
+                <span>{{ record.student_name }}</span>
+              </div>
+            </td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <input type="number" class="form-control table-input" [(ngModel)]="record.marks_obtained" min="0" [max]="record.max_marks" style="padding: 0.4rem 0.75rem; font-size: 0.88rem; width: 100px; border-radius: 6px; font-weight: 600; text-align: center; border: 1.5px solid #e2e8f0; outline: none; background: #f8fafc;" />
+                <span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">/ {{ record.max_marks }}</span>
+              </div>
+            </td>
+            <td>
+              <input type="number" class="form-control table-input" [(ngModel)]="record.max_marks" disabled style="padding: 0.4rem 0.75rem; font-size: 0.88rem; width: 100px; border-radius: 6px; opacity: 0.7; text-align: center; border: 1.5px solid #e2e8f0; background: #f8fafc;" />
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="empty-state">
+              <span class="material-icons">assignment_turned_in</span>
+              <p>
+                @if (!selectedExamId || !selectedClassId || !selectedSubjectId) {
+                  Select Exam and Class-Subject combination above to load the marks entry worksheet.
+                } @else {
+                  No student records available for this class.
+                }
+              </p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

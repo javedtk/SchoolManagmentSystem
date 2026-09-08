@@ -1,0 +1,167 @@
+/* Timetable viewer styles */
+.table-container {
+  margin-top: 1rem;
+}
+
+.days-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.accordion-panel {
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #FFF;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s;
+}
+
+.accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #16a34a, #047857);
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-icon {
+  font-size: 1.25rem;
+  color: #FFF;
+}
+
+.day-title {
+  font-weight: 700;
+  color: #FFF;
+  font-size: 1rem;
+}
+
+.slots-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFF;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  margin-left: 0.5rem;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #FFF;
+}
+
+.expand-icon {
+  transition: transform 0.2s;
+  font-size: 1.25rem;
+}
+
+.accordion-content {
+  padding: 1rem 1.25rem;
+  background: #FFF;
+  border-top: 1px solid #F1F5F9;
+}
+
+.slots-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.slot-detail-item {
+  display: grid;
+  grid-template-columns: 120px 180px 140px 1fr;
+  gap: 1rem;
+  align-items: center;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  padding: 0.65rem 1.25rem;
+  border-radius: 10px;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+  }
+}
+
+.period-label {
+  font-weight: 700;
+  color: #16a34a;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  .material-icons {
+    font-size: 0.95rem;
+  }
+}
+
+.time-label {
+  font-family: monospace;
+  font-size: 0.83rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.class-chip {
+  background: rgba(22, 163, 74, 0.08);
+  color: #16a34a;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  text-align: center;
+  border: 1px solid rgba(22, 163, 74, 0.18);
+  max-width: 120px;
+}
+
+.subject-label {
+  font-weight: 700;
+  color: #0F172A;
+  font-size: 0.88rem;
+
+  .subject-code {
+    font-size: 0.75rem;
+    color: #94A3B8;
+    font-family: monospace;
+    font-weight: 600;
+    margin-left: 0.25rem;
+  }
+}
+
+.empty-state {
+  padding: 4rem 2rem;
+  color: #94A3B8;
+  text-align: center;
+  background: #FFF;
+  border: 1px dashed #E2E8F0;
+  border-radius: 12px;
+
+  .empty-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    opacity: 0.4;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+}

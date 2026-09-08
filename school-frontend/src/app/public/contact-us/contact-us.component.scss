@@ -1,0 +1,199 @@
+$primary: #16A34A;
+$primary-hover: #15803D;
+$dark: #0F172A;
+$light: rgba(22, 163, 74, 0.05);
+$gold: #F59E0B;
+$transition: all 0.3s ease;
+$shadow-hover: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+:host { display: block; }
+
+// Hero Section Styles
+.contact-hero {
+  background: linear-gradient(rgba(15,23,42,.75), rgba(15,23,42,.85)), url('https://images.unsplash.com/photo-1534536281715-e28d76689b4d?q=80&w=1600&auto=format&fit=crop') no-repeat center/cover;
+  min-height: 70vh;
+  padding: 12rem 0 8rem 0; // top padding accounts for fixed header!
+  color: #ffffff;
+  position: relative;
+  text-align: center;
+}
+.contact-hero-title {
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.15;
+  font-weight: 800;
+  font-size: 3.5rem;
+  @media (max-width: 768px) { font-size: 2.2rem; }
+}
+.contact-hero-text {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+.welcome-badge {
+  letter-spacing: 2px;
+  background-color: $primary !important;
+  font-size: 0.85rem;
+  border-radius: 30px;
+}
+
+// Cards Layout
+.contact-info-card, .contact-form-premium-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  transition: $transition;
+  &:hover {
+    border-color: rgba(22, 163, 74, 0.2);
+    box-shadow: $shadow-hover;
+  }
+}
+
+// Info items
+.info-item-box {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  padding: 1.25rem;
+  border-radius: 12px;
+  background: #F8FAFC;
+  border-left: 4px solid rgba(22, 163, 74, 0.2);
+  transition: $transition;
+  margin-bottom: 1.25rem;
+  &:last-child { margin-bottom: 0; }
+  &:hover {
+    transform: translateX(5px);
+    background: #ffffff;
+    border-left-color: $primary;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.06);
+  }
+  .info-icon-badge {
+    width: 36px;
+    height: 36px;
+    background: $light;
+    border: 1px solid rgba(22, 163, 74, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $primary;
+    flex-shrink: 0;
+  }
+  h4 {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  p {
+    color: #475569;
+    font-size: 0.9rem;
+  }
+}
+
+// Form Control overrides
+.form-group {
+  margin-bottom: 1.25rem;
+  label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $dark;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+}
+.form-control {
+  border-radius: 10px;
+  padding: 0.8rem 1.2rem;
+  border: 1.5px solid #E2E8F0;
+  transition: $transition;
+  background-color: #ffffff;
+  color: $dark;
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+  }
+}
+
+// Campus Branches Cards
+.branch-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #E2E8F0;
+  padding: 2.25rem;
+  height: 100%;
+  transition: $transition;
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(22, 163, 74, 0.2);
+    box-shadow: $shadow-hover;
+  }
+  .branch-name {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    color: $dark;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    i {
+      color: $primary;
+    }
+  }
+  .branch-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #475569;
+  }
+}
+
+// Social Grid & emergency
+.emergency-box {
+  background: rgba(239, 68, 68, 0.04);
+  border-left: 4px solid #EF4444;
+  padding: 1.25rem;
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 1rem;
+  &:last-child { margin-bottom: 0; }
+  h5 {
+    color: #EF4444;
+    font-weight: 700;
+  }
+  p {
+    color: #475569;
+    font-size: 0.95rem;
+  }
+}
+
+.social-grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+.social-item-card {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+  transition: $transition;
+  cursor: pointer;
+  color: $dark;
+  &:hover {
+    background: $light;
+    border-color: $primary;
+    color: $primary;
+    transform: translateY(-3px);
+  }
+  .social-icon {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  span {
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+}

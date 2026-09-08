@@ -1,0 +1,56 @@
+<div class="table-container">
+  <div class="days-list">
+    @for (day of uniqueDays; track day) {
+      <div class="accordion-panel">
+        <!-- Accordion Header -->
+        <div (click)="toggleDay(day)" class="accordion-header">
+          <div class="header-left">
+            <span class="material-icons header-icon">today</span>
+            <span class="day-title">{{ day }}</span>
+            <span class="slots-badge">
+              {{ getSlotsForDay(day).length }} {{ getSlotsForDay(day).length === 1 ? 'Slot' : 'Slots' }}
+            </span>
+          </div>
+          <div class="header-right">
+            <span class="material-icons expand-icon" [style.transform]="isDayExpanded(day) ? 'rotate(0deg)' : 'rotate(-90deg)'">
+              expand_more
+            </span>
+          </div>
+        </div>
+
+        <!-- Accordion Content -->
+        @if (isDayExpanded(day)) {
+          <div class="accordion-content">
+            <div class="slots-container">
+              @for (entry of getSlotsForDay(day); track entry.id) {
+                <div class="slot-detail-item">
+                  <span class="period-label">
+                    <span class="material-icons">schedule</span>
+                    Period {{ entry.period_no }}
+                  </span>
+                  <span class="time-label">
+                    {{ entry.start_time }} - {{ entry.end_time }}
+                  </span>
+                  <span class="class-chip">
+                    {{ entry.Class?.name }} - {{ entry.Class?.section }}
+                  </span>
+                  <span class="subject-label">
+                    {{ entry.Subject?.name }}
+                    <span class="subject-code">
+                      ({{ entry.Subject?.code }})
+                    </span>
+                  </span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <span class="material-icons empty-icon">calendar_today</span>
+        <p>No timetable slots assigned to you yet.</p>
+      </div>
+    }
+  </div>
+</div>

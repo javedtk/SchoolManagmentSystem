@@ -1,0 +1,321 @@
+<div class="animate-fade-in">
+  <!-- Hero Section -->
+  <section class="hero-section home-hero text-white d-flex align-items-center">
+    <div class="container text-center text-md-start">
+      <div class="row align-items-center">
+        <div class="col-md-7">
+          <span class="badge bg-success welcome-badge mb-3 px-3 py-2 text-uppercase font-weight-bold">
+            Welcome to Aether Academy
+          </span>
+          <h1 class="display-3 font-weight-bold home-hero-title mb-4">
+            Experience Academic Excellence & Holistic Growth
+          </h1>
+          <p class="lead home-hero-text mb-5 opacity-90">
+            A premium educational sanctuary serving meticulously crafted learning experiences, rooted in modern
+            methodologies and certified expert guidance.
+          </p>
+          <div class="d-flex flex-column flex-sm-row gap-3">
+            <button (click)="navigateTab.emit('admission')" class="btn btn-premium btn-lg">Apply Online Now</button>
+            <button (click)="navigateTab.emit('about')"
+              class="btn btn-outline-light btn-outline-explore btn-lg rounded-pill px-4">
+              Explore Our Vision
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Curated Pathways Section -->
+  <section class="section-padding bg-light">
+    <div class="container">
+      <div class="section-title-wrapper text-center">
+        <span class="subtitle">Curated Pathways</span>
+        <h2 class="title">Explore Our Academy</h2>
+      </div>
+      <div class="row g-4 text-center">
+        <div class="col-6 col-md-3" *ngFor="let dept of departments">
+          <div class="premium-card p-4 h-100 d-flex flex-column align-items-center justify-content-center">
+            <div
+              class="category-icon-wrapper home-category-icon-wrapper mb-3 d-flex align-items-center justify-content-center">
+              <i [class]="dept.icon" class="fa-2x"></i>
+            </div>
+            <h4 class="h5 font-weight-bold mb-1">{{ dept.name }}</h4>
+            <p class="text-muted small mb-0">{{ dept.itemCount }} Courses</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us Section (Cards) -->
+  <section class="section-padding why-choose-section">
+    <div class="container">
+      <div class="section-title-wrapper text-center">
+        <span class="subtitle">Why Aether Academy</span>
+        <h2 class="title">Crafted for an Unforgettable Learning Journey</h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3" *ngFor="let feature of whyChooseUs; let i = index">
+          <div class="why-card premium-card h-100 p-4 text-center" [style.animation-delay]="i * 0.1 + 's'">
+            <div class="why-icon-wrapper mx-auto mb-4">
+              <i [class]="feature.icon" class="fa-2x"></i>
+              <div class="why-icon-glow"></div>
+            </div>
+            <h4 class="h5 fw-bold mb-3">{{ feature.title }}</h4>
+            <p class="text-muted small mb-0">{{ feature.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Story - Two Column with Floating Image -->
+  <section class="section-padding story-section bg-light overflow-hidden">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6 order-lg-1 order-2">
+          <div class="story-content">
+            <span class="subtitle d-inline-block mb-2">Our History</span>
+            <h2 class="display-5 fw-bold story-title mb-4">A Legacy of Learning,<br>Rooted in Excellence</h2>
+            <p class="text-muted mb-4 story-text">
+              Since 2005, Aether Academy has been a sanctuary for young minds who seek to understand, create, and
+              innovate. Born from a vision of holistic development and global readiness, our educators transform raw
+              curiosity into mature academic and emotional strength.
+            </p>
+            <div class="row g-3 mb-4">
+              <div class="col-6">
+                <div class="story-stat d-flex align-items-center">
+                  <div class="story-stat-icon me-3">
+                    <i class="fas fa-graduation-cap"></i>
+                  </div>
+                  <div>
+                    <h5 class="fw-bold mb-0">100%</h5>
+                    <small class="text-muted">University Placement</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="story-stat d-flex align-items-center">
+                  <div class="story-stat-icon me-3">
+                    <i class="fas fa-award"></i>
+                  </div>
+                  <div>
+                    <h5 class="fw-bold mb-0">Top Tier</h5>
+                    <small class="text-muted">Certified Educators</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button (click)="navigateTab.emit('about')" class="btn btn-premium">Read Our Story</button>
+          </div>
+        </div>
+        <div class="col-lg-6 order-lg-2 order-1">
+          <div class="story-image-wrapper">
+            <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=600&auto=format&fit=crop"
+              alt="Students learning in class" class="story-3d-image">
+            <div class="story-image-decoration"></div>
+            <div class="story-floating-badge">
+              <i class="fas fa-award me-2"></i> Ranked #1 Regionally
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Programs Section -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="section-title-wrapper text-center">
+        <span class="subtitle">Academic Highlights</span>
+        <h2 class="title">Our Featured Courses</h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4" *ngFor="let prog of featuredPrograms">
+          <div class="premium-card h-100">
+            <div class="card-img-wrapper">
+              <img [src]="prog.image" [alt]="prog.name">
+              <span class="badge bg-success dish-price-badge position-absolute top-0 end-0 m-3 px-3 py-2">
+                {{ prog.credits }}
+              </span>
+            </div>
+            <div class="card-body p-4">
+              <h3 class="h4 font-weight-bold mb-2">{{ prog.name }}</h3>
+              <p class="text-muted small mb-3">{{ prog.description }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted"><i class="far fa-clock me-2 text-success"></i>{{ prog.duration }}</span>
+                <span class="text-warning"><i class="fas fa-layer-group me-2"></i>{{ prog.level }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Student Success Pathway (Timeline) -->
+  <section class="section-padding process-section">
+    <div class="container">
+      <div class="section-title-wrapper text-center">
+        <span class="subtitle">Our Process</span>
+        <h2 class="title">Student Success Pathway</h2>
+        <p class="process-desc mx-auto" style="max-width: 600px;">
+          Every student's education at Aether Academy follows a structured progression from enrollment to global
+          citizenship.
+        </p>
+      </div>
+      <div class="row g-0 process-timeline">
+        <div class="col-md-3" *ngFor="let step of studentPathway; let i = index; let last = last">
+          <div class="process-step text-center" [style.animation-delay]="i * 0.15 + 's'">
+            <div class="process-step-number mx-auto">
+              <span>{{ i + 1 }}</span>
+            </div>
+            <div class="process-connector" *ngIf="!last"></div>
+            <div class="process-icon-wrapper mx-auto mb-3">
+              <i [class]="step.icon" class="fa-lg"></i>
+            </div>
+            <h5 class="fw-bold mb-2">{{ step.title }}</h5>
+            <p class="process-step-desc small px-2 mb-0">{{ step.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Facilities Section - Two Column Reversed with Floating Image -->
+  <section class="section-padding private-dining-section overflow-hidden">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <div class="dining-image-wrapper">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=600&auto=format&fit=crop"
+              alt="Campus Facilities" class="dining-3d-image">
+            <div class="dining-image-decoration"></div>
+            <div class="dining-floating-badge">
+              <i class="fas fa-star me-2"></i> Elite Facilities
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="dining-content">
+            <span class="subtitle d-inline-block mb-2">Modern Infrastructure</span>
+            <h2 class="display-5 fw-bold dining-title mb-4">State-of-the-Art Facilities<br>& Learning Spaces</h2>
+            <p class="text-muted mb-4 dining-text">
+              We provide a safe, inspiring environment designed to support collaborative research, creative arts, and
+              professional athletic coaching.
+            </p>
+            <ul class="dining-features list-unstyled mb-4">
+              <li class="d-flex align-items-center mb-3" *ngFor="let feature of campusOfferings">
+                <div class="dining-feature-check me-3">
+                  <i class="fas fa-check"></i>
+                </div>
+                <span>{{ feature }}</span>
+              </li>
+            </ul>
+            <button (click)="navigateTab.emit('services')" class="btn btn-premium">Explore Campus Offerings</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Counter Section -->
+  <section class="stats-section section-padding text-white">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-6 col-md-3" *ngFor="let stat of schoolStats">
+          <div class="stat-item d-flex flex-column align-items-center justify-content-center text-center">
+            <div class="stat-icon mb-3 d-flex align-items-center justify-content-center">
+              <i [class]="stat.icon" class="fa-2x"></i>
+            </div>
+            <h3 class="stat-number display-4 fw-bold mb-1">{{ stat.value }}</h3>
+            <p class="stat-label text-uppercase mb-0">{{ stat.label }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Honors Curriculum Section - Card with Floating Image -->
+  <section class="section-padding chef-special-section bg-light overflow-hidden">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-5 order-lg-1 order-2">
+          <div class="chef-content">
+            <span class="subtitle d-inline-block mb-2">Honors Pathways</span>
+            <h2 class="display-5 fw-bold chef-title mb-4">Advanced Placement Honors</h2>
+            <p class="text-muted mb-4">
+              Experience an advanced honors tract designed to push academic bounds, preparing students for rigor through
+              early research models.
+            </p>
+            <div class="chef-menu-preview mb-4">
+              <div class="chef-menu-item d-flex justify-content-between align-items-center"
+                *ngFor="let path of honorsCurriculum">
+                <div>
+                  <h6 class="fw-bold mb-0">{{ path.course }}</h6>
+                  <small class="text-muted">{{ path.description }}</small>
+                </div>
+                <span class="chef-menu-dot"></span>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+              <button (click)="navigateTab.emit('classes')" class="btn btn-premium">View Full Syllabus</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7 order-lg-2 order-1">
+          <div class="chef-image-wrapper">
+            <img
+              src="https://static.vecteezy.com/system/resources/thumbnails/012/406/032/small/graduation-cap-with-diploma-paper-and-falling-gold-confetti-illustration-vector.jpg?w=600"
+              alt="Graduation Cap and Diploma" class="chef-3d-image">
+            <div class="chef-image-decoration"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="section-title-wrapper text-center">
+        <span class="subtitle">Community Voices</span>
+        <h2 class="title">What Parents Say</h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4" *ngFor="let review of parentReviews">
+          <div class="premium-card p-4 h-100 bg-white">
+            <div class="d-flex align-items-center mb-3">
+              <div class="guest-avatar-wrapper me-3">
+                <img [src]="review.avatar" class="w-100 h-100 object-fit-cover" [alt]="review.name">
+              </div>
+              <div>
+                <h4 class="h6 font-weight-bold mb-0">{{ review.name }}</h4>
+                <div class="text-warning small">
+                  <i class="fas fa-star" *ngFor="let star of [1,2,3,4,5]"></i>
+                </div>
+              </div>
+            </div>
+            <p class="text-muted guest-comment mb-0 italic">"{{ review.comment }}"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="section-padding text-white newsletter-section">
+    <div class="container text-center max-width-md newsletter-container">
+      <h2 class="font-weight-bold newsletter-title mb-3">Join Our Academic Circle</h2>
+      <p class="mb-4 opacity-75">
+        Subscribe to receive academic schedules, open house event invitations, and enrollment updates.
+      </p>
+      <form class="d-flex flex-column flex-sm-row gap-2 justify-content-center" (submit)="$event.preventDefault()">
+        <input type="email" class="form-control newsletter-input rounded-pill px-4"
+          placeholder="Enter your email address">
+        <button type="submit" class="btn btn-premium newsletter-btn">Subscribe</button>
+      </form>
+    </div>
+  </section>
+</div>

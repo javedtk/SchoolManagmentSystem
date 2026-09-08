@@ -1,0 +1,220 @@
+<div class="module-wrapper">
+
+  <!-- ── Page Header ──────────────────────────────────────── -->
+  <div class="module-header">
+    <div class="module-title">
+      <span class="material-icons">how_to_reg</span>
+      <div>
+        <h2>Admission Corner</h2>
+        <p>Review and process student enrollment enquiries</p>
+      </div>
+    </div>
+    <div class="module-meta">
+      <div class="meta-badge">
+        <span class="material-icons">pending_actions</span>
+        {{ enquiries.length }} Total
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Quick Status Summary ──────────────────────────────── -->
+  <div class="status-summary">
+    <button class="status-chip chip-all" [class.active]="!filterStatus" (click)="filterStatus = ''">
+      <span class="chip-count">{{ enquiries.length }}</span>
+      <span>All</span>
+    </button>
+    <button class="status-chip chip-pending" [class.active]="filterStatus === 'pending'"
+      (click)="filterStatus = 'pending'">
+      <span class="chip-dot"></span>
+      <span class="chip-count">{{ pendingCount }}</span>
+      <span>Pending</span>
+    </button>
+    <button class="status-chip chip-rejected" [class.active]="filterStatus === 'rejected'"
+      (click)="filterStatus = 'rejected'">
+      <span class="chip-dot"></span>
+      <span class="chip-count">{{ rejectedCount }}</span>
+      <span>Rejected</span>
+    </button>
+  </div>
+
+  <!-- ── Filter Bar ────────────────────────────────────────── -->
+  <div class="filter-bar">
+
+    <!-- Search -->
+    <div class="filter-search">
+      <span class="material-icons search-icon">search</span>
+      <input type="text" placeholder="Search by name, email or phone…" [(ngModel)]="searchText" class="search-input" />
+      @if (searchText) {
+      <button class="clear-input" (click)="searchText = ''">
+        <span class="material-icons">close</span>
+      </button>
+      }
+    </div>
+
+    <!-- Class Filter -->
+    <div class="filter-select-wrap">
+      <span class="material-icons select-icon">class</span>
+      <select class="filter-select" [(ngModel)]="filterClass">
+        <option value="">All Classes</option>
+        @for (cls of uniqueClasses; track cls) {
+        <option [value]="cls">{{ cls }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- Results count + Clear -->
+    <div class="filter-actions">
+      <span class="result-count">
+        <strong>{{ filteredEnquiries.length }}</strong> of {{ enquiries.length }} records
+      </span>
+      @if (hasActiveFilter) {
+      <button class="btn-clear-all" (click)="clearFilters()">
+        <span class="material-icons">filter_alt_off</span>
+        Clear Filters
+      </button>
+      }
+    </div>
+  </div>
+
+  <!-- ── Table ─────────────────────────────────────────────── -->
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Student</th>
+          <th>Parent</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Class</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (enquiry of filteredEnquiries; track enquiry.id; let i = $index) {
+        <tr class="data-row">
+          <td class="row-index">{{ i + 1 }}</td>
+          <td class="student-cell">
+            <div class="avatar-name">
+              @if (enquiry.student_photo) {
+                <img [src]="baseUrl + '/' + enquiry.student_photo" class="avatar-img-circle" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" />
+              } @else {
+                <div class="avatar-circle">{{ enquiry.student_name?.charAt(0) }}</div>
+              }
+              <span>{{ enquiry.student_name }}</span>
+            </div>
+          </td>
+          <td>{{ enquiry.parent_name }}</td>
+          <td class="mono">{{ enquiry.contact }}</td>
+          <td class="email-cell">{{ enquiry.email }}</td>
+          <td><span class="class-chip">{{ enquiry.class_applied }}</span></td>
+          <td class="date-cell">{{ enquiry.applied_date | date:'MMM d, y' }}</td>
+          <td>
+            <span class="status-pill status-{{ enquiry.status }}">
+              <span class="status-dot"></span>
+              {{ enquiry.status | titlecase }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            @if (enquiry.status === 'pending') {
+            <button class="action-btn btn-reject" title="Reject"
+              (click)="approve.emit({ id: enquiry.id, status: 'rejected' })">
+              <span class="material-icons">cancel</span>
+              Reject
+            </button>
+            <button class="action-btn btn-admit" title="Admit Student" (click)="openAdmitModal(enquiry)">
+              <span class="material-icons">person_add</span>
+              Admit
+            </button>
+            } @else {
+            <span class="processed-label">
+              <span class="material-icons">check_circle</span>
+              Processed
+            </span>
+            }
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="9" class="empty-state">
+            <span class="material-icons">
+              {{ hasActiveFilter ? 'search_off' : 'inbox' }}
+            </span>
+            <p>{{ hasActiveFilter ? 'No records match your filters.' : 'No registration enquiries received yet.' }}</p>
+            @if (hasActiveFilter) {
+            <button class="btn-clear-empty" (click)="clearFilters()">Clear Filters</button>
+            }
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── ADMIT STUDENT MODAL ───────────────────────────────── -->
+@if (activeModal === 'admit-student' && selectedEnquiry()) {
+<div class="modal-overlay" (click)="setModal.emit(null)">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <div class="modal-title-group">
+        <div class="modal-icon"><span class="material-icons">person_add</span></div>
+        <div>
+          <h3>Admit Candidate</h3>
+          <p>{{ selectedEnquiry()?.student_name }}</p>
+        </div>
+      </div>
+      <button class="modal-close" (click)="setModal.emit(null)">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-desc">Assign a class and section to create the student's active enrollment profile.</p>
+
+      <form (ngSubmit)="submitAdmit()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>
+              <span class="material-icons">class</span>
+              Target Academic Class
+            </label>
+            <select class="form-control" [(ngModel)]="studentForm.class_id" name="admit_class" required>
+              @for (c of classes; track c.id) {
+              <option [value]="c.id">{{ c.name }} – {{ c.section }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <span class="material-icons">group</span>
+              Assign Section
+            </label>
+            <input type="text" class="form-control" [(ngModel)]="studentForm.section" name="admit_section"
+              placeholder="e.g. A" required />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" [disabled]="isSaving" (click)="setModal.emit(null)">
+            <span class="material-icons">close</span> Cancel
+          </button>
+          <button type="submit" class="btn-confirm" [disabled]="isSaving">
+            @if (isSaving) {
+              <span class="material-icons spinning me-2">refresh</span>
+              <span>Generating...</span>
+            } @else {
+              <span class="material-icons">how_to_reg</span> Generate Enrollment
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+}

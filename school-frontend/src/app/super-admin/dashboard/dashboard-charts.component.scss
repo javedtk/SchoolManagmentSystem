@@ -1,0 +1,173 @@
+// ── Color tokens ─────────────────────────────────────────────
+$g600:  #16a34a;
+$g400:  #4ade80;
+$text-primary:   #0f172a;
+$text-secondary: #475569;
+$text-muted:     #94a3b8;
+$border:         rgba(22, 163, 74, 0.12);
+
+// ═══════════════════════════════════════════════════════════════
+// SECTION HEADER
+// ═══════════════════════════════════════════════════════════════
+.charts-section {
+  margin-top: 2rem;
+}
+
+.charts-section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0;
+
+    .material-icons {
+      font-size: 1.2rem;
+      color: $g600;
+    }
+  }
+
+  .section-subtitle {
+    font-size: 0.82rem;
+    color: $text-muted;
+    font-weight: 500;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GRID
+// ═══════════════════════════════════════════════════════════════
+.charts-grid {
+  display: grid;
+  gap: 1.25rem;
+
+  &.charts-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+
+    @media (max-width: 1280px) { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 640px)  { grid-template-columns: 1fr; }
+  }
+
+  &.charts-row-2 {
+    margin-top: 1.25rem;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CHART CARD
+// ═══════════════════════════════════════════════════════════════
+.chart-card {
+  background: #ffffff;
+  border: 1px solid $border;
+  border-radius: 16px;
+  padding: 1.25rem;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(22, 163, 74, 0.12);
+  }
+
+  // Subtle top accent line
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, $g600, $g400);
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+// ── Card Header ──────────────────────────────────────────────
+.chart-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  .chart-card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  .chart-icon {
+    font-size: 1.1rem;
+    color: $text-muted;
+  }
+}
+
+// ── Color dots ───────────────────────────────────────────────
+.chart-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.dot-green   { background: #16a34a; }
+  &.dot-emerald { background: #059669; }
+  &.dot-teal    { background: #0e7490; }
+  &.dot-amber   { background: #d97706; }
+  &.dot-violet  { background: #7c3aed; }
+  &.dot-indigo  { background: #4338ca; }
+  &.dot-rose    { background: #e11d48; }
+}
+
+// ── Chart canvas wrappers ─────────────────────────────────────
+.chart-wrap {
+  position: relative;
+  width: 100%;
+
+  &.chart-wrap-sm { height: 180px; }
+  &.chart-wrap-md { height: 220px; }
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+// ── Attendance center overlay label ──────────────────────────
+.attendance-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.attendance-center-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+
+  strong {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #15803d;
+    line-height: 1;
+  }
+
+  span {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: $text-muted;
+    margin-top: 0.2rem;
+  }
+}

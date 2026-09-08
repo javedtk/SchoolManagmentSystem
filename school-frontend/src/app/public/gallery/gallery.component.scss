@@ -1,0 +1,471 @@
+$primary: #16A34A;
+$primary-hover: #15803D;
+$dark: #0F172A;
+$light: rgba(22, 163, 74, 0.05);
+$gold: #F59E0B;
+$transition: all 0.3s ease;
+$shadow-hover: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+:host { display: block; }
+
+// Hero Section Styles
+.gallery-hero {
+  background: linear-gradient(rgba(15,23,42,.75), rgba(15,23,42,.85)), url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1600&auto=format&fit=crop') no-repeat center/cover;
+  min-height: 70vh;
+  padding: 12rem 0 8rem 0; // top padding accounts for fixed header!
+  color: #ffffff;
+  position: relative;
+  text-align: center;
+}
+.gallery-hero-title {
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.15;
+  font-weight: 800;
+  font-size: 3.5rem;
+  @media (max-width: 768px) { font-size: 2.2rem; }
+}
+.gallery-hero-text {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+.welcome-badge {
+  letter-spacing: 2px;
+  background-color: $primary !important;
+  font-size: 0.85rem;
+  border-radius: 30px;
+}
+
+// Section Paddings
+.section-padding {
+  padding: 6rem 0;
+  @media (max-width: 768px) {
+    padding: 4rem 0;
+  }
+}
+
+// Section Titles
+.section-title-wrapper {
+  .subtitle {
+    letter-spacing: 1px;
+  }
+  .section-heading {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+  }
+  .section-desc {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 650px;
+    margin: 0 auto;
+  }
+}
+
+// Campus Tour Cards
+.tour-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 24px;
+  overflow: hidden;
+  height: 100%;
+  transition: $transition;
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: rgba(22, 163, 74, 0.25);
+    box-shadow: $shadow-hover;
+    .tour-img-wrapper img {
+      transform: scale(1.08);
+    }
+  }
+
+  .tour-img-wrapper {
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: $transition;
+    }
+  }
+
+  .tour-body {
+    padding: 2rem;
+    h4 {
+      font-family: 'Outfit', sans-serif;
+      color: $dark;
+      font-weight: 800;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    p {
+      color: #475569;
+      line-height: 1.6;
+    }
+    .tour-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      margin-bottom: 0.75rem;
+    }
+  }
+}
+
+// Green Stats Counter Card
+.stat-counter-card {
+  background: rgba(22, 163, 74, 0.02);
+  border: 1px solid rgba(22, 163, 74, 0.12);
+  border-radius: 24px;
+  padding: 2.5rem 1.5rem;
+  height: 100%;
+  transition: $transition;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &:hover {
+    border-color: rgba(22, 163, 74, 0.35);
+    background: rgba(22, 163, 74, 0.05);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(22, 163, 74, 0.05);
+    .stat-icon-wrapper {
+      background: $primary;
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+  }
+
+  .stat-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    background: rgba(22, 163, 74, 0.1);
+    color: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    transition: $transition;
+  }
+
+  .stat-number {
+    font-family: 'Outfit', sans-serif;
+    background: linear-gradient(135deg, #16A34A 0%, #15803D 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    font-weight: 800;
+  }
+
+  .stat-card-label {
+    color: #15803D;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.25rem;
+  }
+}
+
+// Album Premium Card Layout
+.album-premium-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 24px;
+  overflow: hidden;
+  height: 100%;
+  cursor: pointer;
+  transition: $transition;
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: rgba(22, 163, 74, 0.25);
+    box-shadow: $shadow-hover;
+    .album-cover-container {
+      img {
+        transform: scale(1.06);
+      }
+      .album-hover-overlay {
+        opacity: 1;
+        .explore-btn {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+  .album-cover-container {
+    height: 160px;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid #E2E8F0;
+
+    @media (max-width: 1200px) {
+      height: 200px;
+    }
+    @media (max-width: 768px) {
+      height: 240px;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: $transition;
+    }
+    .album-hover-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: $transition;
+
+      .explore-btn {
+        background: $primary;
+        color: #ffffff;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+        transform: translateY(15px);
+        transition: $transition;
+
+        &:hover {
+          background: $primary-hover;
+        }
+      }
+    }
+  }
+
+  .album-card-body {
+    padding: 1.25rem 0.75rem;
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      color: $dark;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+    p {
+      color: #475569;
+      line-height: 1.6;
+    }
+  }
+}
+
+// Media Detail Frame Cards
+.media-premium-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  overflow: hidden;
+  height: 100%;
+  transition: $transition;
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(22, 163, 74, 0.2);
+    box-shadow: $shadow-hover;
+  }
+
+  .media-frame {
+    height: 140px;
+    background: #0F172A;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (max-width: 1200px) {
+      height: 180px;
+    }
+    @media (max-width: 768px) {
+      height: 220px;
+    }
+
+    .media-element {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .media-card-body {
+    padding: 1.25rem;
+    p {
+      color: #475569;
+      font-weight: 500;
+    }
+  }
+}
+
+// Back Button Outline
+.btn-outline-back {
+  background: transparent;
+  color: $primary;
+  border: 2px solid $primary;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: $transition;
+
+  &:hover {
+    background: $primary;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+  }
+}
+
+// Standard Commitment Card
+.standard-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #E2E8F0;
+  padding: 2.25rem;
+  height: 100%;
+  transition: $transition;
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(22, 163, 74, 0.2);
+    box-shadow: $shadow-hover;
+  }
+  .standard-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    color: $dark;
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    i {
+      color: $primary;
+    }
+  }
+  p {
+    color: #475569;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+}
+
+// Empty Feed Placeholder
+.empty-feed {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #E2E8F0;
+  padding: 4rem 2rem;
+  .empty-icon-wrapper {
+    color: #94A3B8;
+  }
+  h4 {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+}
+
+// Image Preview Modal Styles
+.image-preview-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.image-preview-container {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.preview-close-btn {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: none;
+  color: #0F172A;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  z-index: 100000;
+
+  &:hover {
+    background: #16A34A;
+    color: #ffffff;
+    transform: scale(1.1) rotate(90deg);
+  }
+
+  @media (max-width: 768px) {
+    top: 15px;
+    right: 15px;
+    background: rgba(15, 23, 42, 0.6);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// Add cursor styling for previewable images
+.album-cover-container, .img-previewable {
+  cursor: zoom-in;
+}
+

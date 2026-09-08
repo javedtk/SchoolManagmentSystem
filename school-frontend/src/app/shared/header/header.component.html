@@ -1,0 +1,98 @@
+@if (isPublic) {
+  <header class="public-header">
+    <div class="header-container">
+      <div class="logo" (click)="setTab('home')">
+        <span class="material-icons logo-icon">school</span>
+        <span class="logo-text">aether<span>academy</span></span>
+      </div>
+
+      <nav class="nav-links">
+        <a [class.active]="activeTab === 'home'" (click)="setTab('home')">Home</a>
+        <a [class.active]="activeTab === 'about'" (click)="setTab('about')">About Us</a>
+        <a [class.active]="activeTab === 'classes'" (click)="setTab('classes')">Classes</a>
+        <a [class.active]="activeTab === 'admission'" (click)="setTab('admission')">Admissions</a>
+        <a [class.active]="activeTab === 'contact'" (click)="setTab('contact')">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        @if (auth.isAuthenticated()) {
+          <button (click)="onNavigatePortal()" class="btn-primary start-btn">
+            <span class="material-icons">dashboard</span>
+            <span>Dashboard</span>
+          </button>
+        } @else {
+          <button (click)="onNavigatePortal()" class="btn-primary start-btn">
+            <span class="material-icons">login</span>
+            <span>Portal Sign In</span>
+          </button>
+        }
+      </div>
+    </div>
+  </header>
+} @else {
+  <header class="main-header">
+    <div class="header-left">
+      <h2>{{ title }}</h2>
+    </div>
+    <div class="header-right">
+      <div class="notification-container" (click)="toggleNotifications($event)">
+        <span class="material-icons icon-btn">notifications</span>
+        @if (unreadCount > 0) {
+          <span class="notification-badge"></span>
+        }
+
+        <!-- Dropdown panel -->
+        @if (showDropdown) {
+          <div class="notification-dropdown" (click)="$event.stopPropagation()">
+            <div class="dropdown-header">
+              <h4>Notifications</h4>
+              @if (notifications.length > 0) {
+                <button (click)="clearAll()" class="clear-btn">Clear All</button>
+              }
+            </div>
+            <div class="dropdown-body">
+              @for (notif of notifications; track notif.id) {
+                <div class="notification-item" [class.unread]="!notif.read" (click)="markAsRead(notif)">
+                  <div class="notif-avatar">
+                    @if (notif.student_photo) {
+                      <img [src]="'http://localhost:5000/' + notif.student_photo" alt="Photo" />
+                    } @else {
+                      <span class="material-icons">person</span>
+                    }
+                  </div>
+                  <div class="notif-content">
+                    <div class="notif-title-row">
+                      <span class="notif-title">{{ notif.title }}</span>
+                      @if (!notif.read) {
+                        <span class="unread-indicator"></span>
+                      }
+                    </div>
+                    <p class="notif-desc">{{ notif.description }}</p>
+                    <span class="notif-time">{{ notif.time | date:'shortTime' }}</span>
+                  </div>
+                </div>
+              } @empty {
+                <div class="notif-empty">
+                  <span class="material-icons">notifications_off</span>
+                  <p>No notifications yet</p>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+      <a href="/" class="btn-secondary btn-small">
+        <span class="material-icons">public</span><span>Web View</span>
+      </a>
+      @if (user) {
+        <div class="header-user-avatar">
+          @if (user.profile_image) {
+            <img [src]="'http://localhost:5000/' + user.profile_image" alt="Profile" />
+          } @else {
+            <span class="material-icons">account_circle</span>
+          }
+        </div>
+      }
+    </div>
+  </header>
+}

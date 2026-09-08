@@ -1,0 +1,192 @@
+<div class="module-wrapper">
+
+  <!-- ── Page Header ──────────────────────────────────────── -->
+  <div class="module-header">
+    <div class="module-title">
+      <span class="material-icons">event</span>
+      <div>
+        <h2>Manage Events</h2>
+        <p>Coordinate school functions, holidays, and announcements</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="meta-badge mr-2">
+        <span class="material-icons">event_note</span>
+        {{ events.length }} Total
+      </div>
+      <button (click)="openEventModal()" class="action-btn btn-admit">
+        <span class="material-icons">add</span>
+        Post Event
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Table Wrapper ────────────────────────────────────────── -->
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th><span class="material-icons">calendar_today</span>Event Date</th>
+          <th><span class="material-icons">title</span>Title</th>
+          <th><span class="material-icons">category</span>Category</th>
+          <th><span class="material-icons">settings</span>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (e of events; track e.id; let i = $index) {
+          <tr class="data-row">
+            <td class="row-index">{{ i + 1 }}</td>
+            <td class="font-semibold">{{ e.event_date | date:'mediumDate' }}</td>
+            <td>
+              <strong>{{ e.title }}</strong>
+              @if (e.place) {
+                <div style="font-size: 0.72rem; color: #64748b; margin-top: 0.2rem; display: flex; align-items: center; gap: 0.2rem;">
+                  <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">place</span>
+                  <span>{{ e.place }}</span>
+                </div>
+              }
+            </td>
+            <td>
+              <span class="class-chip">{{ e.category }}</span>
+              @if (e.organizer_name) {
+                <div style="font-size: 0.72rem; color: #64748b; margin-top: 0.2rem; display: flex; align-items: center; gap: 0.2rem;">
+                  <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">business</span>
+                  <span>{{ e.organizer_name }} ({{ e.organized_by }})</span>
+                </div>
+              }
+            </td>
+            <td class="actions-cell">
+              <button (click)="openEventModal(e)" class="action-btn btn-admit">
+                <span class="material-icons">edit</span><span>Edit</span>
+              </button>
+              <button (click)="delete.emit(e.id)" class="action-btn btn-reject">
+                <span class="material-icons">delete</span><span>Delete</span>
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="empty-state">
+              <span class="material-icons">event_busy</span>
+              <p>No announcements or events posted yet.</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- EVENT FORM MODAL -->
+@if (activeModal === 'event') {
+  <div class="modal-overlay" (click)="uploadProgress === null && setModal.emit(null)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">event</span>
+          </div>
+          <div>
+            <h3>{{ selectedEvent() ? 'Edit Event Listing' : 'Post Event Listing' }}</h3>
+            <p>{{ selectedEvent() ? 'Modify details of the existing school event' : 'Setup a new event or announcement' }}</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="uploadProgress === null && setModal.emit(null)" [disabled]="uploadProgress !== null">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <form (ngSubmit)="submitEvent()">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label><span class="material-icons">title</span>Event Title</label>
+              <input type="text" class="form-control" [(ngModel)]="eventForm.title" name="ev_title" required placeholder="Enter event title" [disabled]="uploadProgress !== null" />
+            </div>
+            <div class="form-group">
+              <label><span class="material-icons">category</span>Category</label>
+              <input type="text" class="form-control" [(ngModel)]="eventForm.category" name="ev_cat" required placeholder="e.g. Academics, Sports, Holiday" [disabled]="uploadProgress !== null" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label><span class="material-icons">calendar_today</span>Event Date</label>
+              <input type="date" class="form-control" [(ngModel)]="eventForm.event_date" name="ev_date" required [disabled]="uploadProgress !== null" />
+            </div>
+            <div class="form-group">
+              <label><span class="material-icons">place</span>Place / Venue</label>
+              <input type="text" class="form-control" [(ngModel)]="eventForm.place" name="ev_place" required placeholder="e.g. Auditorium, Playground" [disabled]="uploadProgress !== null" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label><span class="material-icons">business</span>Organized By</label>
+              <select class="form-control" [(ngModel)]="eventForm.organized_by" name="ev_org_by" (change)="onOrganizedByChange()" required [disabled]="uploadProgress !== null">
+                <option value="Internal">Internal</option>
+                <option value="External">External</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><span class="material-icons">person</span>Organizer Name</label>
+              <input type="text" class="form-control" [(ngModel)]="eventForm.organizer_name" name="ev_org_name" [disabled]="eventForm.organized_by === 'Internal' || uploadProgress !== null" required placeholder="Enter organizer name" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label><span class="material-icons">image</span>Event Banner Image</label>
+            @if (imagePreview) {
+              <div class="image-preview-wrapper" [style.opacity]="uploadProgress !== null ? '0.7' : '1'">
+                <img [src]="imagePreview" alt="Event preview" />
+                <button type="button" class="btn-remove-image" (click)="removeSelectedImage()" [disabled]="uploadProgress !== null" [style.display]="uploadProgress !== null ? 'none' : 'flex'">
+                  <span class="material-icons">close</span>
+                </button>
+              </div>
+            } @else {
+              <div class="image-upload-dropzone" (click)="uploadProgress === null && fileInput.click()" [style.pointer-events]="uploadProgress !== null ? 'none' : 'auto'" [style.opacity]="uploadProgress !== null ? '0.6' : '1'">
+                <span class="material-icons">cloud_upload</span>
+                <p>Click to upload event banner image</p>
+                <span>Supports JPG, PNG (Recommended 16:9 ratio)</span>
+              </div>
+            }
+            <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)" accept="image/*" [disabled]="uploadProgress !== null" />
+          </div>
+
+          <div class="form-group">
+            <label><span class="material-icons">description</span>Description Details</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="eventForm.description" name="ev_desc" required placeholder="Describe the event details..." [disabled]="uploadProgress !== null"></textarea>
+          </div>
+
+          @if (uploadProgress !== null) {
+            <div class="upload-progress-container">
+              <div class="d-flex align-items-center justify-content-between mb-1">
+                <span class="progress-label">
+                  <span class="material-icons rotating-sync">sync</span>
+                  Uploading Event Assets...
+                </span>
+                <span class="progress-percent">{{ uploadProgress }}%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" [style.width.%]="uploadProgress"></div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="setModal.emit(null)" [disabled]="uploadProgress !== null">
+            <span class="material-icons">close</span><span>Cancel</span>
+          </button>
+          <button type="submit" class="btn-confirm" [disabled]="uploadProgress !== null">
+            <span class="material-icons">publish</span><span>{{ selectedEvent() ? 'Save Changes' : 'Publish Event' }}</span>
+          </button>
+        </div>
+      </form>
+      
+    </div>
+  </div>
+}

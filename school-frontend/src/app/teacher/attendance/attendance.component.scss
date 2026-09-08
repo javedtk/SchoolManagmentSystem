@@ -1,0 +1,189 @@
+// ═══════════════════════════════════════════════════════════════
+// FILTER BAR STYLE
+// ═══════════════════════════════════════════════════════════════
+.filter-bar {
+  background: #ffffff;
+  padding: 0.85rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(22, 163, 74, 0.15);
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.03);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+  width: 100%;
+
+  .form-group {
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    label {
+      font-weight: 700;
+      color: #334155;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .form-control {
+      min-width: 180px;
+      max-width: 300px;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.85rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      background-color: #f8fafc;
+      color: #0f172a;
+      font-weight: 600;
+      outline: none;
+      transition: all 0.2s ease;
+
+      &:focus {
+        border-color: #16a34a;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+      }
+    }
+  }
+
+  .btn-primary {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: none;
+    background: linear-gradient(135deg, #16a34a, #047857);
+    color: #FFF;
+    padding: 0.55rem 1.25rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
+
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(22, 163, 74, 0.35);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .material-icons {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TABLE HEADER SLIMMING
+// ═══════════════════════════════════════════════════════════════
+.custom-table {
+  th {
+    padding: 0.6rem 1rem !important; // slimmer table header
+    font-size: 0.82rem !important;
+    letter-spacing: 0.02em;
+  }
+
+  td {
+    padding: 0.7rem 1rem !important; // slimmer table cells
+    font-size: 0.85rem;
+    vertical-align: middle;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ADMISSION NO BADGE
+// ═══════════════════════════════════════════════════════════════
+.admission-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: 'Outfit', monospace;
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1.5px solid rgba(22, 163, 74, 0.2);
+  border-radius: 8px;
+  letter-spacing: 0.02em;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ATTENDANCE TOGGLE BUTTONS
+// ═══════════════════════════════════════════════════════════════
+.attendance-toggles {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  transition: all 0.2s ease;
+
+  input[type="radio"] {
+    display: none; // Hide default native radio button
+  }
+
+  .select-dot {
+    font-size: 0.5rem;
+    opacity: 0.4;
+    transition: color 0.15s, opacity 0.15s;
+  }
+
+  &:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+  }
+
+  // Active status variations
+  &.present.active {
+    background: #dcfce7;
+    color: #15803d;
+    border-color: #bbf7d0;
+
+    .select-dot {
+      color: #15803d;
+      opacity: 1;
+    }
+  }
+
+  &.absent.active {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #fecaca;
+
+    .select-dot {
+      color: #b91c1c;
+      opacity: 1;
+    }
+  }
+
+  &.leave.active {
+    background: #fef3c7;
+    color: #b45309;
+    border-color: #fde68a;
+
+    .select-dot {
+      color: #b45309;
+      opacity: 1;
+    }
+  }
+}

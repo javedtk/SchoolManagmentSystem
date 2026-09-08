@@ -1,0 +1,524 @@
+<div class="module-wrapper">
+
+  <!-- ── Page Header ──────────────────────────────────────── -->
+  <div class="module-header">
+    <div class="module-title">
+      <span class="material-icons">face</span>
+      <div>
+        <h2>Manage Students</h2>
+        <p>Monitor profiles, manage admissions, and assign classes</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="meta-badge mr-2">
+        <span class="material-icons">groups</span>
+        {{ students.length }} Total
+      </div>
+      <button (click)="openStudentModal()" class="action-btn btn-admit">
+        <span class="material-icons">person_add</span>
+        Register Student
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Quick Status Summary ──────────────────────────────── -->
+  <div class="status-summary">
+    <button class="status-chip chip-all" [class.active]="!filterStatus" (click)="filterStatus = ''">
+      <span class="chip-count">{{ students.length }}</span>
+      <span>All</span>
+    </button>
+    <button class="status-chip chip-approved" [class.active]="filterStatus === 'active'"
+      (click)="filterStatus = 'active'">
+      <span class="chip-dot"></span>
+      <span class="chip-count">{{ activeCount }}</span>
+      <span>Active</span>
+    </button>
+    <button class="status-chip chip-rejected" [class.active]="filterStatus === 'inactive'"
+      (click)="filterStatus = 'inactive'">
+      <span class="chip-dot"></span>
+      <span class="chip-count">{{ inactiveCount }}</span>
+      <span>Inactive</span>
+    </button>
+  </div>
+
+  <!-- ── Filter Bar ────────────────────────────────────────── -->
+  <div class="filter-bar">
+
+    <!-- Search -->
+    <div class="filter-search">
+      <span class="material-icons search-icon">search</span>
+      <input type="text" placeholder="Search by name, email, admission no, or parent…" [(ngModel)]="searchText" class="search-input" />
+      @if (searchText) {
+      <button class="clear-input" (click)="searchText = ''">
+        <span class="material-icons">close</span>
+      </button>
+      }
+    </div>
+
+    <!-- Results count + Clear -->
+    <div class="filter-actions">
+      <span class="result-count">
+        <strong>{{ filteredStudents().length }}</strong> of {{ students.length }} records
+      </span>
+      @if (hasActiveFilter) {
+      <button class="btn-clear-all" (click)="clearFilters()">
+        <span class="material-icons">filter_alt_off</span>
+        Clear Filters
+      </button>
+      }
+    </div>
+  </div>
+
+  <!-- ── Table ─────────────────────────────────────────────── -->
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Admission No</th>
+          <th>Student Member</th>
+          <th>Email</th>
+          <th>Class / Sec</th>
+          <th>Parent Name</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (st of paginatedStudents(); track st.id; let i = $index) {
+        <tr class="data-row">
+          <td class="row-index">{{ (currentPage() - 1) * pageSize() + i + 1 }}</td>
+          <td class="mono font-bold">{{ st.admission_no }}</td>
+          <td class="student-cell">
+            <div class="avatar-name">
+              @if (st.User?.profile_image) {
+                <img [src]="baseUrl + '/' + st.User?.profile_image" class="avatar-img-circle" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" />
+              } @else {
+                <div class="avatar-circle">{{ st.User?.name?.charAt(0) }}</div>
+              }
+              <span>{{ st.User?.name }}</span>
+            </div>
+          </td>
+          <td class="email-cell">{{ st.User?.email }}</td>
+          <td>
+            <span class="class-chip">
+              {{ st.Class ? st.Class.name + ' – ' + st.section : 'Unassigned' }}
+            </span>
+          </td>
+          <td>{{ st.parent_name }}</td>
+          <td>
+            <span class="status-pill status-{{ (st.User?.status || '').toLowerCase() === 'active' ? 'approved' : 'rejected' }}">
+              <span class="status-dot"></span>
+              {{ st.User?.status || 'Inactive' | titlecase }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button class="action-btn btn-admit" title="View Student Detail" (click)="viewStudentDetail(st)">
+              <span class="material-icons">visibility</span>
+              View
+            </button>
+            <button class="action-btn btn-admit" title="Edit Student" (click)="openStudentModal(st)">
+              <span class="material-icons">edit</span>
+              Edit
+            </button>
+            @if ((st.User?.status || '').toLowerCase() === 'active') {
+              <button class="action-btn btn-reject" title="Deactivate Student" (click)="triggerConfirmToggle(st)">
+                <span class="material-icons">block</span>
+                Deactivate
+              </button>
+            } @else {
+              <button class="action-btn btn-admit" style="background: linear-gradient(135deg, #10b981, #059669) !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);" title="Activate Student" (click)="triggerConfirmToggle(st)">
+                <span class="material-icons">check_circle</span>
+                Activate
+              </button>
+            }
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="8" class="empty-state">
+            <span class="material-icons">
+              {{ hasActiveFilter ? 'search_off' : 'face' }}
+            </span>
+            <p>{{ hasActiveFilter ? 'No students match your filters.' : 'No students registered yet.' }}</p>
+            @if (hasActiveFilter) {
+            <button class="btn-clear-empty" (click)="clearFilters()">Clear Filters</button>
+            }
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  @if (filteredStudents().length > 0) {
+    <div class="pagination-wrapper mt-3">
+      <app-pagination
+        [totalItems]="filteredStudents().length"
+        [pageSize]="pageSize()"
+        [currentPage]="currentPage()"
+        (pageChange)="currentPage.set($event)">
+      </app-pagination>
+    </div>
+  }
+</div>
+
+<!-- REGISTER STUDENT MODAL -->
+@if (activeModal === 'student') {
+  <div class="modal-overlay" (click)="setModal.emit(null)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">{{ selectedStudent() ? 'edit' : 'person_add' }}</span>
+          </div>
+          <div>
+            <h3>{{ selectedStudent() ? 'Edit Student Details' : 'Register New Student' }}</h3>
+            <p>{{ selectedStudent() ? studentForm.name : 'Fill in the details to register a new student' }}</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="setModal.emit(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="submitStudent()">
+          
+          <div class="form-row mb-3">
+            <div class="form-group">
+              <label>
+                <span class="material-icons">person</span>
+                Student Full Name
+              </label>
+              <input type="text" class="form-control" placeholder="e.g. John Doe" [(ngModel)]="studentForm.name" name="st_name" required />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <span class="material-icons">email</span>
+                Email Address
+              </label>
+              <input type="email" class="form-control" placeholder="e.g. john.doe@email.com" [(ngModel)]="studentForm.email" name="st_email" required />
+            </div>
+          </div>
+
+          <div class="form-row mb-3">
+            <div class="form-group">
+              <label>
+                <span class="material-icons">badge</span>
+                Admission No <span style="font-size: 0.7rem; font-weight: normal; opacity: 0.75;">(Auto-generated)</span>
+              </label>
+              <input type="text" class="form-control" [(ngModel)]="studentForm.admission_no" name="st_adm" readonly required />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <span class="material-icons">wc</span>
+                Gender
+              </label>
+              <select class="form-control" [(ngModel)]="studentForm.gender" name="st_gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row mb-3">
+            <div class="form-group">
+              <label>
+                <span class="material-icons">school</span>
+                Class Room
+              </label>
+              <select class="form-control" [(ngModel)]="studentForm.class_id" name="st_class" required>
+                @for (c of classes; track c.id) {
+                  <option [value]="c.id">{{ c.name }} – {{ c.section }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>
+                <span class="material-icons">group</span>
+                Assign Section
+              </label>
+              <input type="text" class="form-control" placeholder="e.g. A" [(ngModel)]="studentForm.section" name="st_sec" required />
+            </div>
+          </div>
+
+          <div class="form-row mb-3">
+            <div class="form-group">
+              <label>
+                <span class="material-icons">calendar_today</span>
+                Date of Birth
+              </label>
+              <input type="date" class="form-control" [(ngModel)]="studentForm.dob" name="st_dob" />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <span class="material-icons">supervisor_account</span>
+                Parent Full Name
+              </label>
+              <input type="text" class="form-control" placeholder="e.g. Robert Doe" [(ngModel)]="studentForm.parent_name" name="st_parent" required />
+            </div>
+          </div>
+
+          <div class="form-row mb-3">
+            <div class="form-group">
+              <label>
+                <span class="material-icons">phone</span>
+                Parent Phone Contact
+              </label>
+              <input type="text" class="form-control" placeholder="e.g. +1 (555) 019-2834" [(ngModel)]="studentForm.parent_contact" name="st_parent_phone" required />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <span class="material-icons">home</span>
+                Residential Address
+              </label>
+              <input type="text" class="form-control" placeholder="e.g. 123 Main St, Springfield" [(ngModel)]="studentForm.address" name="st_address" />
+            </div>
+          </div>
+
+          <div class="form-row mb-3">
+            <div class="form-group">
+              <label>
+                <span class="material-icons">directions_bus</span>
+                Transportation Mode
+              </label>
+              <select class="form-control" [(ngModel)]="studentForm.transport_mode" name="st_transport_mode">
+                <option value="Walking">Walking</option>
+                <option value="Bus Facility">Bus Facility</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>
+                <span class="material-icons">photo_camera</span>
+                Upload Student Photo
+              </label>
+              <div class="d-flex align-items-center gap-2">
+                @if (selectedStudent()?.User?.profile_image) {
+                  <img [src]="baseUrl + '/' + selectedStudent()?.User?.profile_image" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; border: 1px solid #cbd5e1;" />
+                }
+                <input type="file" class="form-control" (change)="onPhotoSelected($event)" accept="image/*" />
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" [disabled]="isSaving" (click)="setModal.emit(null)">
+              <span class="material-icons">close</span> Cancel
+            </button>
+            <button type="submit" class="btn-confirm" [disabled]="isSaving">
+              @if (isSaving) {
+                <span class="material-icons spinning me-2">refresh</span>
+                <span>Saving...</span>
+              } @else {
+                <span class="material-icons">save</span> {{ selectedStudent() ? 'Save Changes' : 'Register Student' }}
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- VIEW STUDENT DETAILS MODAL -->
+@if (activeModal === 'view-student' && selectedStudent()) {
+  <div class="modal-overlay" (click)="setModal.emit(null)">
+    <div class="modal-box view-detail-modal" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header" style="background: linear-gradient(135deg, #14532d 0%, #15803d 100%);">
+        <div class="modal-title-group">
+          <div class="modal-icon" style="background: rgba(255,255,255,0.2);">
+            <span class="material-icons" style="color: #4ade80;">visibility</span>
+          </div>
+          <div>
+            <h3>Student Profile Details</h3>
+            <p>Full academic and registration summary</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="setModal.emit(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="view-detail-card">
+          <!-- Avatar & Header -->
+          <div class="profile-brief text-center mb-4 d-flex flex-column align-items-center justify-content-center">
+            @if (selectedStudent()?.User?.profile_image) {
+              <img [src]="baseUrl + '/' + selectedStudent()?.User?.profile_image" class="mb-2" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3);" />
+            } @else {
+              <div class="avatar-large mb-2" style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #22c55e, #15803d); color: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700; text-transform: uppercase; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3);">
+                {{ selectedStudent()?.User?.name?.charAt(0) }}
+              </div>
+            }
+            <h4 class="fw-bold m-0" style="color: var(--text, #0f172a); font-size: 1.2rem;">{{ selectedStudent()?.User?.name }}</h4>
+            <span class="status-pill status-{{ (selectedStudent()?.User?.status || '').toLowerCase() === 'active' ? 'approved' : 'rejected' }} mt-1">
+              <span class="status-dot"></span>
+              {{ selectedStudent()?.User?.status || 'Inactive' | titlecase }}
+            </span>
+          </div>
+
+          <!-- Profile details grid -->
+          <div class="detail-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem 1rem; border-top: 1px solid var(--border, #e2e8f0); padding-top: 1.25rem;">
+            
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">badge</span>
+                Admission No
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569); font-family: monospace;">
+                {{ selectedStudent()?.admission_no }}
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">school</span>
+                Class Room
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569);">
+                {{ selectedStudent()?.Class ? selectedStudent()?.Class?.name + ' – ' + selectedStudent()?.section : 'Unassigned' }}
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">email</span>
+                Email Address
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569); word-break: break-all;">
+                {{ selectedStudent()?.User?.email }}
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">wc</span>
+                Gender
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569);">
+                {{ selectedStudent()?.gender || 'N/A' }}
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">calendar_today</span>
+                Date of Birth
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569);">
+                {{ selectedStudent()?.dob ? (selectedStudent()?.dob | date:'longDate') : 'N/A' }}
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">directions_bus</span>
+                Transportation
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569);">
+                {{ selectedStudent()?.transport_mode || 'Walking' }}
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">supervisor_account</span>
+                Parent Name
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569);">
+                {{ selectedStudent()?.parent_name || 'N/A' }}
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">phone</span>
+                Parent Contact
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569);">
+                {{ selectedStudent()?.parent_contact || 'N/A' }}
+              </div>
+            </div>
+
+            <div class="detail-item" style="grid-column: span 2;">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">home</span>
+                Residential Address
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569);">
+                {{ selectedStudent()?.address || 'N/A' }}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="padding: 0 1.5rem 1.5rem 1.5rem; border-top: none; margin-top: 0.5rem;">
+        <button type="button" class="btn-confirm" (click)="setModal.emit(null)">
+          <span class="material-icons">close</span> Close Details
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- CUSTOM CONFIRMATION DIALOG MODAL -->
+@if (activeModal === 'confirm-toggle' && pendingToggleStudent()) {
+  <div class="modal-overlay" (click)="setModal.emit(null)">
+    <div class="modal-box confirm-dialog-box" (click)="$event.stopPropagation()" style="max-width: 400px; border-radius: 16px;">
+      
+      <div class="modal-body text-center p-4 d-flex flex-column align-items-center justify-content-center">
+        <!-- Icon based on action -->
+        @if ((pendingToggleStudent()?.User?.status || '').toLowerCase() === 'active') {
+          <div class="confirm-icon-wrapper mb-3" style="width: 60px; height: 60px; border-radius: 50%; background: #fef2f2; border: 1.5px solid #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.15);">
+            <span class="material-icons" style="font-size: 2.2rem;">warning</span>
+          </div>
+          <h4 class="fw-bold mb-2" style="color: #991b1b; font-size: 1.15rem; margin-top: 0;">Deactivate Student Profile?</h4>
+        } @else {
+          <div class="confirm-icon-wrapper mb-3" style="width: 60px; height: 60px; border-radius: 50%; background: #f0fdf4; border: 1.5px solid #dcfce7; color: #10b981; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.15);">
+            <span class="material-icons" style="font-size: 2.2rem;">verified_user</span>
+          </div>
+          <h4 class="fw-bold mb-2" style="color: #065f46; font-size: 1.15rem; margin-top: 0;">Activate Student Profile?</h4>
+        }
+
+        <p class="text-muted small mb-4" style="line-height: 1.5; font-size: 0.85rem; padding: 0 0.5rem; text-align: center;">
+          Are you sure you want to 
+          <strong>{{ (pendingToggleStudent()?.User?.status || '').toLowerCase() === 'active' ? 'deactivate' : 'activate' }}</strong> 
+          the profile of <strong>{{ pendingToggleStudent()?.User?.name }}</strong> (Admission No: {{ pendingToggleStudent()?.admission_no }})?
+        </p>
+
+        <div class="d-flex justify-content-center gap-2 w-100" style="border-top: 1px solid #f1f5f9; padding-top: 1.25rem;">
+          <button type="button" class="btn-cancel" (click)="setModal.emit(null)" style="background: #f1f5f9; color: #475569; padding: 0.5rem 1.25rem; border-radius: 10px; font-weight: 700; border: none; font-size: 0.82rem; cursor: pointer; transition: all 0.2s;">
+            Cancel
+          </button>
+          
+          @if ((pendingToggleStudent()?.User?.status || '').toLowerCase() === 'active') {
+            <button type="button" class="btn-confirm" (click)="confirmToggleAction()" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; padding: 0.5rem 1.25rem; border-radius: 10px; font-weight: 700; border: none; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);">
+              Yes, Deactivate
+            </button>
+          } @else {
+            <button type="button" class="btn-confirm" (click)="confirmToggleAction()" style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 0.5rem 1.25rem; border-radius: 10px; font-weight: 700; border: none; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
+              Yes, Activate
+            </button>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>
+}
+
+

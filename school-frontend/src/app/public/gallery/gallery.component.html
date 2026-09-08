@@ -1,0 +1,254 @@
+<section class="gallery-hero text-white d-flex align-items-center justify-content-center text-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <span class="badge bg-success welcome-badge mb-3 px-3 py-2 text-uppercase font-weight-bold">
+          Aether Academy | Media Portal
+        </span>
+        <h1 class="display-3 font-weight-bold gallery-hero-title mb-4 text-white">
+          Campus Gallery
+        </h1>
+        <p class="lead gallery-hero-text mb-0">
+          A visual log of daily campus activity, smart classroom environments, technological project expos, and sports accomplishments.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+@if (!activeAlbum) {
+  <!-- Albums Grid -->
+  <section class="section-padding bg-white">
+    <div class="container">
+      <div class="section-title-wrapper text-center mb-5">
+        <span class="subtitle text-success text-uppercase fw-bold d-inline-block mb-2">Campus Catalog</span>
+        <h2 class="display-6 fw-bold mb-4 section-heading">Our Gallery Albums</h2>
+        <p class="text-muted mx-auto section-desc">Browse through organized media collections documenting class work, athletic meets, and graduation ceremonies.</p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        @for (album of albums; track album.id) {
+          <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <div class="album-premium-card">
+              <div class="album-cover-container" (click)="openPreview(album.cover_image ? 'http://localhost:5000/' + album.cover_image : 'assets/images/album-placeholder.jpg', $event)">
+                <img [src]="album.cover_image ? 'http://localhost:5000/' + album.cover_image : 'assets/images/album-placeholder.jpg'" alt="Album Cover" />
+                <div class="album-hover-overlay">
+                  <div class="explore-btn" (click)="selectAlbum.emit(album.id); $event.stopPropagation()">
+                    <i class="fas fa-images"></i> <span>Explore Album</span>
+                  </div>
+                </div>
+              </div>
+              <div class="album-card-body text-center" (click)="selectAlbum.emit(album.id)">
+                <h3 class="album-title mb-0">{{ album.title }}</h3>
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="col-lg-8">
+            <div class="glass-card empty-feed text-center py-5">
+              <div class="empty-icon-wrapper mb-3 text-muted">
+                <i class="fas fa-images fa-3x"></i>
+              </div>
+              <h4>No Albums Created</h4>
+              <p class="text-muted">No media gallery albums are loaded from the database at this time. Please check back later.</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Campus Highlights Tour -->
+  <section class="section-padding bg-light">
+    <div class="container">
+      <div class="section-title-wrapper text-center mb-5">
+        <span class="subtitle text-success text-uppercase fw-bold d-inline-block mb-2">Visual Tour</span>
+        <h2 class="display-6 fw-bold mb-4 section-heading">Campus Environments</h2>
+        <p class="text-muted mx-auto section-desc">Take a virtual walk through our advanced facilities designed to maximize comfort, innovation, and active study performance.</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <div class="tour-card">
+            <div class="tour-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=600&auto=format&fit=crop" alt="Central Campus" />
+            </div>
+            <div class="tour-body">
+              <span class="badge-active status-active tour-badge mb-2">Central Campus</span>
+              <h4>The Grand Canopy Quad</h4>
+              <p class="text-muted small mb-0">An open-air collaborative social arena where cohorts exchange ideas and hold outdoor debate forums.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="tour-card">
+            <div class="tour-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=600&auto=format&fit=crop" alt="Tech Wing" />
+            </div>
+            <div class="tour-body">
+              <span class="badge-active status-active tour-badge mb-2">Tech Wing</span>
+              <h4>Robotics Engineering Lab</h4>
+              <p class="text-muted small mb-0">State-of-the-art workstations where cohorts build IoT prototypes and program autonomous rovers.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="tour-card">
+            <div class="tour-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=600&auto=format&fit=crop" alt="Academic Core" />
+            </div>
+            <div class="tour-body">
+              <span class="badge-active status-active tour-badge mb-2">Academic Core</span>
+              <h4>Smart Auditorium</h4>
+              <p class="text-muted small mb-0">Equipped with 3D projection mapping and immersive acoustics to host regional guest lectures.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Media Library Stats -->
+  <section class="section-padding bg-white">
+    <div class="container">
+      <div class="row g-4 justify-content-center">
+        <div class="col-lg-3 col-sm-6">
+          <div class="stat-counter-card text-center">
+            <div class="stat-icon-wrapper">
+              <i class="fas fa-images fa-lg"></i>
+            </div>
+            <div class="stat-number display-5 fw-bold mb-2">1,500+</div>
+            <div class="stat-card-label">Photos Archived</div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <div class="stat-counter-card text-center">
+            <div class="stat-icon-wrapper">
+              <i class="fas fa-video fa-lg"></i>
+            </div>
+            <div class="stat-number display-5 fw-bold mb-2">80+</div>
+            <div class="stat-card-label">HD Video Logs</div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <div class="stat-counter-card text-center">
+            <div class="stat-icon-wrapper">
+              <i class="fas fa-calendar-check fa-lg"></i>
+            </div>
+            <div class="stat-number display-5 fw-bold mb-2">50+</div>
+            <div class="stat-card-label">Events Covered</div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <div class="stat-counter-card text-center">
+            <div class="stat-icon-wrapper">
+              <i class="fas fa-camera-retro fa-lg"></i>
+            </div>
+            <div class="stat-number display-5 fw-bold mb-2">100%</div>
+            <div class="stat-card-label">Coverage Quality</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Media Guidelines Policy -->
+  <section class="section-padding bg-light">
+    <div class="container">
+      <div class="section-title-wrapper text-center mb-5">
+        <span class="subtitle text-success text-uppercase fw-bold d-inline-block mb-2">Privacy Core</span>
+        <h2 class="display-6 fw-bold mb-4 section-heading">Media Protection Policies</h2>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="standard-card">
+            <div class="standard-title">
+              <i class="fas fa-user-shield"></i>
+              <span>Student Privacy Guard</span>
+            </div>
+            <p class="text-muted small mb-0">Every media item is audited in compliance with child safety and data security laws, safeguarding student identities.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="standard-card">
+            <div class="standard-title">
+              <i class="fas fa-copyright"></i>
+              <span>Open Educational Use</span>
+            </div>
+            <p class="text-muted small mb-0">Our pictures and videos are distributed under open license guidelines for student academic portfolio presentations.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="standard-card">
+            <div class="standard-title">
+              <i class="fas fa-file-signature"></i>
+              <span>Consent & Permissions</span>
+            </div>
+            <p class="text-muted small mb-0">Families maintain custom preference controls for digital representations. Opt-out controls are available in settings.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+} @else {
+  <!-- Album Detailed Media Grid -->
+  <section class="section-padding bg-white">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <button class="btn-outline-back px-4 py-2" (click)="closeAlbum.emit()">
+          <i class="fas fa-arrow-left me-2"></i> Back to Albums
+        </button>
+      </div>
+
+      <div class="section-title-wrapper text-center mb-5">
+        <span class="subtitle text-success text-uppercase fw-bold d-inline-block mb-2">Album Collection</span>
+        <h2 class="display-6 fw-bold mb-3 section-heading">{{ activeAlbum.title }}</h2>
+        <p class="text-muted mx-auto section-desc">{{ activeAlbum.description }}</p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        @for (media of activeAlbum.GalleryMedia; track media.id) {
+          <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <div class="media-premium-card">
+              <div class="media-frame">
+                @if (media.type === 'video') {
+                  <video [src]="'http://localhost:5000/' + media.file_url" controls class="media-element"></video>
+                } @else {
+                  <img [src]="'http://localhost:5000/' + media.file_url" 
+                       alt="Media item" 
+                       class="media-element img-previewable" 
+                       (click)="openPreview('http://localhost:5000/' + media.file_url, $event)" />
+                }
+              </div>
+              <div class="media-card-body text-center">
+                <p class="media-caption text-muted small mb-0">{{ media.caption || 'Gallery Media' }}</p>
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="col-lg-8">
+            <div class="glass-card empty-feed text-center py-5">
+              <div class="empty-icon-wrapper mb-3 text-muted">
+                <i class="fas fa-images fa-3x"></i>
+              </div>
+              <h4>No Media Items</h4>
+              <p class="text-muted">This album doesn't contain any media files at this time.</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+}
+
+@if (previewImageUrl) {
+  <div class="image-preview-backdrop" (click)="closePreview()">
+    <div class="image-preview-container" (click)="$event.stopPropagation()">
+      <img [src]="previewImageUrl" alt="Preview Image" class="preview-image" />
+      <button class="preview-close-btn" (click)="closePreview()" aria-label="Close Preview">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+}

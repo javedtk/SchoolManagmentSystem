@@ -1,0 +1,180 @@
+.attendance-summary-card {
+  background: linear-gradient(135deg, #15803d 0%, #16a34a 100%);
+  border: none;
+  border-radius: 16px;
+  padding: 1.25rem 1.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(22, 163, 74, 0.2);
+  color: #ffffff;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .summary-left {
+    h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 0.15rem 0;
+      letter-spacing: -0.02em;
+      
+      span {
+        color: #4ade80;
+        font-weight: 900;
+        text-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
+      }
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.8) !important;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin: 0;
+    }
+  }
+
+  .summary-right {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+
+    .badge-active {
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff !important;
+
+      &.badge-present {
+        background: rgba(74, 222, 128, 0.18);
+        border-color: rgba(74, 222, 128, 0.35);
+        color: #4ade80 !important;
+      }
+
+      &.badge-absent {
+        background: rgba(248, 113, 113, 0.18);
+        border-color: rgba(248, 113, 113, 0.35);
+        color: #fca5a5 !important;
+      }
+
+      &.badge-leave {
+        background: rgba(253, 224, 71, 0.15);
+        border-color: rgba(253, 224, 71, 0.35);
+        color: #fef08a !important;
+      }
+    }
+  }
+}
+
+// ── Filter Panel styling ──────────────────────────────────────
+.filter-panel {
+  background: #ffffff;
+  border: 1px solid rgba(22, 163, 74, 0.12);
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 4px 20px rgba(22, 163, 74, 0.04);
+  
+  .filter-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 200px;
+    flex: 1;
+
+    @media (max-width: 576px) {
+      min-width: 100%;
+    }
+  }
+
+  .filter-label {
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #475569;
+    letter-spacing: 0.03em;
+  }
+
+  .input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .material-icons {
+      position: absolute;
+      left: 0.75rem;
+      font-size: 1.1rem;
+      color: #94a3b8;
+      pointer-events: none;
+    }
+
+    .form-control {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      color: #0f172a;
+      font-size: 0.88rem;
+      padding: 0.5rem 0.75rem 0.5rem 2.2rem;
+      border-radius: 8px;
+      outline: none;
+      height: 38px;
+      transition: all 0.2s ease;
+
+      &:focus {
+        border-color: #16a34a;
+        box-shadow: 0 0 6px rgba(22, 163, 74, 0.2);
+      }
+    }
+
+    .select-control {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1rem;
+      padding-right: 2.2rem;
+    }
+  }
+
+  .btn-clear {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0 1rem;
+    border-radius: 8px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.16);
+      border-color: #ef4444;
+    }
+
+    .material-icons {
+      font-size: 1.1rem;
+    }
+  }
+}
+

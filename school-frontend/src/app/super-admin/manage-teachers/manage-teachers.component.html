@@ -1,0 +1,399 @@
+<div class="module-wrapper">
+
+  <!-- ── Page Header ──────────────────────────────────────── -->
+  <div class="module-header">
+    <div class="module-title">
+      <span class="material-icons">badge</span>
+      <div>
+        <h2>Manage Teachers</h2>
+        <p>Add, edit and monitor school faculty members</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="meta-badge mr-2">
+        <span class="material-icons">groups</span>
+        {{ teachers.length }} Total
+      </div>
+      <button (click)="openTeacherModal()" class="action-btn btn-admit">
+        <span class="material-icons">person_add</span>
+        Add Teacher
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Quick Status Summary ──────────────────────────────── -->
+  <div class="status-summary">
+    <button class="status-chip chip-all" [class.active]="!filterStatus" (click)="filterStatus = ''">
+      <span class="chip-count">{{ teachers.length }}</span>
+      <span>All</span>
+    </button>
+    <button class="status-chip chip-approved" [class.active]="filterStatus === 'active'"
+      (click)="filterStatus = 'active'">
+      <span class="chip-dot"></span>
+      <span class="chip-count">{{ activeCount }}</span>
+      <span>Active</span>
+    </button>
+    <button class="status-chip chip-rejected" [class.active]="filterStatus === 'inactive'"
+      (click)="filterStatus = 'inactive'">
+      <span class="chip-dot"></span>
+      <span class="chip-count">{{ inactiveCount }}</span>
+      <span>Inactive</span>
+    </button>
+  </div>
+
+  <!-- ── Filter Bar ────────────────────────────────────────── -->
+  <div class="filter-bar">
+
+    <!-- Search -->
+    <div class="filter-search">
+      <span class="material-icons search-icon">search</span>
+      <input type="text" placeholder="Search by name, email or employee ID…" [(ngModel)]="searchText" class="search-input" />
+      @if (searchText) {
+      <button class="clear-input" (click)="searchText = ''">
+        <span class="material-icons">close</span>
+      </button>
+      }
+    </div>
+
+    <!-- Results count + Clear -->
+    <div class="filter-actions">
+      <span class="result-count">
+        <strong>{{ filteredTeachers.length }}</strong> of {{ teachers.length }} records
+      </span>
+      @if (hasActiveFilter) {
+      <button class="btn-clear-all" (click)="clearFilters()">
+        <span class="material-icons">filter_alt_off</span>
+        Clear Filters
+      </button>
+      }
+    </div>
+  </div>
+
+  <!-- ── Table ─────────────────────────────────────────────── -->
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Emp ID</th>
+          <th>Faculty Member</th>
+          <th>Email</th>
+          <th>Designation</th>
+          <th>Qualification</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (t of filteredTeachers; track t.id; let i = $index) {
+        <tr class="data-row">
+          <td class="row-index">{{ i + 1 }}</td>
+          <td class="mono">{{ t.employee_id }}</td>
+          <td class="student-cell">
+            <div class="avatar-name">
+              <div class="avatar-circle">{{ t.User?.name?.charAt(0) }}</div>
+              <span>{{ t.User?.name }}</span>
+            </div>
+          </td>
+          <td class="email-cell">{{ t.User?.email }}</td>
+          <td>{{ t.designation }}</td>
+          <td><span class="class-chip">{{ t.qualification }}</span></td>
+          <td>
+            <span class="status-pill status-{{ (t.User?.status || '').toLowerCase() === 'active' ? 'approved' : 'rejected' }}">
+              <span class="status-dot"></span>
+              {{ t.User?.status || 'Inactive' | titlecase }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button class="action-btn btn-admit" title="View Teacher Detail" (click)="viewTeacherDetail(t)">
+              <span class="material-icons">visibility</span>
+              View
+            </button>
+            <button class="action-btn btn-admit" title="Edit Faculty" (click)="openTeacherModal(t)">
+              <span class="material-icons">edit</span>
+              Edit
+            </button>
+            @if ((t.User?.status || '').toLowerCase() === 'active') {
+              <button class="action-btn btn-reject" title="Deactivate Faculty" (click)="triggerConfirmToggle(t)">
+                <span class="material-icons">block</span>
+                Disable
+              </button>
+            } @else {
+              <button class="action-btn btn-admit" style="background: linear-gradient(135deg, #10b981, #059669) !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);" title="Activate Faculty" (click)="triggerConfirmToggle(t)">
+                <span class="material-icons">check_circle</span>
+                Enable
+              </button>
+            }
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="8" class="empty-state">
+            <span class="material-icons">
+              {{ hasActiveFilter ? 'search_off' : 'badge' }}
+            </span>
+            <p>{{ hasActiveFilter ? 'No teachers match your filters.' : 'No teachers registered yet.' }}</p>
+            @if (hasActiveFilter) {
+            <button class="btn-clear-empty" (click)="clearFilters()">Clear Filters</button>
+            }
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- CREATE/EDIT TEACHER MODAL -->
+@if (activeModal === 'teacher') {
+  <div class="modal-overlay" (click)="setModal.emit(null)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">{{ selectedTeacher() ? 'edit' : 'person_add' }}</span>
+          </div>
+          <div>
+            <h3>{{ selectedTeacher() ? 'Edit Faculty Member' : 'Register New Teacher' }}</h3>
+            <p>{{ selectedTeacher() ? teacherForm.name : 'Fill in the details to create a new faculty profile' }}</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="setModal.emit(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="submitTeacher()">
+          <div class="form-group mb-3">
+            <label>
+              <span class="material-icons">person</span>
+              Faculty Full Name
+            </label>
+            <input type="text" class="form-control" [(ngModel)]="teacherForm.name" name="t_name" required />
+          </div>
+
+          <div class="form-group mb-3">
+            <label>
+              <span class="material-icons">email</span>
+              Email Address
+            </label>
+            <input type="email" class="form-control" [(ngModel)]="teacherForm.email" name="t_email" required />
+          </div>
+
+          <div class="form-row mb-3">
+            <div class="form-group">
+              <label>
+                <span class="material-icons">badge</span>
+                Employee ID
+              </label>
+              <input type="text" class="form-control" [(ngModel)]="teacherForm.employee_id" name="t_emp" [disabled]="!!selectedTeacher()" required />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <span class="material-icons">work</span>
+                Designation
+              </label>
+              <input type="text" class="form-control" [(ngModel)]="teacherForm.designation" name="t_des" />
+            </div>
+          </div>
+
+          <div class="form-row mb-3">
+            <div class="form-group">
+              <label>
+                <span class="material-icons">school</span>
+                Qualification
+              </label>
+              <input type="text" class="form-control" [(ngModel)]="teacherForm.qualification" name="t_qual" />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <span class="material-icons">calendar_today</span>
+                Joining Date
+              </label>
+              <input type="date" class="form-control" [(ngModel)]="teacherForm.joining_date" name="t_join" />
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label>
+              <span class="material-icons">description</span>
+              Teacher Profile Biography
+            </label>
+            <textarea class="form-control" rows="3" [(ngModel)]="teacherForm.bio" name="t_bio"></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" (click)="setModal.emit(null)">
+              <span class="material-icons">close</span> Cancel
+            </button>
+            <button type="submit" class="btn-confirm">
+              <span class="material-icons">save</span> Save Member
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- CUSTOM CONFIRMATION DIALOG MODAL -->
+@if (activeModal === 'confirm-toggle-teacher' && pendingToggleTeacher()) {
+  <div class="modal-overlay" (click)="setModal.emit(null)">
+    <div class="modal-box confirm-dialog-box" (click)="$event.stopPropagation()" style="max-width: 400px; border-radius: 16px;">
+      
+      <div class="modal-body text-center p-4 d-flex flex-column align-items-center justify-content-center">
+        <!-- Icon based on action -->
+        @if ((pendingToggleTeacher()?.User?.status || '').toLowerCase() === 'active') {
+          <div class="confirm-icon-wrapper mb-3" style="width: 60px; height: 60px; border-radius: 50%; background: #fef2f2; border: 1.5px solid #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.15);">
+            <span class="material-icons" style="font-size: 2.2rem;">warning</span>
+          </div>
+          <h4 class="fw-bold mb-2" style="color: #991b1b; font-size: 1.15rem; margin-top: 0;">Disable Teacher Account?</h4>
+        } @else {
+          <div class="confirm-icon-wrapper mb-3" style="width: 60px; height: 60px; border-radius: 50%; background: #f0fdf4; border: 1.5px solid #dcfce7; color: #10b981; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.15);">
+            <span class="material-icons" style="font-size: 2.2rem;">verified_user</span>
+          </div>
+          <h4 class="fw-bold mb-2" style="color: #065f46; font-size: 1.15rem; margin-top: 0;">Enable Teacher Account?</h4>
+        }
+
+        <p class="text-muted small mb-4" style="line-height: 1.5; font-size: 0.85rem; padding: 0 0.5rem; text-align: center;">
+          Are you sure you want to 
+          <strong>{{ (pendingToggleTeacher()?.User?.status || '').toLowerCase() === 'active' ? 'disable' : 'enable' }}</strong> 
+          the account of <strong>{{ pendingToggleTeacher()?.User?.name }}</strong> (Employee ID: {{ pendingToggleTeacher()?.employee_id }})?
+        </p>
+
+        <div class="d-flex justify-content-center gap-2 w-100" style="border-top: 1px solid #f1f5f9; padding-top: 1.25rem;">
+          <button type="button" class="btn-cancel" (click)="setModal.emit(null)" style="background: #f1f5f9; color: #475569; padding: 0.5rem 1.25rem; border-radius: 10px; font-weight: 700; border: none; font-size: 0.82rem; cursor: pointer; transition: all 0.2s;">
+            Cancel
+          </button>
+          
+          @if ((pendingToggleTeacher()?.User?.status || '').toLowerCase() === 'active') {
+            <button type="button" class="btn-confirm" (click)="confirmToggleAction()" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; padding: 0.5rem 1.25rem; border-radius: 10px; font-weight: 700; border: none; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);">
+              Yes, Disable
+            </button>
+          } @else {
+            <button type="button" class="btn-confirm" (click)="confirmToggleAction()" style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 0.5rem 1.25rem; border-radius: 10px; font-weight: 700; border: none; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
+              Yes, Enable
+            </button>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- VIEW TEACHER DETAILS MODAL -->
+@if (activeModal === 'view-teacher' && selectedTeacher()) {
+  <div class="modal-overlay" (click)="setModal.emit(null)">
+    <div class="modal-box view-detail-modal" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header" style="background: linear-gradient(135deg, #14532d 0%, #15803d 100%);">
+        <div class="modal-title-group">
+          <div class="modal-icon" style="background: rgba(255,255,255,0.2);">
+            <span class="material-icons" style="color: #4ade80;">visibility</span>
+          </div>
+          <div>
+            <h3>Faculty Profile Details</h3>
+            <p>Full faculty registration and timeline summary</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="setModal.emit(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="view-detail-card">
+          <!-- Avatar & Header -->
+          <div class="profile-brief text-center mb-4 d-flex flex-column align-items-center justify-content-center">
+            <div class="avatar-large mb-2" style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #22c55e, #15803d); color: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700; text-transform: uppercase; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3);">
+              {{ selectedTeacher()?.User?.name?.charAt(0) }}
+            </div>
+            <h4 class="fw-bold m-0" style="color: var(--text, #0f172a); font-size: 1.2rem;">{{ selectedTeacher()?.User?.name }}</h4>
+            <span class="status-pill status-{{ (selectedTeacher()?.User?.status || '').toLowerCase() === 'active' ? 'approved' : 'rejected' }} mt-1">
+              <span class="status-dot"></span>
+              {{ selectedTeacher()?.User?.status || 'Inactive' | titlecase }}
+            </span>
+          </div>
+
+          <!-- Profile details grid -->
+          <div class="detail-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem 1rem; border-top: 1px solid var(--border, #e2e8f0); padding-top: 1.25rem;">
+            
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">badge</span>
+                Employee ID
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569); font-family: monospace;">
+                {{ selectedTeacher()?.employee_id }}
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">work</span>
+                Designation
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569);">
+                {{ selectedTeacher()?.designation || 'N/A' }}
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">email</span>
+                Email Address
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569); word-break: break-all;">
+                {{ selectedTeacher()?.User?.email }}
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">school</span>
+                Qualification
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569);">
+                {{ selectedTeacher()?.qualification || 'N/A' }}
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">calendar_today</span>
+                Joining Date
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569);">
+                {{ selectedTeacher()?.joining_date ? (selectedTeacher()?.joining_date | date:'longDate') : 'N/A' }}
+              </div>
+            </div>
+
+            <div class="detail-item" style="grid-column: span 2;">
+              <label style="font-size: 0.72rem; color: var(--text-muted, #94a3b8); font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem;">
+                <span class="material-icons" style="font-size: 0.85rem; color: #16a34a;">description</span>
+                Teacher Biography
+              </label>
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-sub, #475569); line-height: 1.5; white-space: pre-line;">
+                {{ selectedTeacher()?.bio || 'No biography details provided.' }}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="padding: 0 1.5rem 1.5rem 1.5rem; border-top: none; margin-top: 0.5rem;">
+        <button type="button" class="btn-confirm" (click)="setModal.emit(null)">
+          <span class="material-icons">close</span> Close Details
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
+

@@ -1,0 +1,237 @@
+<section class="admission-hero text-white d-flex align-items-center justify-content-center text-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <span class="badge bg-success welcome-badge mb-3 px-3 py-2 text-uppercase font-weight-bold">
+          Aether Academy | Enrollment
+        </span>
+        <h1 class="display-3 font-weight-bold admission-hero-title mb-4 text-white">
+          Admission Desk
+        </h1>
+        <p class="lead admission-hero-text mb-0">
+          Begin your journey with Aether Academy. Review our admissions guidelines and submit candidate enquiries for
+          academic registration.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Guide & Enquiry Form Section -->
+<section class="section-padding bg-white">
+  <div class="container">
+    <div class="row g-5 align-items-start">
+
+      <!-- Guide -->
+      <div class="col-lg-6">
+        <div class="admission-info-card">
+          <span class="subtitle d-inline-block mb-2 text-success text-uppercase fw-bold"
+            style="letter-spacing: 1px;">Admissions Pathway</span>
+          <h2 class="display-6 fw-bold mb-4"
+            style="color: var(--dark-color, #0F172A); font-family: 'Outfit', sans-serif;">{{ cmsAdmissionInfo.title ||
+            'Apply For Enrollment' }}</h2>
+          <p class="text-muted mb-4 story-text" style="font-size: 1.05rem; line-height: 1.8;">
+            {{ cmsAdmissionInfo.content || 'Our admissions process is designed to find potential scholars who are
+            excited by research, innovation, and leadership opportunities.' }}
+          </p>
+
+          <div class="process-steps">
+            <div class="process-step-item">
+              <span class="step-num-badge">1</span>
+              <div>
+                <h4>Submit Enquiry Form</h4>
+                <p class="mb-0">Fill out the online student enquiry form with basic candidate details.</p>
+              </div>
+            </div>
+            <div class="process-step-item">
+              <span class="step-num-badge">2</span>
+              <div>
+                <h4>Document Review</h4>
+                <p class="mb-0">Our academic admissions desk evaluates candidate grades and eligibility details.</p>
+              </div>
+            </div>
+            <div class="process-step-item">
+              <span class="step-num-badge">3</span>
+              <div>
+                <h4>Interview & Assessment</h4>
+                <p class="mb-0">Candidate is invited for an interactive skill assessment on campus.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enquiry Form -->
+      <div class="col-lg-6">
+        <div class="admission-form-premium-card">
+          <h3 class="fw-bold mb-4" style="color: var(--dark-color, #0F172A); font-family: 'Outfit', sans-serif;">Online
+            Admission Enquiry</h3>
+
+          @if (admissionSuccess) {
+          <div class="alert alert-success d-flex align-items-center gap-2 mb-4">
+            <span class="material-icons">check_circle</span>
+            <span>{{ admissionSuccess }}</span>
+          </div>
+          }
+
+          @if (admissionError) {
+          <div class="alert alert-danger d-flex align-items-center gap-2 mb-4">
+            <span class="material-icons">error</span>
+            <span>{{ admissionError }}</span>
+          </div>
+          }
+
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label>Candidate Student Name</label>
+              <input type="text" class="form-control" placeholder="Full name of student"
+                [(ngModel)]="admissionForm.student_name" name="student_name" required />
+            </div>
+            <div class="form-group">
+              <label>Parent / Guardian Name</label>
+              <input type="text" class="form-control" placeholder="Full name of parent"
+                [(ngModel)]="admissionForm.parent_name" name="parent_name" required />
+            </div>
+            <div class="form-group">
+              <label>Contact Phone Number</label>
+              <input type="text" class="form-control" placeholder="Phone contact" [(ngModel)]="admissionForm.contact"
+                name="contact" required />
+            </div>
+            <div class="form-group">
+              <label>Parent Email Address</label>
+              <input type="email" class="form-control" placeholder="Parent email" [(ngModel)]="admissionForm.email"
+                name="email" required />
+            </div>
+            <div class="form-group">
+              <label>Class Applied For</label>
+              <select class="form-control" [(ngModel)]="admissionForm.class_applied" name="class_applied" required>
+                <option value="Grade Jr KG">Grade Jr. KG</option>
+                <option value="Grade Sr KG">Grade Sr. KG</option>
+                <option value="Grade 1">Grade 1</option>
+                <option value="Grade 2">Grade 2</option>
+                <option value="Grade 3">Grade 3</option>
+                <option value="Grade 4">Grade 4</option>
+                <option value="Grade 5">Grade 5</option>
+                <option value="Grade 6">Grade 6</option>
+                <option value="Grade 7">Grade 7</option>
+                <option value="Grade 8">Grade 8</option>
+                <option value="Grade 9">Grade 9</option>
+                <option value="Grade 9">Grade 9</option>
+                <option value="Grade 9">Grade 9</option>
+                <option value="Grade 9">Grade 9</option>
+                <option value="Grade 9">Grade 9</option>
+                <option value="Grade 10">Grade 10</option>
+                <option value="Grade 11">Grade 11</option>
+                <option value="Grade 12">Grade 12</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-3">
+              <label>Transportation Mode</label>
+              <select class="form-control" [(ngModel)]="admissionForm.transport_mode" name="transport_mode" required>
+                <option value="Walking">Walking</option>
+                <option value="Bus Facility">Bus Facility</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-3">
+              <label>Upload Student Photo</label>
+              <input type="file" class="form-control" (change)="onPhotoSelected($event)" accept="image/*" />
+            </div>
+
+            <button type="submit" class="btn btn-premium w-100 mt-3" [disabled]="admissionLoading"
+              style="border-radius: 12px; padding: 0.9rem;">
+              @if (admissionLoading) {
+              <span class="material-icons spinning me-2">refresh</span>
+              <span>Submitting Enquiry...</span>
+              } @else {
+              <span class="material-icons me-2">send</span>
+              <span>Submit Enquiry Form</span>
+              }
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Important Dates -->
+<section class="section-padding bg-light">
+  <div class="container">
+    <div class="section-title-wrapper text-center">
+      <span class="subtitle">Enrollment Calendar</span>
+      <h2 class="title">Important Admissions Dates</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="date-card">
+          <div class="date-title">September 15</div>
+          <h4 class="h6 fw-bold mb-2">Applications Open</h4>
+          <p class="text-muted small mb-0">Admissions portal opens for submitting candidate registration files online.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="date-card">
+          <div class="date-title">November 30</div>
+          <h4 class="h6 fw-bold mb-2">Phase 1 Deadline</h4>
+          <p class="text-muted small mb-0">Closing date for priority student registrations and scholarship eligibility
+            reviews.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="date-card">
+          <div class="date-title">December 15</div>
+          <h4 class="h6 fw-bold mb-2">Diagnostic Assessments</h4>
+          <p class="text-muted small mb-0">Written evaluations and student-teacher interviews hosted on campus.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="date-card">
+          <div class="date-title">January 10</div>
+          <h4 class="h6 fw-bold mb-2">Orientation & Induction</h4>
+          <p class="text-muted small mb-0">Welcome assembly, course syllabus outlines, and boarding allocation setup.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Scholarship Tiers -->
+<section class="section-padding bg-white">
+  <div class="container">
+    <div class="section-title-wrapper text-center">
+      <span class="subtitle">Supportive Education</span>
+      <h2 class="title">Merit & Talent Scholarships</h2>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-6 col-lg-4">
+        <div class="scholarship-card">
+          <div class="scholar-value">50%</div>
+          <h4 class="h5 fw-bold">Academic Merit</h4>
+          <p class="text-muted small mb-0">Offered to scholars demonstrating >95% scores in board diagnostic tests.
+            Requires recommendation letter and portfolio files.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="scholarship-card">
+          <div class="scholar-value">30%</div>
+          <h4 class="h5 fw-bold">Athletic & Arts Talent</h4>
+          <p class="text-muted small mb-0">Offered to representatives at state/national sports, coding, or classical
+            orchestra events.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="scholarship-card">
+          <div class="scholar-value">Need</div>
+          <h4 class="h5 fw-bold">Financial Assistance</h4>
+          <p class="text-muted small mb-0">Tuition waivers tailored to households following evaluation of financial
+            records by the academy audit board.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

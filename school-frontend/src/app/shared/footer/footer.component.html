@@ -1,0 +1,62 @@
+@if (isPublic) {
+  <footer class="public-footer">
+    <div class="footer-container">
+      <!-- Column 1: Brand Info -->
+      <div class="footer-column brand-col">
+        <h3>Aether Academy</h3>
+        <p class="brand-desc">Advanced digital portal orchestrating academic workflows and providing excellence in modern education fields. Shaping the leaders of tomorrow.</p>
+        <div class="badge-accreditation">
+          <span class="material-icons">verified</span>
+          <span>Accredited Grade A</span>
+        </div>
+      </div>
+
+      <!-- Column 2: Academics -->
+      <div class="footer-column">
+        <h4>Academics</h4>
+        <a (click)="setTab('classes')">Classes & Syllabi</a>
+        <a (click)="setTab('services')">Facilities</a>
+        <a (click)="setTab('faculty')">Our Faculty</a>
+        <a (click)="setTab('events')">Events Bulletin</a>
+      </div>
+
+      <!-- Column 3: Discover -->
+      <div class="footer-column">
+        <h4>Discover</h4>
+        <a (click)="setTab('about')">About Us</a>
+        <a (click)="setTab('achievements')">Achievements</a>
+        <a (click)="setTab('gallery')">School Gallery</a>
+        <a (click)="setTab('career')">Careers / Join Team</a>
+      </div>
+
+      <!-- Column 4: Connect -->
+      <div class="footer-column contact-col">
+        <h4>Get In Touch</h4>
+        <a (click)="setTab('admission')" class="admission-highlight-link">
+          <span class="material-icons">campaign</span> Admissions Corner
+        </a>
+        <a (click)="setTab('contact')">Contact Us</a>
+        <div class="contact-details">
+          <p><span class="material-icons">email</span> info@aetheracademy.edu</p>
+          <p><span class="material-icons">phone</span> +1 (555) 019-2834</p>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <p>&copy; 2026 Aether Academy. All Rights Reserved. Portal secured by encryption policies.</p>
+      </div>
+    </div>
+  </footer>
+} @else {
+  <footer class="portal-footer">
+    <div class="footer-container">
+      <p>&copy; 2026 Aether Academy Portal. All Rights Reserved. Fully Encrypted Session.</p>
+      <div class="footer-meta-links">
+        <a href="/">System Policy</a>
+        <span class="divider">|</span>
+        <a href="/">User Agreement</a>
+      </div>
+    </div>
+  </footer>
+}

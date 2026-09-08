@@ -1,0 +1,181 @@
+<div class="module-wrapper">
+
+  <!-- ── Page Header ──────────────────────────────────────── -->
+  <div class="module-header">
+    <div class="module-title">
+      <span class="material-icons">class</span>
+      <div>
+        <h2>Manage Classes</h2>
+        <p>Create and manage academic classes and class teachers</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="meta-badge mr-2">
+        <span class="material-icons">groups</span>
+        {{ classes.length }} Total
+      </div>
+      <button (click)="openClassModal()" class="action-btn btn-admit">
+        <span class="material-icons">add</span>
+        Create Class
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Filter Bar ────────────────────────────────────────── -->
+  <div class="filter-bar">
+
+    <!-- Search -->
+    <div class="filter-search">
+      <span class="material-icons search-icon">search</span>
+      <input type="text" placeholder="Search by class name, section, or teacher…" [(ngModel)]="searchText" class="search-input" />
+      @if (searchText) {
+      <button class="clear-input" (click)="searchText = ''">
+        <span class="material-icons">close</span>
+      </button>
+      }
+    </div>
+
+    <!-- Results count + Clear -->
+    <div class="filter-actions">
+      <span class="result-count">
+        <strong>{{ filteredClasses.length }}</strong> of {{ classes.length }} records
+      </span>
+      @if (hasActiveFilter) {
+      <button class="btn-clear-all" (click)="clearFilters()">
+        <span class="material-icons">filter_alt_off</span>
+        Clear Filters
+      </button>
+      }
+    </div>
+  </div>
+
+  <!-- ── Table ─────────────────────────────────────────────── -->
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Class Name</th>
+          <th>Section</th>
+          <th>Class Teacher</th>
+          <th>Max Capacity</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of filteredClasses; track c.id; let i = $index) {
+        <tr class="data-row">
+          <td class="row-index">{{ i + 1 }}</td>
+          <td class="student-cell">
+            <div class="avatar-name">
+              <div class="avatar-circle">{{ c.name?.charAt(0) }}</div>
+              <span>{{ c.name }}</span>
+            </div>
+          </td>
+          <td><span class="class-chip">{{ c.section }}</span></td>
+          <td class="email-cell">{{ c.ClassTeacher ? c.ClassTeacher.User?.name : 'Unassigned' }}</td>
+          <td class="mono">{{ c.capacity }} students</td>
+          <td class="actions-cell">
+            <button class="action-btn btn-admit" title="Edit Class" (click)="openClassModal(c)">
+              <span class="material-icons">edit</span>
+              Edit
+            </button>
+            <button class="action-btn btn-reject" title="Delete Class" (click)="delete.emit(c.id)">
+              <span class="material-icons">delete</span>
+              Delete
+            </button>
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="6" class="empty-state">
+            <span class="material-icons">
+              {{ hasActiveFilter ? 'search_off' : 'class' }}
+            </span>
+            <p>{{ hasActiveFilter ? 'No classes match your filters.' : 'No academic classes registered yet.' }}</p>
+            @if (hasActiveFilter) {
+            <button class="btn-clear-empty" (click)="clearFilters()">Clear Filters</button>
+            }
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- CREATE/EDIT CLASS MODAL -->
+@if (activeModal === 'class') {
+  <div class="modal-overlay" (click)="setModal.emit(null)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">{{ selectedClass() ? 'edit' : 'add' }}</span>
+          </div>
+          <div>
+            <h3>{{ selectedClass() ? 'Edit Class Details' : 'Create New Class Room' }}</h3>
+            <p>{{ selectedClass() ? classForm.name + ' - ' + classForm.section : 'Fill in the details to setup a new classroom' }}</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="setModal.emit(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="submitClass()">
+          <div class="form-row mb-3">
+            <div class="form-group">
+              <label>
+                <span class="material-icons">class</span>
+                Class Name
+              </label>
+              <input type="text" class="form-control" placeholder="e.g. Grade 10" [(ngModel)]="classForm.name" name="c_name" required />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <span class="material-icons">group</span>
+                Section
+              </label>
+              <input type="text" class="form-control" placeholder="e.g. A" [(ngModel)]="classForm.section" name="c_sec" required />
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label>
+              <span class="material-icons">person</span>
+              Class Teacher
+            </label>
+            <select class="form-control" [(ngModel)]="classForm.class_teacher_id" name="c_teacher">
+              <option [value]="0">-- Select Teacher --</option>
+              @for (t of teachers; track t.id) {
+                <option [value]="t.id">{{ t.User?.name }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group mb-3">
+            <label>
+              <span class="material-icons">event_seat</span>
+              Max Seat Capacity
+            </label>
+            <input type="number" class="form-control" [(ngModel)]="classForm.capacity" name="c_cap" />
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" (click)="setModal.emit(null)">
+              <span class="material-icons">close</span> Cancel
+            </button>
+            <button type="submit" class="btn-confirm">
+              <span class="material-icons">save</span> Save Class
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+}

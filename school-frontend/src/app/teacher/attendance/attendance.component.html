@@ -1,0 +1,63 @@
+<div class="action-header filter-bar">
+  <div class="form-group flex-row">
+    <label>Class:</label>
+    <select class="form-control" [value]="selectedClassId || 'null'" (change)="onClassChange($event)">
+      <option value="null">-- Select Class --</option>
+      @for (cs of classSubjects; track cs.id) {
+        <option [value]="cs.Class.id">{{ cs.Class.name }} - {{ cs.Class.section }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-group flex-row">
+    <label>Date:</label>
+    <input type="date" class="form-control" [value]="selectedDate" (change)="onDateChange($event)" />
+  </div>
+
+  <button (click)="submitAttendance()" class="btn-primary ml-auto" [disabled]="!selectedClassId || !attendanceRecords.length">
+    <span class="material-icons">check_circle</span><span>Submit Attendance Sheet</span>
+  </button>
+</div>
+
+<div class="table-container mt-3">
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Admission No</th>
+        <th>Student Name</th>
+        <th>Attendance Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (record of attendanceRecords; track record.student_id) {
+        <tr>
+          <td>
+            <span class="admission-badge">{{ record.admission_no }}</span>
+          </td>
+          <td style="font-weight: 600; color: #0F172A;">{{ record.student_name }}</td>
+          <td>
+            <div class="attendance-toggles">
+              <label class="toggle-btn present" [class.active]="record.status === 'present'">
+                <input type="radio" [name]="'attendance_' + record.student_id" value="present" [(ngModel)]="record.status" />
+                <span class="material-icons select-dot">circle</span>
+                Present
+              </label>
+              <label class="toggle-btn absent" [class.active]="record.status === 'absent'">
+                <input type="radio" [name]="'attendance_' + record.student_id" value="absent" [(ngModel)]="record.status" />
+                <span class="material-icons select-dot">circle</span>
+                Absent
+              </label>
+              <label class="toggle-btn leave" [class.active]="record.status === 'leave'">
+                <input type="radio" [name]="'attendance_' + record.student_id" value="leave" [(ngModel)]="record.status" />
+                <span class="material-icons select-dot">circle</span>
+                Leave
+              </label>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="3" class="text-center">Select both Class and Date to render daily attendance sheet.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>

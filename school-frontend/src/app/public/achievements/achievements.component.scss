@@ -1,0 +1,281 @@
+$primary: #16A34A;
+$primary-hover: #15803D;
+$dark: #0F172A;
+$light: rgba(22, 163, 74, 0.05);
+$gold: #F59E0B;
+$transition: all 0.3s ease;
+$shadow-hover: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+:host { display: block; }
+
+// Hero Section Styles
+.achievements-hero {
+  background: linear-gradient(rgba(15,23,42,.75), rgba(15,23,42,.85)), url('https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1600&auto=format&fit=crop') no-repeat center/cover;
+  min-height: 70vh;
+  padding: 12rem 0 8rem 0; // top padding accounts for fixed header!
+  color: #ffffff;
+  position: relative;
+  text-align: center;
+}
+.achievements-hero-title {
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.15;
+  font-weight: 800;
+  font-size: 3.5rem;
+  @media (max-width: 768px) { font-size: 2.2rem; }
+}
+.achievements-hero-text {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+.welcome-badge {
+  letter-spacing: 2px;
+  background-color: $primary !important;
+  font-size: 0.85rem;
+  border-radius: 30px;
+}
+
+// Section Paddings
+.section-padding {
+  padding: 6rem 0;
+  @media (max-width: 768px) {
+    padding: 4rem 0;
+  }
+}
+
+// Section Titles
+.section-title-wrapper {
+  .subtitle {
+    letter-spacing: 1px;
+  }
+  .section-heading {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+  }
+  .section-desc {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 650px;
+    margin: 0 auto;
+  }
+}
+
+// Honor Medallions Cards
+.honor-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  height: 100%;
+  transition: $transition;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: rgba(22, 163, 74, 0.25);
+    box-shadow: $shadow-hover;
+    .honor-icon-wrapper {
+      background: $primary;
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+  }
+
+  .honor-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    background: $light;
+    color: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    transition: $transition;
+  }
+
+  .honor-title {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+    font-weight: 800;
+    font-size: 1.3rem;
+  }
+
+  p {
+    color: #475569;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+}
+
+// Green Stats Counter Card (Matching User preference)
+.stat-counter-card {
+  background: rgba(22, 163, 74, 0.02);
+  border: 1px solid rgba(22, 163, 74, 0.12);
+  border-radius: 24px;
+  padding: 2.5rem 1.5rem;
+  height: 100%;
+  transition: $transition;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &:hover {
+    border-color: rgba(22, 163, 74, 0.35);
+    background: rgba(22, 163, 74, 0.05);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(22, 163, 74, 0.05);
+    .stat-icon-wrapper {
+      background: $primary;
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+  }
+
+  .stat-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    background: rgba(22, 163, 74, 0.1);
+    color: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    transition: $transition;
+  }
+
+  .stat-number {
+    font-family: 'Outfit', sans-serif;
+    background: linear-gradient(135deg, #16A34A 0%, #15803D 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    font-weight: 800;
+  }
+
+  .stat-card-label {
+    color: #15803D;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.25rem;
+  }
+}
+
+// Achievements Dynamic Card
+.achievement-premium-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  height: 100%;
+  transition: $transition;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: rgba(22, 163, 74, 0.25);
+    box-shadow: $shadow-hover;
+    .achievement-badge-icon {
+      background: $primary;
+      color: #ffffff;
+      transform: scale(1.1) rotate(5deg);
+    }
+  }
+
+  .achievement-badge-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: $light;
+    color: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    transition: $transition;
+  }
+
+  .achievement-title {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+    font-weight: 800;
+    font-size: 1.25rem;
+  }
+
+  .date-badge {
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .achievement-desc {
+    color: #475569;
+    line-height: 1.6;
+  }
+}
+
+// Placement Card
+.placement-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  height: 100%;
+  transition: $transition;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &:hover {
+    border-color: rgba(22, 163, 74, 0.2);
+    transform: translateY(-5px);
+    box-shadow: $shadow-hover;
+    .placement-icon {
+      color: $primary;
+      transform: scale(1.1);
+    }
+  }
+
+  .placement-icon {
+    font-size: 2.25rem;
+    color: #94A3B8;
+    margin-bottom: 1.25rem;
+    transition: $transition;
+  }
+
+  h4 {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+// Empty Feed Wrapper
+.empty-feed {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #E2E8F0;
+  padding: 4rem 2rem;
+  .empty-icon-wrapper {
+    color: #94A3B8;
+  }
+  h4 {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+}

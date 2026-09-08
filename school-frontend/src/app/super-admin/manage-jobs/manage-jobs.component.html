@@ -1,0 +1,220 @@
+<div class="jobs-wrapper">
+  <!-- Sub-tab Selector -->
+  <div class="sub-tabs mb-4">
+    <button [class.active]="subTab() === 'listings'" (click)="setSubTab('listings')" class="btn-sub-tab">
+      <span class="material-icons">work</span><span>Job Listings</span>
+    </button>
+    <button [class.active]="subTab() === 'applications'" (click)="setSubTab('applications')" class="btn-sub-tab">
+      <span class="material-icons">description</span><span>Applications Received</span>
+    </button>
+  </div>
+
+  @if (subTab() === 'listings') {
+    <div class="action-header">
+      <h3>Open Vacancies</h3>
+      <button (click)="openJobModal()" class="btn-premium-solid btn-green ml-auto">
+        <span class="material-icons">add</span><span>Add Vacancy</span>
+      </button>
+    </div>
+
+    <div class="table-container mt-3">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Job Title</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (job of jobs(); track job.id) {
+            <tr>
+              <td>
+                <strong>{{ job.title }}</strong>
+                <p class="text-muted small-text mb-0">{{ job.description | slice:0:60 }}...</p>
+              </td>
+              <td>{{ job.type }}</td>
+              <td>{{ job.location }}</td>
+              <td>
+                <span class="badge-active status-{{ job.status }}">
+                  {{ job.status === 'inactive' ? 'Closed' : (job.status | titlecase) }}
+                </span>
+              </td>
+              <td class="actions-cell">
+                <div class="d-flex">
+                  <button (click)="openJobModal(job)" class="btn-premium-solid btn-green">
+                    <span class="material-icons">edit</span>Edit
+                  </button>
+                  <button (click)="deleteJob(job.id)" class="btn-premium-solid btn-red">
+                    <span class="material-icons">delete</span>Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5" class="text-center">No jobs listed yet. Click "Add Vacancy".</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <div class="action-header">
+      <h3>Job Applications</h3>
+    </div>
+
+    <div class="table-container mt-3">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Applicant</th>
+            <th>Contact Details</th>
+            <th>Target Position</th>
+            <th>Cover Letter</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (app of applications(); track app.id) {
+            <tr>
+              <td>{{ app.applicant_name }}</td>
+              <td>
+                <p class="mb-0">{{ app.email }}</p>
+                <p class="text-muted small-text mb-0">{{ app.phone }}</p>
+              </td>
+              <td>{{ app.Job?.title || 'Unknown Position' }}</td>
+              <td>
+                <span [title]="app.cover_letter" class="cover-letter-preview">
+                  {{ app.cover_letter | slice:0:50 }}...
+                </span>
+              </td>
+              <td>
+                <span class="badge-active status-{{ app.status }}">
+                  {{ app.status }}
+                </span>
+              </td>
+              <td class="actions-cell">
+                <div class="d-flex">
+                  <a [href]="getResumeUrl(app.resume)" class="btn-premium-solid btn-green" target="_blank">
+                    <span class="material-icons">download</span>CV
+                  </a>
+                  @if (app.status === 'applied') {
+                    <button (click)="updateApplicationStatus(app.id, 'shortlisted')" class="btn-premium-solid btn-green">
+                      <span class="material-icons">done</span>Shortlist
+                    </button>
+                    <button (click)="updateApplicationStatus(app.id, 'rejected')" class="btn-premium-solid btn-red">
+                      <span class="material-icons">close</span>Reject
+                    </button>
+                  } @else if (app.status === 'shortlisted') {
+                    <button (click)="updateApplicationStatus(app.id, 'hired')" class="btn-premium-solid btn-green">
+                      <span class="material-icons">check_circle</span>Approve/Select
+                    </button>
+                    <button (click)="updateApplicationStatus(app.id, 'rejected')" class="btn-premium-solid btn-red">
+                      <span class="material-icons">close</span>Reject
+                    </button>
+                  } @else {
+                    <span class="text-muted small-text">Completed</span>
+                  }
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6" class="text-center">No applications received yet.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+<!-- JOB MODAL -->
+@if (activeModal() === 'job') {
+  <div class="modal-overlay" (click)="activeModal.set(null)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">work</span>
+          </div>
+          <div>
+            <h3>{{ selectedJob() ? 'Edit Job Opening' : 'Add Job Opening' }}</h3>
+            <p>{{ selectedJob() ? 'Modify job vacancy details and specifications' : 'Define a new career opportunity' }}</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="activeModal.set(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <form (ngSubmit)="submitJob()">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label><span class="material-icons">badge</span>Job Title</label>
+              <input type="text" class="form-control" [(ngModel)]="jobForm.title" name="job_title" required placeholder="e.g. Staff Teacher" />
+            </div>
+            <div class="form-group">
+              <label><span class="material-icons">place</span>Location</label>
+              <input type="text" class="form-control" [(ngModel)]="jobForm.location" name="job_loc" required placeholder="e.g. On-site / Remote" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label><span class="material-icons">schedule</span>Job Type</label>
+              <select class="form-control" [(ngModel)]="jobForm.type" name="job_type">
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
+                <option value="Remote">Remote</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><span class="material-icons">toggle_on</span>Status</label>
+              <select class="form-control" [(ngModel)]="jobForm.status" name="job_status">
+                <option value="active">Active</option>
+                <option value="inactive">Closed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label><span class="material-icons">description</span>Description</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="jobForm.description" name="job_desc" required placeholder="Provide a detailed description of the role duties..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label><span class="material-icons">list_alt</span>Requirements</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="jobForm.requirements" name="job_reqs" required placeholder="List key credentials, experiences, and academic requirements..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="activeModal.set(null)">
+            <span class="material-icons">close</span><span>Cancel</span>
+          </button>
+          <button type="submit" class="btn-confirm">
+            <span class="material-icons">publish</span><span>{{ selectedJob() ? 'Save Changes' : 'Post Listing' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- Custom Confirmation Alert Dialog Modal -->
+@if (confirmDialog()) {
+  <app-custom-alert
+    [isModal]="true"
+    [showCancel]="true"
+    [title]="confirmDialog()?.title || 'Confirm Action'"
+    [message]="confirmDialog()?.message || ''"
+    [type]="confirmDialog()?.type || 'warning'"
+    [confirmText]="confirmDialog()?.confirmText || 'OK'"
+    [cancelText]="confirmDialog()?.cancelText || 'Cancel'"
+    (confirm)="confirmDialog()?.onConfirm(); confirmDialog.set(null)"
+    (close)="confirmDialog.set(null)">
+  </app-custom-alert>
+}

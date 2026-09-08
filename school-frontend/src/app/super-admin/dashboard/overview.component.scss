@@ -1,0 +1,565 @@
+// ── Color tokens ─────────────────────────────────────────────
+$g900: #052e16;
+$g800: #14532d;
+$g700: #15803d;
+$g600: #16a34a;
+$g500: #22c55e;
+$g400: #4ade80;
+$g100: #dcfce7;
+$g50:  #f0fdf4;
+
+// ═══════════════════════════════════════════════════════════════
+// SUMMARY CARDS
+// ═══════════════════════════════════════════════════════════════
+.summary-grid {
+  margin-top: 0.75rem;        // tightened from 1.5rem
+  margin-bottom: 0;
+}
+
+.secondary-grid {
+  margin-top: 1rem;           // gap between row 1 and row 2
+}
+
+.tertiary-grid {
+  margin-top: 1rem;           // gap between row 2 and row 3
+}
+
+// grid-5 layout for 5-column row
+.grid-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.summary-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 1.1rem;    // further reduced for slimmer cards
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+
+  // ── Green gradient card ──────────────────────────────────
+  &.stat-card-green {
+    background: linear-gradient(135deg, $g700 0%, $g600 100%);
+    box-shadow: 0 8px 28px rgba(22, 163, 74, 0.32);
+    border: none;
+
+    &:hover { box-shadow: 0 16px 36px rgba(22, 163, 74, 0.42); }
+
+    .card-icon {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      span { color: #fff; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.8); }
+    .card-badge {
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .card-watermark { color: rgba(255,255,255,0.06); }
+  }
+
+  // ── Dark green card ──────────────────────────────────────
+  &.stat-card-dark {
+    background: linear-gradient(135deg, $g900 0%, $g800 100%);
+    box-shadow: 0 8px 28px rgba(5, 46, 22, 0.4);
+    border: none;
+
+    &:hover { box-shadow: 0 16px 36px rgba(5, 46, 22, 0.5); }
+
+    .card-icon {
+      background: rgba(74, 222, 128, 0.15);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      span { color: $g400; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.65); }
+    .card-badge {
+      background: rgba(74, 222, 128, 0.15);
+      color: $g400;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+    .card-watermark { color: rgba(74, 222, 128, 0.06); }
+  }
+
+  // ── White card ───────────────────────────────────────────
+  &.stat-card-white {
+    background: #fff;
+    border: 1px solid rgba(22, 163, 74, 0.15);
+    box-shadow: 0 4px 18px rgba(22, 163, 74, 0.08);
+
+    &:hover {
+      border-color: $g600;
+      box-shadow: 0 10px 28px rgba(22, 163, 74, 0.18);
+    }
+
+    .card-icon {
+      background: $g50;
+      border: 1px solid rgba(22, 163, 74, 0.2);
+      span { color: $g600; }
+    }
+    .card-body h3 { color: #0f172a; }
+    .card-body p  { color: #475569; }
+    .card-badge.badge-green {
+      background: $g100;
+      color: $g700;
+      border: 1px solid rgba(22, 163, 74, 0.25);
+    }
+    .card-badge.badge-orange {
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+    .card-badge {
+      background: $g50;
+      color: $g700;
+      border: 1px solid rgba(22, 163, 74, 0.2);
+    }
+  }
+
+  // ── Teal card ──────────────────────────────────────────
+  &.stat-card-teal {
+    background: linear-gradient(135deg, #0f4c5c 0%, #0e7490 100%);
+    box-shadow: 0 8px 24px rgba(14, 116, 144, 0.3);
+    border: none;
+
+    &:hover { box-shadow: 0 14px 32px rgba(14, 116, 144, 0.42); }
+
+    .card-icon {
+      background: rgba(103, 232, 249, 0.15);
+      border: 1px solid rgba(103, 232, 249, 0.3);
+      span { color: #67e8f9; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.75); }
+    .card-badge.badge-teal {
+      background: rgba(103, 232, 249, 0.18);
+      color: #67e8f9;
+      border: 1px solid rgba(103, 232, 249, 0.3);
+    }
+    .card-watermark { color: rgba(103, 232, 249, 0.07); }
+  }
+
+  // ── Amber card ──────────────────────────────────────────
+  &.stat-card-amber {
+    background: linear-gradient(135deg, #78350f 0%, #b45309 100%);
+    box-shadow: 0 8px 24px rgba(180, 83, 9, 0.3);
+    border: none;
+
+    &:hover { box-shadow: 0 14px 32px rgba(180, 83, 9, 0.42); }
+
+    .card-icon {
+      background: rgba(252, 211, 77, 0.15);
+      border: 1px solid rgba(252, 211, 77, 0.3);
+      span { color: #fcd34d; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.75); }
+    .card-badge.badge-amber {
+      background: rgba(252, 211, 77, 0.18);
+      color: #fcd34d;
+      border: 1px solid rgba(252, 211, 77, 0.3);
+    }
+    .card-watermark { color: rgba(252, 211, 77, 0.07); }
+  }
+
+  // ── Indigo card ──────────────────────────────────────────
+  &.stat-card-indigo {
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);
+    box-shadow: 0 8px 24px rgba(67, 56, 202, 0.3);
+    border: none;
+
+    &:hover { box-shadow: 0 14px 32px rgba(67, 56, 202, 0.42); }
+
+    .card-icon {
+      background: rgba(165, 180, 252, 0.15);
+      border: 1px solid rgba(165, 180, 252, 0.3);
+      span { color: #a5b4fc; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.75); }
+    .card-badge.badge-indigo {
+      background: rgba(165, 180, 252, 0.18);
+      color: #a5b4fc;
+      border: 1px solid rgba(165, 180, 252, 0.3);
+    }
+    .card-watermark { color: rgba(165, 180, 252, 0.07); }
+  }
+
+  // ── Rose card ────────────────────────────────────────────
+  &.stat-card-rose {
+    background: linear-gradient(135deg, #881337 0%, #e11d48 100%);
+    box-shadow: 0 8px 24px rgba(225, 29, 72, 0.3);
+    border: none;
+
+    &:hover { box-shadow: 0 14px 32px rgba(225, 29, 72, 0.42); }
+
+    .card-icon {
+      background: rgba(253, 164, 175, 0.15);
+      border: 1px solid rgba(253, 164, 175, 0.3);
+      span { color: #fda4af; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.75); }
+    .card-badge.badge-rose {
+      background: rgba(253, 164, 175, 0.18);
+      color: #fda4af;
+      border: 1px solid rgba(253, 164, 175, 0.3);
+    }
+    .card-watermark { color: rgba(253, 164, 175, 0.07); }
+  }
+
+  // ── Emerald card ─────────────────────────────────────────
+  &.stat-card-emerald {
+    background: linear-gradient(135deg, #064e3b 0%, #059669 100%);
+    box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);
+    border: none;
+
+    &:hover { box-shadow: 0 14px 32px rgba(5, 150, 105, 0.42); }
+
+    .card-icon {
+      background: rgba(110, 231, 183, 0.15);
+      border: 1px solid rgba(110, 231, 183, 0.3);
+      span { color: #6ee7b7; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.75); }
+    .card-badge.badge-emerald {
+      background: rgba(110, 231, 183, 0.18);
+      color: #6ee7b7;
+      border: 1px solid rgba(110, 231, 183, 0.3);
+    }
+    .card-watermark { color: rgba(110, 231, 183, 0.07); }
+  }
+
+  // ── Violet card ──────────────────────────────────────────
+  &.stat-card-violet {
+    background: linear-gradient(135deg, #2e1065 0%, #7c3aed 100%);
+    box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);
+    border: none;
+
+    &:hover { box-shadow: 0 14px 32px rgba(124, 58, 237, 0.42); }
+
+    .card-icon {
+      background: rgba(196, 181, 253, 0.15);
+      border: 1px solid rgba(196, 181, 253, 0.3);
+      span { color: #c4b5fd; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.75); }
+    .card-badge.badge-violet {
+      background: rgba(196, 181, 253, 0.18);
+      color: #c4b5fd;
+      border: 1px solid rgba(196, 181, 253, 0.3);
+    }
+    .card-watermark { color: rgba(196, 181, 253, 0.07); }
+  }
+
+  // ── Orange card ──────────────────────────────────────────
+  &.stat-card-orange {
+    background: linear-gradient(135deg, #7c2d12 0%, #ea580c 100%);
+    box-shadow: 0 8px 24px rgba(234, 88, 12, 0.3);
+    border: none;
+
+    &:hover { box-shadow: 0 14px 32px rgba(234, 88, 12, 0.42); }
+
+    .card-icon {
+      background: rgba(253, 186, 116, 0.15);
+      border: 1px solid rgba(253, 186, 116, 0.3);
+      span { color: #fdba74; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.75); }
+    .card-badge.badge-orange-alt {
+      background: rgba(253, 186, 116, 0.18);
+      color: #fdba74;
+      border: 1px solid rgba(253, 186, 116, 0.3);
+    }
+    .card-watermark { color: rgba(253, 186, 116, 0.07); }
+  }
+
+  // ── Slate card ───────────────────────────────────────────
+  &.stat-card-slate {
+    background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.4);
+    border: none;
+
+    &:hover { box-shadow: 0 14px 32px rgba(15, 23, 42, 0.55); }
+
+    .card-icon {
+      background: rgba(148, 163, 184, 0.15);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      span { color: #94a3b8; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.65); }
+    .card-badge.badge-slate {
+      background: rgba(148, 163, 184, 0.18);
+      color: #cbd5e1;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+    .card-watermark { color: rgba(148, 163, 184, 0.06); }
+  }
+
+  // ── Shared sub-elements ──────────────────────────────────
+  .card-icon {
+    width: 44px;             // reduced from 54px
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    span { font-size: 1.5rem; }  // reduced from 1.9rem
+  }
+
+  .card-body {
+    flex: 1;
+
+    h3 {
+      font-size: 1.55rem;    // reduced from 1.9rem
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 0.15rem;
+    }
+
+    p {
+      font-size: 0.77rem;    // reduced from 0.8rem
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.68rem;      // tighter badge text
+    font-weight: 700;
+    padding: 0.2rem 0.55rem; // slimmer badge pill
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+
+    span.material-icons { font-size: 0.78rem; }
+  }
+
+  .card-watermark {
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    font-size: 6rem !important;  // reduced from 7rem
+    pointer-events: none;
+    line-height: 1;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CHART CARDS
+// ═══════════════════════════════════════════════════════════════
+.chart-grid {
+  margin-top: 1.75rem;
+}
+
+.chart-card {
+  background: #fff;
+  border: 1px solid rgba(22, 163, 74, 0.12);
+  border-radius: 18px;
+  padding: 1.5rem;
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+
+    span.material-icons {
+      font-size: 1.1rem;
+      color: $g600;
+    }
+  }
+
+  .live-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $g700;
+    background: $g100;
+    border: 1px solid rgba(22, 163, 74, 0.25);
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: $g500;
+      animation: pulse 1.5s infinite;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+// ── Attendance ring ──────────────────────────────────────────
+.attendance-display {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.ring-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+}
+
+.ring-svg {
+  width: 140px;
+  height: 140px;
+  transform: rotate(-90deg);
+
+  .ring-bg {
+    fill: none;
+    stroke: $g100;
+    stroke-width: 10;
+  }
+
+  .ring-fill {
+    fill: none;
+    stroke: $g500;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 314;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s ease;
+    filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.4));
+  }
+}
+
+.ring-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+
+  .check-icon {
+    font-size: 1.4rem !important;
+    color: $g500;
+  }
+
+  strong {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $g700;
+    line-height: 1;
+  }
+}
+
+.attendance-info {
+  flex: 1;
+
+  .att-desc {
+    font-size: 0.875rem;
+    color: #475569;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .att-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: $g700;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+
+    span.material-icons { font-size: 1rem; color: $g500; }
+  }
+}
+
+// ── Gender bar chart ─────────────────────────────────────────
+.gender-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0.5rem 0;
+}
+
+.gender-bar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gender-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .gender-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #475569;
+  }
+
+  .gender-count {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: $g700;
+  }
+}
+
+.bar-progress {
+  height: 10px;
+  background: $g100;
+  border-radius: 10px;
+  overflow: hidden;
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, $g600, $g400);
+    border-radius: 10px;
+    transition: width 0.8s ease;
+    min-width: 6px;
+  }
+}

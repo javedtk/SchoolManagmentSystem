@@ -1,0 +1,279 @@
+<div class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-header">
+      <span class="material-icons logo-icon">school</span>
+      <span class="logo-text">aether<span>portal</span></span>
+    </div>
+
+    <div class="user-brief">
+      <div class="user-avatar">
+        @if (auth.currentUser()?.profile_image) {
+          <img [src]="'http://localhost:5000/' + auth.currentUser().profile_image" alt="Profile" />
+        } @else {
+          <span class="material-icons">admin_panel_settings</span>
+        }
+      </div>
+      <div class="user-info">
+        <h4>{{ auth.currentUser()?.name }}</h4>
+        <p>Super Administrator</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a [class.active]="activeTab() === 'dashboard'" (click)="setTab('dashboard')">
+        <span class="material-icons">dashboard</span><span>Dashboard</span>
+      </a>
+      <a [class.active]="activeTab() === 'admissions'" (click)="setTab('admissions')">
+        <span class="material-icons">campaign</span><span>Admission Desk</span>
+      </a>
+      <a [class.active]="activeTab() === 'teachers'" (click)="setTab('teachers')">
+        <span class="material-icons">badge</span><span>Manage Teachers</span>
+      </a>
+      <a [class.active]="activeTab() === 'classes'" (click)="setTab('classes')">
+        <span class="material-icons">class</span><span>Manage Classes</span>
+      </a>
+      <a [class.active]="activeTab() === 'subjects'" (click)="setTab('subjects')">
+        <span class="material-icons">menu_book</span><span>Manage Subjects</span>
+      </a>
+      <a [class.active]="activeTab() === 'students'" (click)="setTab('students')">
+        <span class="material-icons">people</span><span>Manage Students</span>
+      </a>
+      <a [class.active]="activeTab() === 'timetable'" (click)="setTab('timetable')">
+        <span class="material-icons">schedule</span><span>Timetable Editor</span>
+      </a>
+      <a [class.active]="activeTab() === 'exams'" (click)="setTab('exams')">
+        <span class="material-icons">grade</span><span>Exams & Results</span>
+      </a>
+      <a [class.active]="activeTab() === 'fees'" (click)="setTab('fees')">
+        <span class="material-icons">payments</span><span>Fee Operations</span>
+      </a>
+      <a [class.active]="activeTab() === 'events'" (click)="setTab('events')">
+        <span class="material-icons">event</span><span>Events Manager</span>
+      </a>
+      <a [class.active]="activeTab() === 'gallery'" (click)="setTab('gallery')">
+        <span class="material-icons">photo_library</span><span>Gallery Manager</span>
+      </a>
+      <a [class.active]="activeTab() === 'jobs'" (click)="setTab('jobs')">
+        <span class="material-icons">work</span><span>Jobs open</span>
+      </a>
+      <a [class.active]="activeTab() === 'applications'" (click)="setTab('applications')">
+        <span class="material-icons">description</span><span>Job Applications</span>
+      </a>
+      <a [class.active]="activeTab() === 'settings'" (click)="setTab('settings')">
+        <span class="material-icons">settings</span><span>System Config</span>
+      </a>
+      <a [class.active]="activeTab() === 'profile'" (click)="setTab('profile')">
+        <span class="material-icons">person</span><span>My Profile</span>
+      </a>
+      <a [class.active]="activeTab() === 'guide'" (click)="setTab('guide')">
+        <span class="material-icons">help</span><span>User Guide</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button (click)="logout()" class="logout-btn">
+        <span class="material-icons">logout</span><span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Body Content -->
+  <main class="dashboard-main">
+    <!-- Top Header -->
+    <app-header 
+      [isPublic]="false" 
+      [title]="(activeTab() | uppercase) + ' PANEL'" 
+      [user]="auth.currentUser()">
+    </app-header>
+
+    <!-- Alert Messages Banner -->
+    <app-custom-alert 
+      [message]="alertMsg()?.text || ''" 
+      [type]="alertMsg()?.type === 'error' ? 'error' : (alertMsg()?.type === 'success' ? 'success' : 'info')"
+      (close)="alertMsg.set(null)">
+    </app-custom-alert>
+
+    <!-- Custom Confirmation Alert Dialog Modal -->
+    @if (confirmDialog()) {
+      <app-custom-alert
+        [isModal]="true"
+        [showCancel]="true"
+        [title]="confirmDialog()?.title || 'Confirm Action'"
+        [message]="confirmDialog()?.message || ''"
+        [type]="confirmDialog()?.type || 'warning'"
+        [confirmText]="confirmDialog()?.confirmText || 'OK'"
+        [cancelText]="confirmDialog()?.cancelText || 'Cancel'"
+        (confirm)="confirmDialog()?.onConfirm(); confirmDialog.set(null)"
+        (close)="confirmDialog.set(null)">
+      </app-custom-alert>
+    }
+
+    <!-- TAB PANEL WRAPPERS -->
+    <div class="tab-panel-content">
+
+      <!-- DASHBOARD OVERVIEW -->
+      @if (activeTab() === 'dashboard') {
+        <app-admin-overview
+          [stats]="stats()"
+          [charts]="charts()">
+        </app-admin-overview>
+      }
+
+      <!-- ADMISSION CORNER -->
+      @if (activeTab() === 'admissions') {
+        <app-admin-admission-corner
+          [enquiries]="enquiries()"
+          [classes]="classes()"
+          [activeModal]="activeModal()"
+          [isSaving]="studentAdmitting()"
+          (approve)="approveEnquiry($event.id, $event.status)"
+          (admit)="admitStudent($event)"
+          (setModal)="activeModal.set($event)">
+        </app-admin-admission-corner>
+      }
+
+      <!-- MANAGE TEACHERS -->
+      @if (activeTab() === 'teachers') {
+        <app-admin-manage-teachers
+          [teachers]="teachers()"
+          [activeModal]="activeModal()"
+          (save)="saveTeacher($event)"
+          (delete)="deleteTeacher($event)"
+          (setModal)="activeModal.set($event)">
+        </app-admin-manage-teachers>
+      }
+
+      <!-- MANAGE CLASSES -->
+      @if (activeTab() === 'classes') {
+        <app-admin-manage-classes
+          [classes]="classes()"
+          [teachers]="teachers()"
+          [activeModal]="activeModal()"
+          (save)="saveClass($event)"
+          (delete)="deleteClass($event)"
+          (setModal)="activeModal.set($event)">
+        </app-admin-manage-classes>
+      }
+
+      <!-- MANAGE SUBJECTS -->
+      @if (activeTab() === 'subjects') {
+        <app-admin-manage-subjects
+          [subjects]="subjects()"
+          [classes]="classes()"
+          [activeModal]="activeModal()"
+          (save)="saveSubject($event)"
+          (delete)="deleteSubject($event)"
+          (setModal)="activeModal.set($event)">
+        </app-admin-manage-subjects>
+      }
+
+      <!-- MANAGE STUDENTS -->
+      @if (activeTab() === 'students') {
+        <app-admin-manage-students
+          [students]="students()"
+          [classes]="classes()"
+          [activeModal]="activeModal()"
+          [isSaving]="studentSaving()"
+          (save)="saveStudent($event)"
+          (delete)="deleteStudent($event)"
+          (setModal)="activeModal.set($event)">
+        </app-admin-manage-students>
+      }
+
+      <!-- TIMETABLE EDITOR -->
+      @if (activeTab() === 'timetable') {
+        <app-admin-manage-timetable
+          [classes]="classes()"
+          [subjects]="subjects()"
+          [teachers]="teachers()"
+          [timetableEntries]="timetableEntries()"
+          [selectedClassId]="selectedClassId()"
+          [selectedTeacherId]="selectedTeacherId()"
+          [activeModal]="activeModal()"
+          (classSelected)="selectedClassId.set($event); selectedTeacherId.set(null); onTimetableClassSelected()"
+          (teacherSelected)="selectedTeacherId.set($event); selectedClassId.set(null); onTimetableTeacherSelected()"
+          (save)="saveTimetableEntry($event)"
+          (delete)="deleteTimetableSlot($event)"
+          (setModal)="activeModal.set($event)">
+        </app-admin-manage-timetable>
+      }
+
+      <!-- EXAMS & RESULTS -->
+      @if (activeTab() === 'exams') {
+        <app-admin-manage-results
+          [exams]="exams()"
+          [classes]="classes()"
+          [studentResults]="studentResults()"
+          [activeModal]="activeModal()"
+          [selectedExamId]="selectedExamId()"
+          [selectedClassId]="selectedClassId()"
+          (filterChanged)="selectedExamId.set($event.examId); selectedClassId.set($event.classId); onClassOrExamSelectedForResults()"
+          (saveExam)="saveExam($event)"
+          (setModal)="activeModal.set($event)"
+          (emailReport)="emailReportCard($event)">
+        </app-admin-manage-results>
+      }
+
+      <!-- FEES OPERATIONS -->
+      @if (activeTab() === 'fees') {
+        <app-admin-fee-receipt
+          [feeStructures]="feeStructures()"
+          [payments]="payments()"
+          [classes]="classes()"
+          [activeModal]="activeModal()"
+          [verifyingPaymentId]="verifyingPaymentId()"
+          (saveStructure)="saveFeeStructure($event)"
+          (deleteStructure)="deleteFeeStructure($event)"
+          (setModal)="activeModal.set($event)"
+          (verifyPayment)="verifyPayment($event)">
+        </app-admin-fee-receipt>
+      }
+
+      <!-- EVENTS MANAGER -->
+      @if (activeTab() === 'events') {
+        <app-admin-manage-events
+          [events]="events()"
+          [activeModal]="activeModal()"
+          [uploadProgress]="eventUploadProgress()"
+          (save)="saveEvent($event)"
+          (delete)="deleteEvent($event)"
+          (setModal)="activeModal.set($event)">
+        </app-admin-manage-events>
+      }
+
+      <!-- GALLERY MANAGER -->
+      @if (activeTab() === 'gallery') {
+        <app-admin-manage-gallery></app-admin-manage-gallery>
+      }
+
+      <!-- JOBS & APPLICATIONS -->
+      @if (activeTab() === 'jobs' || activeTab() === 'applications') {
+        <app-admin-manage-jobs></app-admin-manage-jobs>
+      }
+
+      <!-- SYSTEM SETTINGS -->
+      @if (activeTab() === 'settings') {
+        <app-admin-settings
+          [settingsForm]="settingsForm"
+          (save)="saveSettings($event)"
+          (updatePassword)="changePassword($event)">
+        </app-admin-settings>
+      }
+
+      <!-- PROFILE SETTINGS -->
+      @if (activeTab() === 'profile') {
+        <app-admin-profile
+          [currentUser]="auth.currentUser()"
+          (updatePassword)="changePassword($event)">
+        </app-admin-profile>
+      }
+
+      <!-- USER GUIDE -->
+      @if (activeTab() === 'guide') {
+        <app-admin-user-guide></app-admin-user-guide>
+      }
+
+    </div>
+  </main>
+</div>

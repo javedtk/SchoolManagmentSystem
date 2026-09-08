@@ -1,0 +1,54 @@
+<div class="table-container">
+  <table class="custom-table" style="width: 100%; border-collapse: collapse; margin-top: 1rem; border: 1px solid #E2E8F0; border-radius: 12px; overflow: hidden;">
+    <thead>
+      <tr style="background: linear-gradient(135deg, #14532d 0%, #15803d 100%); color: white;">
+        <th style="width: 160px; padding: 0.75rem 1.25rem; text-align: left; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.03em;">Day</th>
+        <th style="padding: 0.75rem 1.25rem; text-align: left; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.03em;">Timetable Slots</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (day of uniqueDays; track day) {
+        <tr style="border-bottom: 1px solid #E2E8F0; transition: background 0.15s;">
+          <td style="font-weight: 700; color: #0F172A; vertical-align: top; padding: 1.25rem; font-size: 0.95rem; background: #F8FAFC;">
+            <div style="display: flex; align-items: center; gap: 0.35rem;">
+              <span class="material-icons" style="font-size: 1.25rem; color: #16a34a;">today</span>
+              <span>{{ day }}</span>
+            </div>
+          </td>
+          <td style="padding: 0.75rem 1.25rem;">
+            <div class="slots-container" style="display: flex; flex-direction: column; gap: 0.6rem;">
+              @for (entry of getSlotsForDay(day); track entry.id) {
+                <div class="slot-detail-item" style="display: grid; grid-template-columns: 120px 180px 220px 1fr; gap: 1rem; align-items: center; background: #FFFFFF; border: 1px solid #E2E8F0; padding: 0.65rem 1.25rem; border-radius: 10px; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                  <span style="font-weight: 700; color: #16a34a; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.25rem;">
+                    <span class="material-icons" style="font-size: 0.95rem;">schedule</span>
+                    Period {{ entry.period_no }}
+                  </span>
+                  <span style="font-family: monospace; font-size: 0.83rem; color: #475569; font-weight: 600;">
+                    {{ entry.start_time }} - {{ entry.end_time }}
+                  </span>
+                  <span style="font-weight: 700; color: #0F172A; font-size: 0.88rem;">
+                    {{ entry.Subject?.name }}
+                    <span style="font-size: 0.75rem; color: #94A3B8; font-family: monospace; font-weight: 600; margin-left: 0.25rem;">
+                      ({{ entry.Subject?.code }})
+                    </span>
+                  </span>
+                  <span style="font-size: 0.82rem; color: #475569; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
+                    <span class="material-icons" style="font-size: 1.05rem; color: #94A3B8;">badge</span>
+                    Teacher: {{ entry.Teacher?.User?.name || 'Unassigned' }}
+                  </span>
+                </div>
+              }
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="2" class="text-center" style="padding: 4rem 2rem; color: #94A3B8; text-align: center;">
+            <span class="material-icons" style="font-size: 3rem; display: block; margin-bottom: 0.5rem; opacity: 0.4;">calendar_today</span>
+            <p style="margin: 0; font-size: 0.9rem; font-weight: 500;">No timetable slots assigned to your class yet.</p>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

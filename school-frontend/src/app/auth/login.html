@@ -1,0 +1,71 @@
+<div class="login-wrapper">
+  <div class="login-container glass-card">
+    <div class="brand">
+      <div class="logo-box">
+        <span class="material-icons logo-icon">school</span>
+      </div>
+      <h2>AETHER ACADEMY</h2>
+      <p class="subtitle">Centralized Management Portal</p>
+    </div>
+
+    @if (errorMsg()) {
+      <div class="alert alert-error">
+        <span class="material-icons">error</span>
+        <span>{{ errorMsg() }}</span>
+      </div>
+    }
+
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <div class="form-group">
+        <label for="email">Portal Email</label>
+        <div class="input-with-icon">
+          <span class="material-icons input-icon">email</span>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            placeholder="Enter your registered email"
+            [(ngModel)]="email"
+            name="email"
+            required
+            autocomplete="email"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-with-icon">
+          <span class="material-icons input-icon">lock</span>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            placeholder="Enter your password"
+            [(ngModel)]="password"
+            name="password"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary login-btn" [disabled]="loading()">
+        @if (loading()) {
+          <span class="material-icons spinning">refresh</span>
+          <span>Signing In...</span>
+        } @else {
+          <span class="material-icons">vpn_key</span>
+          <span>Sign In to Portal</span>
+        }
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p>Secure login with industry standard SSL & JWT encryption.</p>
+      <a href="/" class="back-home">
+        <span class="material-icons">arrow_back</span> Back to Public Site
+      </a>
+    </div>
+  </div>
+</div>

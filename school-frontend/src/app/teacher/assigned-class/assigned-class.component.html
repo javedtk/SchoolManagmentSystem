@@ -1,0 +1,48 @@
+<div class="action-header filter-bar">
+  <div class="form-group flex-row">
+    <label>Select Assigned Class:</label>
+    <select class="form-control" (change)="onClassChange($event)">
+      <option value="">-- Select Class --</option>
+      @for (cs of classSubjects; track cs.id) {
+        <option [value]="cs.Class.id">{{ cs.Class.name }} - {{ cs.Class.section }} ({{ cs.Subject.name }})</option>
+      }
+    </select>
+  </div>
+</div>
+
+<div class="table-container mt-3">
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Admission No</th>
+        <th>Student Name</th>
+        <th>Contact Email</th>
+        <th>Gender</th>
+        <th>Parent/Guardian</th>
+        <th>Parent Phone</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (st of students; track st.id) {
+        <tr>
+          <td>
+            <span class="admission-badge">{{ st.admission_no }}</span>
+          </td>
+          <td style="font-weight: 600; color: #0F172A;">
+            {{ st.User?.name }}
+          </td>
+          <td>{{ st.User?.email }}</td>
+          <td>
+            <span class="gender-badge gender-{{ st.gender?.toLowerCase() }}">
+              {{ st.gender }}
+            </span>
+          </td>
+          <td>{{ st.parent_name }}</td>
+          <td>{{ st.parent_contact }}</td>
+        </tr>
+      } @empty {
+        <tr><td colspan="6" class="text-center">Select an assigned class to load student roster list.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>

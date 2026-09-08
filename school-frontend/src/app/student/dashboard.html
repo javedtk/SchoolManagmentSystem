@@ -1,0 +1,138 @@
+<div class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-header">
+      <span class="material-icons logo-icon">school</span>
+      <span class="logo-text">aether<span>portal</span></span>
+    </div>
+
+    <div class="user-brief">
+      <div class="user-avatar">
+        @if (auth.currentUser()?.profile_image) {
+          <img [src]="'http://localhost:5000/' + auth.currentUser().profile_image" alt="Profile" />
+        } @else {
+          <span class="material-icons">account_circle</span>
+        }
+      </div>
+      <div class="user-info">
+        <h4>{{ auth.currentUser()?.name }}</h4>
+        <p>Student ({{ stats().className }})</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a [class.active]="activeTab() === 'dashboard'" (click)="setTab('dashboard')">
+        <span class="material-icons">dashboard</span><span>Dashboard</span>
+      </a>
+      <a [class.active]="activeTab() === 'attendance'" (click)="setTab('attendance')">
+        <span class="material-icons">calendar_today</span><span>My Attendance</span>
+      </a>
+      <a [class.active]="activeTab() === 'assignments'" (click)="setTab('assignments')">
+        <span class="material-icons">assignment</span><span>Assignments</span>
+      </a>
+      <a [class.active]="activeTab() === 'results'" (click)="setTab('results')">
+        <span class="material-icons">emoji_events</span><span>My Grades</span>
+      </a>
+      <a [class.active]="activeTab() === 'fees'" (click)="setTab('fees')">
+        <span class="material-icons">payments</span><span>Fees & Receipts</span>
+      </a>
+      <a [class.active]="activeTab() === 'timetable'" (click)="setTab('timetable')">
+        <span class="material-icons">schedule</span><span>Class Timetable</span>
+      </a>
+      <a [class.active]="activeTab() === 'profile'" (click)="setTab('profile')">
+        <span class="material-icons">person</span><span>My Profile</span>
+      </a>
+      <a [class.active]="activeTab() === 'guide'" (click)="setTab('guide')">
+        <span class="material-icons">help</span><span>User Guide</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button (click)="logout()" class="logout-btn">
+        <span class="material-icons">logout</span><span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Body Content -->
+  <main class="dashboard-main">
+    <!-- Top Header -->
+    <app-header 
+      [isPublic]="false" 
+      [title]="'STUDENT ' + (activeTab() | uppercase)" 
+      [user]="auth.currentUser()">
+    </app-header>
+
+    <!-- Alert Messages Banner -->
+    <app-custom-alert 
+      [message]="alertMsg()?.text || ''" 
+      [type]="alertMsg()?.type === 'error' ? 'error' : (alertMsg()?.type === 'success' ? 'success' : 'info')"
+      (close)="alertMsg.set(null)">
+    </app-custom-alert>
+
+    <!-- TAB WRAPPER -->
+    <div class="tab-panel-content">
+
+      <!-- DASHBOARD OVERVIEW -->
+      @if (activeTab() === 'dashboard') {
+        <app-student-overview
+          [stats]="stats()"
+          [charts]="charts()"
+          [upcomingEvents]="upcomingEvents()"
+          [latestResults]="latestResults()">
+        </app-student-overview>
+      }
+
+      <!-- MY ATTENDANCE -->
+      @if (activeTab() === 'attendance') {
+        <app-student-attendance
+          [attendanceReport]="attendanceReport()">
+        </app-student-attendance>
+      }
+
+      <!-- ASSIGNMENTS VIEW & SUBMIT -->
+      @if (activeTab() === 'assignments') {
+        <app-student-assignments
+          [assignments]="assignments()"
+          [studentSubmissions]="studentSubmissions()"
+          (reload)="loadAssignmentsAndSubmissions()">
+        </app-student-assignments>
+      }
+
+      <!-- VIEW RESULTS -->
+      @if (activeTab() === 'results') {
+        <app-student-results
+          [results]="results()">
+        </app-student-results>
+      }
+
+      <!-- FEES AND PAYMENTS -->
+      @if (activeTab() === 'fees') {
+        <app-student-fee-receipt
+          [feeStatus]="feeStatus()"
+          (reload)="loadFeeDetails()">
+        </app-student-fee-receipt>
+      }
+
+      <!-- CLASS TIMETABLE -->
+      @if (activeTab() === 'timetable') {
+        <app-student-timetable
+          [timetable]="timetable()">
+        </app-student-timetable>
+      }
+
+      <!-- PROFILE PASSWORD CHANGE -->
+      @if (activeTab() === 'profile') {
+        <app-student-settings
+          (updatePassword)="changePassword($event)">
+        </app-student-settings>
+      }
+
+      <!-- USER GUIDE -->
+      @if (activeTab() === 'guide') {
+        <app-student-user-guide></app-student-user-guide>
+      }
+
+    </div>
+  </main>
+</div>

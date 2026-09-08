@@ -1,0 +1,225 @@
+@if (alertMessage()) {
+  <div class="alert alert-{{ alertMessage()?.type }} mb-4">
+    <span class="material-icons">
+      {{ alertMessage()?.type === 'success' ? 'check_circle' : 'error' }}
+    </span>
+    <span>{{ alertMessage()?.text }}</span>
+  </div>
+}
+
+<div class="profile-layout">
+  <!-- LEFT SIDE: Profile Information & Stats -->
+  <div class="profile-sidebar-column">
+    <!-- Profile Summary Card -->
+    <div class="glass-card mb-4 profile-card text-center relative-container">
+      <!-- Status Badge in the top-right corner -->
+      @if (currentUserDetails()?.status) {
+        <span class="badge-active status-{{ currentUserDetails()?.status }} absolute-badge">
+          <span class="material-icons">check_circle</span>{{ currentUserDetails()?.status | uppercase }}
+        </span>
+      }
+
+      <div class="avatar-upload-zone mt-3" (click)="fileInput.click()">
+        <div class="avatar-preview">
+          @if (imagePreview()) {
+            <img [src]="imagePreview()" alt="Preview" />
+          } @else if (currentUserDetails()?.profile_image || currentUser?.profile_image) {
+            <img [src]="'http://localhost:5000/' + (currentUserDetails()?.profile_image || currentUser?.profile_image)" alt="Profile" />
+          } @else {
+            <div class="fallback-avatar">
+              <span class="material-icons">admin_panel_settings</span>
+            </div>
+          }
+          <div class="avatar-overlay">
+            <span class="material-icons">photo_camera</span>
+            <p>Change Photo</p>
+          </div>
+        </div>
+        <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;" />
+      </div>
+
+      <h3 class="admin-name mt-3">{{ currentUserDetails()?.name || currentUser?.name }}</h3>
+      <p class="admin-email mt-1">{{ currentUserDetails()?.email || currentUser?.email }}</p>
+      
+      <div class="role-badge-container mt-2">
+        <span class="role-chip">
+          <span class="material-icons">verified</span>Super Administrator
+        </span>
+      </div>
+    </div>
+
+    <!-- Account Metadata Card -->
+    <div class="glass-card mb-4 details-meta-card">
+      <div class="card-header-compact">
+        <span class="material-icons">info</span>
+        <h4>Account Information</h4>
+      </div>
+      <hr class="divider" />
+      <div class="meta-item">
+        <span class="material-icons">badge</span>
+        <div>
+          <label>Admin ID</label>
+          <span>#{{ currentUserDetails()?.id || currentUser?.id }}</span>
+        </div>
+      </div>
+      <div class="meta-item">
+        <span class="material-icons">email</span>
+        <div>
+          <label>Email Address</label>
+          <span class="locked-value">
+            {{ currentUserDetails()?.email || currentUser?.email }}
+            <span class="material-icons lock-icon" title="Email cannot be changed by the user">lock</span>
+          </span>
+        </div>
+      </div>
+      <div class="meta-item">
+        <span class="material-icons">calendar_today</span>
+        <div>
+          <label>Account Created</label>
+          <span>{{ (currentUserDetails()?.createdAt | date:'longDate') || 'N/A' }}</span>
+        </div>
+      </div>
+      <div class="meta-item">
+        <span class="material-icons">update</span>
+        <div>
+          <label>Last Updated</label>
+          <span>{{ (currentUserDetails()?.updatedAt | date:'longDate') || 'N/A' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT SIDE: Configuration Forms & Access Lists -->
+  <div class="profile-main-column">
+    <!-- Edit Details Card -->
+    <div class="glass-card mb-4 edit-details-card">
+      <div class="card-header-compact">
+        <span class="material-icons">manage_accounts</span>
+        <div>
+          <h4>Personal Specifications</h4>
+          <p>Update your public-facing name and identity info</p>
+        </div>
+      </div>
+      <hr class="divider" />
+      <form (ngSubmit)="submitDetailsUpdate()" class="mt-3">
+        <div class="form-group">
+          <label><span class="material-icons">person</span>Full Name</label>
+          <input type="text" class="form-control" [(ngModel)]="name" name="name" required placeholder="Enter full name" />
+        </div>
+        <div class="form-group">
+          <label><span class="material-icons">image</span>Profile Photo File</label>
+          <div class="file-picker-custom" (click)="fileInput.click()">
+            <span class="material-icons">cloud_upload</span>
+            <span>{{ selectedFile() ? selectedFile()?.name : 'Choose new profile image...' }}</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+          <button type="submit" class="btn-premium-solid btn-green" [disabled]="isSubmittingDetails()">
+            <span class="material-icons">save</span>
+            <span>{{ isSubmittingDetails() ? 'Saving...' : 'Update Details' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Password Reset Card -->
+    <div class="glass-card mb-4 credentials-card">
+      <div class="card-header-compact">
+        <span class="material-icons">lock_open</span>
+        <div>
+          <h4>Security Credentials</h4>
+          <p>Modify system access password</p>
+        </div>
+      </div>
+      <hr class="divider" />
+      <form (ngSubmit)="submitPasswordChange()" class="mt-3">
+        <div class="form-row">
+          <div class="form-group">
+            <label><span class="material-icons">key</span>Current Password</label>
+            <input type="password" class="form-control" [(ngModel)]="passwordForm.currentPassword" name="currentPassword" required placeholder="••••••••" />
+          </div>
+          <div class="form-group">
+            <label><span class="material-icons">password</span>New Secure Password</label>
+            <input type="password" class="form-control" [(ngModel)]="passwordForm.newPassword" name="newPassword" required placeholder="••••••••" />
+          </div>
+        </div>
+        <div class="d-flex justify-content-end mt-2">
+          <button type="submit" class="btn-premium-solid btn-green">
+            <span class="material-icons">security</span>
+            <span>Update Credentials</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Access Permissions Card -->
+    <div class="glass-card permissions-card">
+      <div class="card-header-compact">
+        <span class="material-icons">gpp_good</span>
+        <div>
+          <h4>Access Permissions & System Access Matrix</h4>
+          <p>Permissions authorized for your role in the system</p>
+        </div>
+      </div>
+      <hr class="divider" />
+      <div class="permissions-list mt-3">
+        <div class="permission-item">
+          <span class="material-icons check-icon">check_circle</span>
+          <div>
+            <strong>User Directory Controls</strong>
+            <p>Full Read/Write/Delete rights over system accounts, student data, and teacher rosters.</p>
+          </div>
+        </div>
+        <div class="permission-item">
+          <span class="material-icons check-icon">check_circle</span>
+          <div>
+            <strong>Admission & Registrar Desk</strong>
+            <p>Process incoming enquiries, approve admissions, and establish official student enrollment keys.</p>
+          </div>
+        </div>
+        <div class="permission-item">
+          <span class="material-icons check-icon">check_circle</span>
+          <div>
+            <strong>Academics & Curriculums</strong>
+            <p>Define subjects, format class groups, and compile master timetables for classes and instructors.</p>
+          </div>
+        </div>
+        <div class="permission-item">
+          <span class="material-icons check-icon">check_circle</span>
+          <div>
+            <strong>Finance & Billing Ledgers</strong>
+            <p>Manage tuition structures, view payments history, and audit/verify student payment receipts.</p>
+          </div>
+        </div>
+        <div class="permission-item">
+          <span class="material-icons check-icon">check_circle</span>
+          <div>
+            <strong>Exams, Grading & Reports</strong>
+            <p>Configure examinations, enter records, publish final report cards, and email results to parents.</p>
+          </div>
+        </div>
+        <div class="permission-item">
+          <span class="material-icons check-icon">check_circle</span>
+          <div>
+            <strong>Campus Communication</strong>
+            <p>Post events on the community bulletin, attach banner images, and curate photo gallery collections.</p>
+          </div>
+        </div>
+        <div class="permission-item">
+          <span class="material-icons check-icon">check_circle</span>
+          <div>
+            <strong>Recruitment & Careers Desk</strong>
+            <p>Configure vacancy listings, screen incoming applicants, download PDF resumes, and send decisions.</p>
+          </div>
+        </div>
+        <div class="permission-item">
+          <span class="material-icons check-icon">check_circle</span>
+          <div>
+            <strong>System Configurations</strong>
+            <p>Manage central school preferences, SMTP mail configurations, database locks, and security policies.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

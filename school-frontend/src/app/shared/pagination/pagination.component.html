@@ -1,0 +1,40 @@
+@if (totalPages() > 1) {
+  <div class="pagination-wrapper">
+    <button 
+      class="pagination-btn arrow-btn" 
+      [disabled]="currentPage === 1" 
+      (click)="onPageClick(currentPage - 1)">
+      <span class="material-icons">chevron_left</span>
+    </button>
+
+    @if (pages()[0] > 1) {
+      <button class="pagination-btn" (click)="onPageClick(1)">1</button>
+      @if (pages()[0] > 2) {
+        <span class="pagination-ellipsis">...</span>
+      }
+    }
+
+    @for (p of pages(); track p) {
+      <button 
+        class="pagination-btn" 
+        [class.active]="p === currentPage" 
+        (click)="onPageClick(p)">
+        {{ p }}
+      </button>
+    }
+
+    @if (pages()[pages().length - 1] < totalPages()) {
+      @if (pages()[pages().length - 1] < totalPages() - 1) {
+        <span class="pagination-ellipsis">...</span>
+      }
+      <button class="pagination-btn" (click)="onPageClick(totalPages())">{{ totalPages() }}</button>
+    }
+
+    <button 
+      class="pagination-btn arrow-btn" 
+      [disabled]="currentPage === totalPages()" 
+      (click)="onPageClick(currentPage + 1)">
+      <span class="material-icons">chevron_right</span>
+    </button>
+  </div>
+}

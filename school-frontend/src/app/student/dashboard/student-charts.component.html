@@ -1,0 +1,71 @@
+<section class="charts-section">
+
+  <div class="charts-section-header">
+    <h2 class="section-title">
+      <span class="material-icons">insights</span>
+      Personal Learning Analytics
+    </h2>
+    <span class="section-subtitle">Real-time charts of your attendance, assignments, fees, and grades</span>
+  </div>
+
+  <div class="charts-grid charts-grid-4">
+
+    <!-- 1. Attendance Breakdown Doughnut -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-green"></span>
+          Attendance Breakdown
+        </div>
+        <span class="material-icons chart-icon">event_available</span>
+      </div>
+      <div class="chart-wrap chart-wrap-sm">
+        <canvas #attendanceDough></canvas>
+      </div>
+    </div>
+
+    <!-- 2. Homework / Assignments Progress Pie -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-teal"></span>
+          Homework Progress
+        </div>
+        <span class="material-icons chart-icon">assignment</span>
+      </div>
+      <div class="chart-wrap chart-wrap-sm">
+        <canvas #assignmentsPie></canvas>
+      </div>
+    </div>
+
+    <!-- 3. Fee Paid vs Pending Doughnut -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-amber"></span>
+          Fee Status Overview
+        </div>
+        <span class="material-icons chart-icon">payments</span>
+      </div>
+      <div class="chart-wrap chart-wrap-sm">
+        <canvas #feeDough></canvas>
+      </div>
+    </div>
+
+    <!-- 4. Academic Grades by Subject Bar Chart -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-violet"></span>
+          Subject Performance
+        </div>
+        <span class="material-icons chart-icon">school</span>
+      </div>
+      <div class="chart-wrap chart-wrap-sm">
+        <canvas #performanceBar></canvas>
+      </div>
+    </div>
+
+  </div>
+
+</section>

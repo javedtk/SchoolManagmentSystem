@@ -1,0 +1,177 @@
+<div class="grid-2">
+  <!-- Fee structures status -->
+  <div class="glass-card">
+    <h3>Outstanding Fee Billings</h3>
+    <div class="table-container mt-2">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Paid</th>
+            <th>Due</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of feeStatus; track item.feeStructure.id) {
+          <tr>
+            <td>{{ item.feeStructure.category }}</td>
+            <td>Rs.{{ item.feeStructure.amount }}</td>
+            <td>Rs.{{ item.amountPaid }}</td>
+            <td>Rs.{{ item.balance }}</td>
+            <td>
+              @if (item.balance > 0) {
+              @if (item.pendingVerification) {
+              <span class="badge-pending text-warning font-semibold">Verification Pending</span>
+              } @else {
+              <button (click)="openPayModal(item)" class="btn-primary btn-small">Pay Now</button>
+              }
+              } @else {
+              <span class="text-success font-semibold">Settled</span>
+              }
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="5" class="text-center">No fee billings outstanding.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- past receipts log -->
+  <div class="glass-card">
+    <h3>Payment Receipts</h3>
+    <div class="table-container mt-2">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Receipt No</th>
+            <th>Payment Date</th>
+            <th>Amount Paid</th>
+            <th>Receipt PDF</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (hasPayments) {
+          @for (item of feeStatus; track item.feeStructure.id) {
+          @for (p of item.payments; track p.id) {
+          <tr>
+            <td>{{ p.receipt_no }}</td>
+            <td>{{ p.payment_date | date:'mediumDate' }}</td>
+            <td>Rs.{{ p.amount_paid }}</td>
+            <td>
+              @if (p.verified) {
+              <a [href]="downloadReceiptUrl(p.id)" class="btn-outline btn-small" target="_blank">Download PDF</a>
+              } @else {
+              <span class="badge-pending text-warning font-semibold"><i class="fas fa-clock me-1"></i>Pending
+                Verification</span>
+              }
+            </td>
+          </tr>
+          }
+          }
+          } @else {
+          <tr>
+            <td colspan="4" class="text-center">No transaction records found.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PAY DUE FEE MODAL -->
+@if (activeModal() === 'pay-fee') {
+<div class="modal-overlay">
+  <div class="modal-content glass-card fee-payment-modal">
+    <h3 class="mb-2">Secure Fee Settlement</h3>
+    <p class="text-muted small mb-4">Please select a payment option below, complete the transaction via your banking
+      application, and upload the proof of payment screenshot along with the exact paid amount.</p>
+
+    <!-- Payment Options Selector Grid -->
+    <div class="payment-options-grid mb-4">
+      <!-- Option 1: QR Code -->
+      <div class="payment-option-card" [class.active-card]="paymentMode === 'QR Code'"
+        (click)="paymentMode = 'QR Code'">
+        <div class="card-header">
+          <span class="card-radio-btn"></span>
+          <strong>1. Scan QR Code</strong>
+        </div>
+        <div class="qr-container-box text-center mt-2 p-2">
+          <img src="img/WhatsApp Image 2026-06-23 at 12.04.24 PM.jpeg" alt="QR Code Payment"
+            class="qr-preview-img img-fluid" />
+        </div>
+      </div>
+
+      <!-- Option 2: UPI ID -->
+      <div class="payment-option-card" [class.active-card]="paymentMode === 'UPI'" (click)="paymentMode = 'UPI'">
+        <div class="card-header">
+          <span class="card-radio-btn"></span>
+          <strong>2. Pay using UPI ID</strong>
+        </div>
+        <div class="upi-container-box mt-3 p-3 bg-light rounded text-center">
+          <code class="upi-code-text fs-6 text-success font-semibold">junednite-5@okaxis</code>
+          <p class="small text-muted mt-2 mb-0">Copy the UPI address to pay from Google Pay, PhonePe, Paytm, or BHIM
+            apps.</p>
+        </div>
+      </div>
+
+      <!-- Option 3: Bank Transfer -->
+      <div class="payment-option-card" [class.active-card]="paymentMode === 'Bank Transfer'"
+        (click)="paymentMode = 'Bank Transfer'">
+        <div class="card-header">
+          <span class="card-radio-btn"></span>
+          <strong>3. Bank Account Transfer</strong>
+        </div>
+        <div class="bank-details-box mt-3 p-3 bg-light rounded text-start">
+          <div class="mb-1"><small class="text-muted">Bank Name:</small> <span class="fw-bold">ICICI Bank</span></div>
+          <div class="mb-1"><small class="text-muted">Account Number:</small> <span class="fw-bold">674801701276</span>
+          </div>
+          <div class="mb-0"><small class="text-muted">IFSC Code:</small> <span
+              class="fw-bold text-success">ICICI0656</span></div>
+        </div>
+      </div>
+    </div>
+
+    <form (ngSubmit)="processPayment()">
+      <div class="row g-3">
+        <div class="col-md-6 form-group">
+          <label class="form-label font-semibold">Amount Paid (Rs.) <span class="text-danger">*</span></label>
+          <input type="number" class="form-control" [(ngModel)]="amountPaid" name="payment_amount" required />
+          <small class="text-muted">Outstanding balance: Rs.{{ payAmount() }}</small>
+        </div>
+        <div class="col-md-6 form-group">
+          <label class="form-label font-semibold">Chosen Payment Mode</label>
+          <input type="text" class="form-control" [value]="paymentMode" name="payment_mode_display" disabled />
+        </div>
+      </div>
+
+      <div class="form-group mt-3">
+        <label class="form-label font-semibold">Attach Payment Screenshot (Proof) <span
+            class="text-danger">*</span></label>
+        <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*" required />
+        <small class="text-muted d-block mt-1">Please upload the confirmation page screenshot showing successful
+          transaction status.</small>
+      </div>
+
+      <div class="flex-end gap-2 mt-4">
+        <button type="button" class="btn-secondary" (click)="activeModal.set(null)">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="payLoading()">
+          @if (payLoading()) {
+          <span class="material-icons spinning">refresh</span>
+          <span>Uploading proof...</span>
+          } @else {
+          <span class="material-icons">cloud_upload</span>
+          <span>Submit Payment Receipt</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}

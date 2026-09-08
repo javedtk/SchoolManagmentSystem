@@ -1,0 +1,79 @@
+// Theme Palette Variables
+$border-color: #E2E8F0;
+$cyan: #16A34A;
+$cyan-hover: #15803D;
+$gold: #047857;
+$gold-hover: #065F46;
+$text-primary: #0F172A;
+$text-secondary: #475569;
+$text-muted: #94A3B8;
+
+.pagination-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 1rem 0;
+}
+
+.pagination-btn {
+  background: #FFFFFF;
+  color: $text-secondary;
+  border: 1px solid $border-color;
+  min-width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  padding: 0 0.5rem;
+
+  &:hover:not(:disabled) {
+    border-color: $cyan;
+    color: $cyan;
+    background: rgba(22, 163, 74, 0.05);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(22, 163, 74, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #F8FAFC;
+    color: $text-muted;
+  }
+
+  &.active {
+    background: $cyan;
+    color: #FFFFFF;
+    border-color: $cyan;
+    box-shadow: 0 4px 10px rgba(22, 163, 74, 0.25);
+
+    &:hover {
+      background: $cyan-hover;
+      transform: none;
+    }
+  }
+
+  &.arrow-btn {
+    border-radius: 50%;
+    
+    .material-icons {
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.pagination-ellipsis {
+  color: $text-muted;
+  font-weight: 600;
+  padding: 0 0.25rem;
+}

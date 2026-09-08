@@ -1,0 +1,188 @@
+<section class="achievements-hero text-white d-flex align-items-center justify-content-center text-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <span class="badge bg-success welcome-badge mb-3 px-3 py-2 text-uppercase font-weight-bold">
+          Aether Academy | Hall of Fame
+        </span>
+        <h1 class="display-3 font-weight-bold achievements-hero-title mb-4 text-white">
+          Our Achievements
+        </h1>
+        <p class="lead achievements-hero-text mb-0">
+          Celebrating outstanding student achievements in regional board exams, national science fairs, sports tournaments, and artistic competitions.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Scholastic Honors & Medal Programs -->
+<section class="section-padding bg-white">
+  <div class="container">
+    <div class="section-title-wrapper text-center mb-5">
+      <span class="subtitle text-success text-uppercase fw-bold d-inline-block mb-2">Honors Program</span>
+      <h2 class="display-6 fw-bold mb-4 section-heading">Scholastic Honors & Medals</h2>
+      <p class="text-muted mx-auto section-desc">We foster a culture of excellence and recognize high achievers through our institutional honors, medallions, and scholarship programs.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      <div class="col-lg-4 col-md-6">
+        <div class="honor-card text-center">
+          <div class="honor-icon-wrapper">
+            <i class="fas fa-medal fa-2x"></i>
+          </div>
+          <h3 class="honor-title mb-2">Gold Medallist Honor</h3>
+          <p class="text-muted small">Awarded to candidates who secure the top 1% scoring bracket in international AP and board evaluations across core science and arts streams.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="honor-card text-center">
+          <div class="honor-icon-wrapper">
+            <i class="fas fa-user-graduate fa-2x"></i>
+          </div>
+          <h3 class="honor-title mb-2">Dean's List Award</h3>
+          <p class="text-muted small">Recognizing students demonstrating persistent scholastic excellence, character leadership, and contributions to collaborative research labs.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="honor-card text-center">
+          <div class="honor-icon-wrapper">
+            <i class="fas fa-crown fa-2x"></i>
+          </div>
+          <h3 class="honor-title mb-2">Principal's Scholarship</h3>
+          <p class="text-muted small">A fully-funded merit grant awarded annually to exceptional scholars who pioneer breakthrough STEM projects or creative design initiatives.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats counters section -->
+<section class="section-padding bg-light">
+  <div class="container">
+    <div class="row g-4 justify-content-center">
+      <div class="col-lg-3 col-sm-6">
+        <div class="stat-counter-card text-center">
+          <div class="stat-icon-wrapper">
+            <i class="fas fa-trophy fa-lg"></i>
+          </div>
+          <div class="stat-number display-5 fw-bold mb-2">150+</div>
+          <div class="stat-card-label">National Awards</div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="stat-counter-card text-center">
+          <div class="stat-icon-wrapper">
+            <i class="fas fa-percentage fa-lg"></i>
+          </div>
+          <div class="stat-number display-5 fw-bold mb-2">98%</div>
+          <div class="stat-card-label">Board Passing Rate</div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="stat-counter-card text-center">
+          <div class="stat-icon-wrapper">
+            <i class="fas fa-running fa-lg"></i>
+          </div>
+          <div class="stat-number display-5 fw-bold mb-2">12+</div>
+          <div class="stat-card-label">Sports Championships</div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="stat-counter-card text-center">
+          <div class="stat-icon-wrapper">
+            <i class="fas fa-university fa-lg"></i>
+          </div>
+          <div class="stat-number display-5 fw-bold mb-2">350+</div>
+          <div class="stat-card-label">Ivy League Alumni</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dynamic Achievements Grid -->
+<section class="section-padding bg-white">
+  <div class="container">
+    <div class="section-title-wrapper text-center mb-5">
+      <span class="subtitle text-success text-uppercase fw-bold d-inline-block mb-2">Milestones Archive</span>
+      <h2 class="display-6 fw-bold mb-4 section-heading">Recent Accomplishments</h2>
+      <p class="text-muted mx-auto section-desc">Explore the chronological timeline of achievements awarded to our students, teams, and departments for their outstanding outcomes.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      @for (ach of achievements; track ach.id) {
+        <div class="col-lg-4 col-md-6">
+          <div class="achievement-premium-card text-center">
+            <div class="achievement-badge-icon">
+              <i class="fas fa-award fa-2x"></i>
+            </div>
+            <h3 class="achievement-title mb-2">{{ ach.title }}</h3>
+            <span class="badge-active status-active date-badge mb-3">{{ ach.date_awarded || 'Recent' }}</span>
+            <p class="achievement-desc text-muted small">{{ ach.description }}</p>
+          </div>
+        </div>
+      } @empty {
+        <div class="col-lg-8">
+          <div class="glass-card empty-feed text-center py-5">
+            <div class="empty-icon-wrapper mb-3 text-muted">
+              <i class="fas fa-trophy fa-3x"></i>
+            </div>
+            <h4>No Achievements Loaded</h4>
+            <p class="text-muted">No student milestones are loaded from the database at this time. Our candidates are working on winning new recognitions.</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Global Alumni Placement Networks -->
+<section class="section-padding bg-light">
+  <div class="container">
+    <div class="section-title-wrapper text-center mb-5">
+      <span class="subtitle text-success text-uppercase fw-bold d-inline-block mb-2">Alumni Tracks</span>
+      <h2 class="display-6 fw-bold mb-4 section-heading">Global University Placements</h2>
+      <p class="text-muted mx-auto section-desc">Our graduates successfully secure admissions and merit placements in world-leading higher education institutions.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      <div class="col-lg-3 col-sm-6">
+        <div class="placement-card text-center">
+          <div class="placement-icon">
+            <i class="fas fa-university"></i>
+          </div>
+          <h4>Stanford University</h4>
+          <p class="text-muted small">Silicon Valley Track</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="placement-card text-center">
+          <div class="placement-icon">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <h4>MIT Scholars</h4>
+          <p class="text-muted small">Robotics & Tech Core</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="placement-card text-center">
+          <div class="placement-icon">
+            <i class="fas fa-book-reader"></i>
+          </div>
+          <h4>Oxford University</h4>
+          <p class="text-muted small">PPE & Humanities Core</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="placement-card text-center">
+          <div class="placement-icon">
+            <i class="fas fa-chalkboard"></i>
+          </div>
+          <h4>Cambridge Academy</h4>
+          <p class="text-muted small">Mathematics Tripos</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

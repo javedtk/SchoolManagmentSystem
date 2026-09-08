@@ -1,0 +1,222 @@
+<div class="action-header d-flex justify-content-between align-items-center gap-3">
+  <!-- Left Side: Filter controls -->
+  <div class="d-flex align-items-center gap-3">
+    <!-- Text Search Filter -->
+    <div class="filter-group d-flex align-items-center gap-2">
+      <label class="mb-0 text-muted font-semibold text-nowrap">
+        <span class="material-icons" style="vertical-align: middle; font-size: 18px;">search</span> Search:
+      </label>
+      <input type="text" class="form-control" [(ngModel)]="searchQuery" placeholder="Student name or receipt #"
+        style="width: auto; min-width: 200px;" />
+    </div>
+
+    <!-- Class Filter -->
+    <div class="filter-group d-flex align-items-center gap-2">
+      <label class="mb-0 text-muted font-semibold text-nowrap">
+        <span class="material-icons" style="vertical-align: middle; font-size: 18px;">filter_alt</span> Class:
+      </label>
+      <select class="form-control" [(ngModel)]="selectedClassFilter" style="width: auto; min-width: 150px;">
+        <option [value]="0">-- All Classes --</option>
+        @for (c of classes; track c.id) {
+        <option [value]="c.id">{{ c.name }} - {{ c.section }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- Status Filter -->
+    <div class="filter-group d-flex align-items-center gap-2">
+      <label class="mb-0 text-muted font-semibold text-nowrap">
+        <span class="material-icons" style="vertical-align: middle; font-size: 18px;">verified</span> Status:
+      </label>
+      <select class="form-control" [(ngModel)]="selectedStatusFilter" style="width: auto; min-width: 130px;">
+        <option value="all">-- All Status --</option>
+        <option value="verified">Verified</option>
+        <option value="pending">Pending</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Right Side: Action Button -->
+  <button (click)="openFeeStructureModal()" class="btn-primary btn-small text-nowrap">
+    <span class="material-icons" style="font-size: 16px; vertical-align: middle;">add</span><span>Define Billing
+      Item</span>
+  </button>
+</div>
+
+<div class="d-flex flex-column gap-4 mt-3">
+  <!-- billing definitions -->
+  <div class="glass-card">
+    <h3>Active Class Fee Structures</h3>
+    <div class="table-container mt-2">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Due Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (fs of feeStructures; track fs.id) {
+          <tr>
+            <td>{{ fs.Class ? fs.Class.name : 'All Classes' }}</td>
+            <td>{{ fs.category }}</td>
+            <td>Rs.{{ fs.amount }}</td>
+            <td>{{ fs.due_date }}</td>
+            <td>
+              <button (click)="deleteStructure.emit(fs.id)" class="btn-premium-solid btn-red">
+                <span class="material-icons">delete</span>Delete
+              </button>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="5" class="text-center">No fee structures defined.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- payments receipt logs -->
+  <div class="glass-card">
+    <h3>Recent Fee Receipt logs</h3>
+    <div class="table-container mt-2">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Receipt No</th>
+            <th>Student Name & Class</th>
+            <th>Paid</th>
+            <th>Proof</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (pay of paginatedPayments; track pay.id) {
+          <tr>
+            <td>{{ pay.receipt_no }}</td>
+            <td>
+              <strong>{{ pay.Student?.User?.name }}</strong>
+              <div class="small text-muted">{{ pay.Student?.Class ? pay.Student.Class.name : 'Unknown Class' }}</div>
+            </td>
+            <td>Rs.{{ pay.amount_paid }}</td>
+            <td>
+              @if (pay.screenshot_url) {
+              <button (click)="openScreenshotModal('http://localhost:5000/' + pay.screenshot_url, $event)"
+                class="btn-premium-solid btn-green" title="Click to view payment proof screenshot">
+                <span class="material-icons">visibility</span>View
+              </button>
+              } @else {
+              <span class="text-muted small">No proof</span>
+              }
+            </td>
+            <td>
+              @if (pay.verified) {
+              <span class="badge-active text-success font-semibold">Verified</span>
+              } @else {
+              <span class="badge-pending text-warning font-semibold">Pending</span>
+              }
+            </td>
+            <td>
+              <div class="d-flex gap-1">
+                @if (pay.verified) {
+                <a [href]="downloadReceiptUrl(pay.id)" class="btn-premium-solid btn-green" target="_blank">
+                  <span class="material-icons">download</span>Receipt
+                </a>
+                } @else {
+                <button (click)="verifyPayment.emit(pay.id)" [disabled]="verifyingPaymentId === pay.id"
+                  class="btn-premium-solid btn-green">
+                  @if (verifyingPaymentId === pay.id) {
+                  <span class="material-icons spinning">sync</span>Verifying...
+                  } @else {
+                  <span class="material-icons">check_circle</span>Verify
+                  }
+                </button>
+                }
+              </div>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="6" class="text-center">No fee receipts submitted.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (filteredPayments.length > 0) {
+      <div class="mt-3">
+        <app-pagination
+          [totalItems]="filteredPayments.length"
+          [pageSize]="pageSize"
+          [currentPage]="currentPage"
+          (pageChange)="currentPage = $event">
+        </app-pagination>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- BILLING ITEM MODAL -->
+@if (activeModal === 'feeStructure') {
+<div class="modal-overlay">
+  <div class="modal-content glass-card">
+    <h3>Define Class Billing Structure</h3>
+    <form (ngSubmit)="submitFeeStructure()">
+      <div class="form-group">
+        <label>Apply to Class</label>
+        <select class="form-control" [(ngModel)]="feeStructureForm.class_id" name="fee_class">
+          <option [value]="0">-- All Classes --</option>
+          @for (c of classes; track c.id) {
+          <option [value]="c.id">{{ c.name }} - {{ c.section }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Fee Category</label>
+        <input type="text" class="form-control" placeholder="e.g. Tuition Fee" [(ngModel)]="feeStructureForm.category"
+          name="fee_cat" required />
+      </div>
+      <div class="form-group">
+        <label>Billing Amount (Rs.)</label>
+        <input type="number" class="form-control" [(ngModel)]="feeStructureForm.amount" name="fee_amt" required />
+      </div>
+      <div class="form-group">
+        <label>Payment Due Date</label>
+        <input type="date" class="form-control" [(ngModel)]="feeStructureForm.due_date" name="fee_due" />
+      </div>
+
+      <div class="flex-end gap-2 mt-4">
+        <button type="button" class="btn-secondary" (click)="setModal.emit(null)">Cancel</button>
+        <button type="submit" class="btn-primary">Submit Bill</button>
+      </div>
+    </form>
+  </div>
+</div>
+}
+
+<!-- SCREENSHOT PREVIEW MODAL -->
+@if (selectedScreenshotUrl) {
+<div class="modal-overlay" (click)="closeScreenshotModal()">
+  <div class="modal-content glass-card screenshot-preview-modal" (click)="$event.stopPropagation()"
+    style="max-width: 600px; width: 90%;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="mb-0">Payment Proof Screenshot</h3>
+      <button
+        class="btn-outline btn-small text-danger d-flex align-items-center justify-content-center p-1 rounded-circle"
+        (click)="closeScreenshotModal()" style="width: 32px; height: 32px;">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+    <div class="screenshot-container text-center bg-dark p-2 rounded">
+      <img [src]="selectedScreenshotUrl" alt="Payment screenshot proof" class="img-fluid rounded"
+        style="max-height: 70vh; object-fit: contain; width: 100%;" />
+    </div>
+  </div>
+</div>
+}

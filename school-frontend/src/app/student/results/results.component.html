@@ -1,0 +1,41 @@
+<div class="results-dashboard">
+  @for (examBlock of results; track examBlock.exam.id) {
+    <div class="glass-card mb-4">
+      <div class="flex-row justify-between mb-3 border-bottom pb-2">
+        <h3>{{ examBlock.exam.name }} ({{ examBlock.exam.academic_year }})</h3>
+        <a [href]="downloadReportCardUrl(examBlock.exam.id)" class="btn-primary btn-small">
+          <span class="material-icons">download</span><span>Download Report Card PDF</span>
+        </a>
+      </div>
+
+      <div class="table-container">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Subject Code</th>
+              <th>Subject Name</th>
+              <th>Marks Obtained</th>
+              <th>Max Marks</th>
+              <th>Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (sub of examBlock.subjects; track sub.subject_id) {
+              <tr>
+                <td>{{ sub.code }}</td>
+                <td>{{ sub.name }}</td>
+                <td>{{ sub.marks_obtained }}</td>
+                <td>{{ sub.max_marks }}</td>
+                <td><span class="badge-active">{{ sub.grade }}</span></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  } @empty {
+    <div class="glass-card empty-feed">
+      <p>No examination results published for your profile yet.</p>
+    </div>
+  }
+</div>

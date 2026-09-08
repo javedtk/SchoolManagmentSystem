@@ -1,0 +1,83 @@
+<div class="attendance-summary-card mb-4">
+  <div class="summary-left">
+    <h3>Overall Attendance Rate: <span>{{ attendanceReport.percentage }}%</span></h3>
+    <p>Your academic compliance record</p>
+  </div>
+  <div class="summary-right">
+    <span class="badge-active badge-present">Present: {{ attendanceReport.summary?.present || 0 }}</span>
+    <span class="badge-active badge-absent">Absent: {{ attendanceReport.summary?.absent || 0 }}</span>
+    <span class="badge-active badge-leave">Leave: {{ attendanceReport.summary?.leave || 0 }}</span>
+  </div>
+</div>
+
+<!-- Interactive Attendance Filters -->
+<div class="filter-panel mb-4">
+  <div class="filter-row">
+    <div class="filter-group">
+      <label class="filter-label">Search Date</label>
+      <div class="input-with-icon">
+        <span class="material-icons">calendar_today</span>
+        <input type="date" class="form-control" [(ngModel)]="searchDate" />
+      </div>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label">Status Filter</label>
+      <div class="input-with-icon">
+        <span class="material-icons">filter_list</span>
+        <select class="form-control select-control" [(ngModel)]="selectedStatus">
+          <option value="all">All Status</option>
+          <option value="present">Present</option>
+          <option value="absent">Absent</option>
+          <option value="leave">Leave</option>
+        </select>
+      </div>
+    </div>
+    @if (searchDate || selectedStatus !== 'all') {
+      <button class="btn-clear" (click)="clearFilters()">
+        <span class="material-icons">clear_all</span> Clear Filters
+      </button>
+    }
+  </div>
+</div>
+
+<div class="table-container">
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Class Room</th>
+        <th>Attendance Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (record of paginatedRecords; track record.id) {
+        <tr>
+          <td>{{ record.date }}</td>
+          <td>{{ record.Class?.name }} - {{ record.Class?.section }}</td>
+          <td>
+            <span class="badge-active" 
+                  [ngClass]="{
+                    'status-present': record.status === 'present',
+                    'status-absent': record.status === 'absent',
+                    'status-leave': record.status === 'leave'
+                  }">
+              {{ record.status | uppercase }}
+            </span>
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="3" class="text-center">No attendance history logged.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- Pagination controls -->
+<div class="mt-4">
+  <app-pagination
+    [totalItems]="filteredRecords.length"
+    [pageSize]="pageSize"
+    [currentPage]="currentPage"
+    (pageChange)="currentPage = $event">
+  </app-pagination>
+</div>

@@ -1,0 +1,252 @@
+$primary: #16A34A;
+$primary-hover: #15803D;
+$dark: #0F172A;
+$light: rgba(22, 163, 74, 0.05);
+$gold: #F59E0B;
+$transition: all 0.3s ease;
+$shadow-hover: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+:host { display: block; }
+
+// Hero Section Styles
+.faculty-hero {
+  background: linear-gradient(rgba(15,23,42,.75), rgba(15,23,42,.85)), url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1600&auto=format&fit=crop') no-repeat center/cover;
+  min-height: 70vh;
+  padding: 12rem 0 8rem 0; // top padding accounts for fixed header!
+  color: #ffffff;
+  position: relative;
+  text-align: center;
+}
+.faculty-hero-title {
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.15;
+  font-weight: 800;
+  font-size: 3.5rem;
+  @media (max-width: 768px) { font-size: 2.2rem; }
+}
+.faculty-hero-text {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+.welcome-badge {
+  letter-spacing: 2px;
+  background-color: $primary !important;
+  font-size: 0.85rem;
+  border-radius: 30px;
+}
+
+// Section Paddings
+.section-padding {
+  padding: 6rem 0;
+  @media (max-width: 768px) {
+    padding: 4rem 0;
+  }
+}
+
+// Section Titles
+.section-title-wrapper {
+  .subtitle {
+    letter-spacing: 1px;
+  }
+  .section-heading {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+  }
+  .section-desc {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 650px;
+    margin: 0 auto;
+  }
+}
+
+// Leadership and Faculty Cards Styles
+.leader-premium-card, .faculty-premium-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  height: 100%;
+  position: relative;
+  transition: $transition;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: rgba(22, 163, 74, 0.25);
+    box-shadow: $shadow-hover;
+    .leader-avatar-container, .faculty-avatar-container {
+      border-color: $primary;
+    }
+  }
+
+  .leader-avatar-container, .faculty-avatar-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem auto;
+    border: 3px solid rgba(22, 163, 74, 0.1);
+    padding: 4px;
+    transition: $transition;
+    position: relative;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ffffff;
+    }
+
+    .avatar-placeholder {
+      width: 100%;
+      height: 100%;
+      background: $light;
+      color: $primary;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #ffffff;
+    }
+  }
+
+  h3 {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+    font-weight: 800;
+    font-size: 1.35rem;
+  }
+
+  .designation-badge {
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  p {
+    color: #475569;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .leader-qualification, .faculty-qualification {
+    font-size: 0.85rem;
+    color: #64748B;
+  }
+
+  .leader-bio, .faculty-bio {
+    font-size: 0.92rem;
+    color: #475569;
+  }
+}
+
+// Stats Counter
+.stat-counter-card {
+  background: rgba(22, 163, 74, 0.02);
+  border: 1px solid rgba(22, 163, 74, 0.12);
+  border-radius: 24px;
+  padding: 2.5rem 1.5rem;
+  height: 100%;
+  transition: $transition;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &:hover {
+    border-color: rgba(22, 163, 74, 0.35);
+    background: rgba(22, 163, 74, 0.05);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(22, 163, 74, 0.05);
+    .stat-icon-wrapper {
+      background: $primary;
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+  }
+
+  .stat-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    background: rgba(22, 163, 74, 0.1);
+    color: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    transition: $transition;
+  }
+
+  .stat-number {
+    font-family: 'Outfit', sans-serif;
+    background: linear-gradient(135deg, #16A34A 0%, #15803D 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    font-weight: 800;
+  }
+
+  .stat-card-label {
+    color: #15803D;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.25rem;
+  }
+}
+
+// Standard Commitment Card
+.standard-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #E2E8F0;
+  padding: 2.25rem;
+  height: 100%;
+  transition: $transition;
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(22, 163, 74, 0.2);
+    box-shadow: $shadow-hover;
+  }
+  .standard-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    color: $dark;
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    i {
+      color: $primary;
+    }
+  }
+  p {
+    color: #475569;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+}
+
+// Empty Feed Placeholder
+.empty-feed {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #E2E8F0;
+  padding: 4rem 2rem;
+  .empty-icon-wrapper {
+    color: #94A3B8;
+  }
+  h4 {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+}

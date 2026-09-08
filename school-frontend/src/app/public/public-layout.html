@@ -1,0 +1,104 @@
+<div class="public-wrapper">
+  <!-- Top Navigation Bar -->
+  <app-header 
+    [isPublic]="true" 
+    [activeTab]="activeTab()" 
+    (tabChanged)="setTab($event)" 
+    (navigatePortal)="navigateToPortal()">
+  </app-header>
+
+  <!-- Page Content Area -->
+  <main class="page-content">
+
+    <!-- HOME TAB -->
+    @if (activeTab() === 'home') {
+      <app-public-home [events]="events()" (navigateTab)="setTab($event)"></app-public-home>
+    }
+
+    <!-- ABOUT US TAB -->
+    @if (activeTab() === 'about') {
+      <app-public-about-us [aboutInfo]="cmsAbout()"></app-public-about-us>
+    }
+
+    <!-- CLASSES TAB -->
+    @if (activeTab() === 'classes') {
+      <app-public-classes [classes]="classes()"></app-public-classes>
+    }
+
+    <!-- SERVICES / FACILITIES TAB -->
+    @if (activeTab() === 'services') {
+      <app-public-services [cmsServices]="cmsServices()"></app-public-services>
+    }
+
+    <!-- FACULTY TAB -->
+    @if (activeTab() === 'faculty') {
+      <app-public-faculty [faculty]="faculty()"></app-public-faculty>
+    }
+
+    <!-- ADMISSIONS TAB -->
+    @if (activeTab() === 'admission') {
+      <app-public-admission 
+        #admissionComp
+        [cmsAdmissionInfo]="cmsAdmissionInfo()" 
+        [admissionLoading]="admissionLoading()" 
+        [admissionSuccess]="admissionSuccess()" 
+        [admissionError]="admissionError()"
+        (submitEnquiry)="submitAdmissionEnquiry($event, admissionComp)">
+      </app-public-admission>
+    }
+
+    <!-- EVENTS TAB -->
+    @if (activeTab() === 'events') {
+      <app-public-events [events]="events()"></app-public-events>
+    }
+
+    <!-- GALLERY TAB -->
+    @if (activeTab() === 'gallery') {
+      <app-public-gallery 
+        [albums]="albums()" 
+        [activeAlbum]="activeAlbum()"
+        (selectAlbum)="viewAlbum($event)"
+        (closeAlbum)="activeAlbum.set(null)">
+      </app-public-gallery>
+    }
+
+    <!-- ACHIEVEMENTS TAB -->
+    @if (activeTab() === 'achievements') {
+      <app-public-achievements [achievements]="achievements()"></app-public-achievements>
+    }
+
+    <!-- CAREERS TAB -->
+    @if (activeTab() === 'career') {
+      <app-public-career 
+        #careerComp
+        [jobs]="jobs()" 
+        [activeJob]="activeJob()" 
+        [jobLoading]="jobLoading()" 
+        [jobSuccess]="jobSuccess()" 
+        [jobError]="jobError()"
+        (selectJob)="openJobApplication($event)"
+        (closeJob)="activeJob.set(null)"
+        (resumeSelected)="onResumeSelected($event)"
+        (submitApplication)="submitJobApplication($event, careerComp)">
+      </app-public-career>
+    }
+
+    <!-- CONTACT US TAB -->
+    @if (activeTab() === 'contact') {
+      <app-public-contact-us 
+        #contactComp
+        [contactLoading]="contactLoading()" 
+        [contactSuccess]="contactSuccess()" 
+        [contactError]="contactError()"
+        (submitContact)="submitContactForm($event, contactComp)">
+      </app-public-contact-us>
+    }
+
+  </main>
+
+  <!-- Public Footer -->
+  <app-footer 
+    [isPublic]="true" 
+    (tabChanged)="setTab($event)">
+  </app-footer>
+</div>

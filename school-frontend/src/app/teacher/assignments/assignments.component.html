@@ -1,0 +1,258 @@
+<div class="action-header filter-bar">
+  <div class="form-group flex-row">
+    <label>Class:</label>
+    <select class="form-control" [value]="selectedClassId() || 'null'" (change)="onClassFilterChange($event)">
+      <option value="null">All Classes</option>
+      @for (c of uniqueClasses(); track c.id) {
+        <option [value]="c.id">{{ c.name }} - {{ c.section }}</option>
+      }
+    </select>
+  </div>
+
+  <button (click)="openAssignmentModal()" class="btn-primary" style="margin-left: auto; display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; padding: 0.55rem 1.25rem; border-radius: 10px; border: none; background: linear-gradient(135deg, #16a34a, #047857); color: white; cursor: pointer; font-weight: 700; box-shadow: 0 4px 10px rgba(22, 163, 74, 0.2);">
+    <span class="material-icons" style="font-size: 1.15rem;">add</span>
+    <span>Create Assignment</span>
+  </button>
+</div>
+
+<div class="table-container mt-3">
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Class / Sec</th>
+        <th>Subject Name</th>
+        <th>Assignment Title</th>
+        <th>Due Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (a of filteredAssignments(); track a.id) {
+
+        <tr>
+          <td style="font-weight: 600; color: #0F172A;">{{ a.Class?.name }} - {{ a.Class?.section }}</td>
+          <td>{{ a.Subject?.name }}</td>
+          <td style="font-weight: 600; color: #15803d;">{{ a.title }}</td>
+          <td>{{ a.due_date | date:'mediumDate' }}</td>
+          <td>
+            <div class="actions-cell-flex">
+              <button (click)="viewSubmissions(a.id)" class="btn-primary btn-small">
+                <span class="material-icons" style="font-size: 0.9rem;">visibility</span>
+                Submissions
+              </button>
+              <button (click)="deleteAssignment(a.id)" class="btn-outline btn-small text-danger">
+                <span class="material-icons" style="font-size: 0.9rem;">delete</span>
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="5" class="text-center">No assignments posted. Click "Create Assignment".</td></tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- POST ASSIGNMENT MODAL -->
+@if (activeModal() === 'assignment') {
+  <div class="modal-overlay" (click)="activeModal.set(null)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">add_task</span>
+          </div>
+          <div>
+            <h3>Create Academic Assignment</h3>
+            <p>Fill in details to post a new assignment task</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="activeModal.set(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="saveAssignment()">
+          
+          <div class="form-group">
+            <label>
+              <span class="material-icons">school</span>
+              Select Target Class-Subject
+            </label>
+            <select class="form-control" (change)="onClassSubjectChange($event)" required>
+              <option value="">-- Select Combination --</option>
+              @for (cs of classSubjects; track cs.id) {
+                <option [value]="cs.Class.id + ':' + cs.Subject.id">{{ cs.Class.name }} - {{ cs.Class.section }} ({{ cs.Subject.name }})</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <span class="material-icons">title</span>
+              Assignment Title
+            </label>
+            <input type="text" class="form-control" placeholder="e.g. Calculus Practice" [(ngModel)]="assignmentForm.title" name="a_title" required />
+          </div>
+
+          <div class="form-group">
+            <label>
+              <span class="material-icons">description</span>
+              Description Instructions
+            </label>
+            <textarea class="form-control" rows="4" placeholder="Enter assignment tasks..." [(ngModel)]="assignmentForm.description" name="a_desc"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <span class="material-icons">calendar_today</span>
+              Due Date
+            </label>
+            <input type="datetime-local" class="form-control" [(ngModel)]="assignmentForm.due_date" name="a_due" required />
+          </div>
+
+          <div class="form-group">
+            <label>
+              <span class="material-icons">cloud_upload</span>
+              Upload Reference Document (PDF/Image)
+            </label>
+            <input type="file" class="form-control" (change)="onAttachmentSelected($event)" accept=".pdf,.png,.jpg,.jpeg" />
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" (click)="activeModal.set(null)">
+              <span class="material-icons">close</span> Cancel
+            </button>
+            <button type="submit" class="btn-confirm">
+              <span class="material-icons">save</span> Post Assignment
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- VIEW SUBMISSIONS MODAL -->
+@if (activeModal() === 'submissions') {
+  <div class="modal-overlay" (click)="activeModal.set(null)">
+    <div class="modal-box" (click)="$event.stopPropagation()" style="max-width: 900px; width: 90%;">
+      
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">fact_check</span>
+          </div>
+          <div>
+            <h3>Student Assignment Submissions</h3>
+            <p>Review and grade student responses</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="activeModal.set(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+        <div class="table-container">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Submitted Date</th>
+                <th>Status</th>
+                <th>Remarks</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (sub of submissions(); track sub.id) {
+                <tr>
+                  <td style="font-weight: 600; color: #0F172A;">{{ sub.Student?.User?.name }}</td>
+                  <td>{{ sub.submitted_at | date:'medium' }}</td>
+                  <td>
+                    <span class="status-pill status-{{ sub.status?.toLowerCase() }}">
+                      <span class="status-dot"></span>
+                      {{ sub.status }}
+                    </span>
+                  </td>
+                  <td>{{ sub.remarks || 'No remarks entered.' }}</td>
+                  <td>
+                    <div class="actions-cell-flex">
+                      <a [href]="'http://localhost:5000/' + sub.file" target="_blank" class="btn-primary btn-small">
+                        <span class="material-icons" style="font-size: 0.9rem;">download</span>
+                        Download File
+                      </a>
+                      <button (click)="openGradeModal(sub)" class="btn-confirm btn-small">
+                        <span class="material-icons" style="font-size: 0.9rem;">grade</span>
+                        Grade
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                <tr><td colspan="5" class="text-center">No student submissions received for this assignment.</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-confirm" (click)="activeModal.set(null)">
+          <span class="material-icons">check</span> Close List
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- GRADE SUBMISSION MODAL -->
+@if (activeModal() === 'grade') {
+  <div class="modal-overlay" (click)="activeModal.set('submissions')">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">rate_review</span>
+          </div>
+          <div>
+            <h3>Grade Homework Submission</h3>
+            <p>Student: {{ selectedEntity()?.Student?.User?.name }}</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="activeModal.set('submissions')">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="saveGrade()">
+          <div class="form-group">
+            <label>
+              <span class="material-icons">feedback</span>
+              Teacher Grading Remarks
+            </label>
+            <textarea class="form-control" rows="4" placeholder="Enter feedback remarks..." [(ngModel)]="gradeForm.remarks" name="grade_remarks" required></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" (click)="activeModal.set('submissions')">
+              <span class="material-icons">arrow_back</span> Back
+            </button>
+            <button type="submit" class="btn-confirm">
+              <span class="material-icons">save</span> Submit Grade
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+}

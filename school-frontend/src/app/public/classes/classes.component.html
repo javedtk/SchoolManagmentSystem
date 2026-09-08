@@ -1,0 +1,185 @@
+<section class="class-hero text-white d-flex align-items-center justify-content-center text-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <span class="badge bg-success welcome-badge mb-3 px-3 py-2 text-uppercase font-weight-bold">
+          Aether Academy | Academic Paths
+        </span>
+        <h1 class="display-3 font-weight-bold class-hero-title mb-4 text-white">
+          Offered Academic Classes
+        </h1>
+        <p class="lead class-hero-text mb-0">
+          Explore our comprehensive academic curricula designed to facilitate cognitive growth, critical thinking, and preparation for secondary board exams.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Active Classes List Grid -->
+<section class="section-padding bg-light">
+  <div class="container">
+    <div class="section-title-wrapper text-center">
+      <span class="subtitle">Enrollment Catalog</span>
+      <h2 class="title">Active Grade Classrooms</h2>
+    </div>
+    <div class="row g-4 justify-content-center">
+      @for (cls of classes; track cls.id; let i = $index) {
+        <div class="col-md-6 col-lg-4">
+          <div class="class-premium-card">
+            <div class="card-img-wrapper">
+              <img [src]="classImages[i % classImages.length]" alt="Academic Class">
+              <span class="badge bg-success position-absolute top-0 end-0 m-3 px-3 py-2 text-uppercase font-weight-bold" style="background-color: var(--bs-success) !important;">
+                Section {{ cls.section }}
+              </span>
+            </div>
+            <div class="card-body">
+              <h3 class="class-title">{{ cls.name }}</h3>
+              <p class="class-desc">Comprehensive academic syllabus designed for intellectual growth and preparation for secondary board exams.</p>
+              
+              <div class="class-meta-list">
+                <div class="meta-item">
+                  <i class="fas fa-users meta-icon"></i>
+                  <span><strong>Capacity:</strong> {{ cls.capacity || 'N/A' }} Scholars</span>
+                </div>
+                <div class="meta-item">
+                  <i class="fas fa-chalkboard-teacher meta-icon"></i>
+                  <span><strong>Class Teacher:</strong> {{ cls.ClassTeacher ? cls.ClassTeacher.User.name : 'Unassigned' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div class="col-lg-8">
+          <div class="empty-feed-card">
+            <i class="fas fa-folder-open fa-3x text-muted mb-3 mx-auto d-block"></i>
+            <p class="mb-0">No active classes loaded from database yet.</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Specialized Career Tracks -->
+<section class="section-padding bg-white">
+  <div class="container">
+    <div class="section-title-wrapper text-center">
+      <span class="subtitle">Choose Your Focus</span>
+      <h2 class="title">Specialized Academic Tracks</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="track-card">
+          <div class="track-icon">
+            <i class="fas fa-calculator fa-lg"></i>
+          </div>
+          <h4 class="h5 fw-bold mb-2">Pre-Engineering</h4>
+          <p class="text-muted small mb-0">Math-intensive preparation focusing on calculus, advanced physics models, and structural mechanics for engineering goals.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="track-card">
+          <div class="track-icon">
+            <i class="fas fa-heartbeat fa-lg"></i>
+          </div>
+          <h4 class="h5 fw-bold mb-2">Biomedical Sciences</h4>
+          <p class="text-muted small mb-0">Intensive curriculum covering organic chemistry, cell biology, genetics, and biotechnology lab techniques.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="track-card">
+          <div class="track-icon">
+            <i class="fas fa-balance-scale fa-lg"></i>
+          </div>
+          <h4 class="h5 fw-bold mb-2">Liberal Arts & Law</h4>
+          <p class="text-muted small mb-0">Fostering critical analysis of world history, literature, constitutional law, and public policy frameworks.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="track-card">
+          <div class="track-icon">
+            <i class="fas fa-robot fa-lg"></i>
+          </div>
+          <h4 class="h5 fw-bold mb-2">Tech & Digital Arts</h4>
+          <p class="text-muted small mb-0">Focusing on object-oriented programming, data structures, creative UI/UX design, and foundational AI modules.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Assessment Framework Section -->
+<section class="section-padding bg-light">
+  <div class="container">
+    <div class="section-title-wrapper text-center">
+      <span class="subtitle">Structured Success</span>
+      <h2 class="title">Assessment & Grading Model</h2>
+    </div>
+    <div class="row g-4 text-center">
+      <div class="col-md-4">
+        <div class="eval-card">
+          <div class="eval-pct">30%</div>
+          <h4 class="h5 fw-bold mb-2">Continuous Assessment</h4>
+          <p class="text-muted small mb-0">Weekly quizzes, diagnostic homework reviews, and hands-on laboratory report submissions.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="eval-card">
+          <div class="eval-pct">30%</div>
+          <h4 class="h5 fw-bold mb-2">Midterm Case Projects</h4>
+          <p class="text-muted small mb-0">Group case study files, experimental research models, and interactive project demonstrations.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="eval-card">
+          <div class="eval-pct">40%</div>
+          <h4 class="h5 fw-bold mb-2">Final Board Mock Exams</h4>
+          <p class="text-muted small mb-0">Comprehensive theoretical examinations and practical board testing aligned with international standards.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Academic FAQ Accordion -->
+<section class="section-padding bg-white">
+  <div class="container">
+    <div class="section-title-wrapper text-center">
+      <span class="subtitle">Got Questions?</span>
+      <h2 class="title">Academic Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" (click)="faq1.classList.toggle('d-none'); icon1.classList.toggle('fa-rotate-180')">
+          <span>How are classroom sections assigned?</span>
+          <i #icon1 class="fas fa-chevron-down text-muted transition-all duration-300"></i>
+        </div>
+        <div #faq1 class="faq-answer d-none">
+          Sections are assigned based on enrollment capacity limits and diagnostic assessment performance to ensure optimal teacher-to-student ratios and individual attention.
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question" (click)="faq2.classList.toggle('d-none'); icon2.classList.toggle('fa-rotate-180')">
+          <span>Is there learning support for struggling scholars?</span>
+          <i #icon2 class="fas fa-chevron-down text-muted transition-all duration-300"></i>
+        </div>
+        <div #faq2 class="faq-answer d-none">
+          Yes! Daily peer-tutoring circles and dedicated teacher-led study sessions are hosted in the digital library catalog after regular class hours.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" (click)="faq3.classList.toggle('d-none'); icon3.classList.toggle('fa-rotate-180')">
+          <span>Are Advanced Placement (AP) credits transferable?</span>
+          <i #icon3 class="fas fa-chevron-down text-muted transition-all duration-300"></i>
+        </div>
+        <div #faq3 class="faq-answer d-none">
+          Aether Academy is fully certified by the College Board. AP course credits count toward national board exams and are recognized by elite international universities.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,191 @@
+$primary: #16A34A;
+$primary-hover: #15803D;
+$dark: #0F172A;
+$light: rgba(22, 163, 74, 0.05);
+$gold: #F59E0B;
+$transition: all 0.3s ease;
+$shadow-hover: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+:host { display: block; }
+
+// Hero Section Styles
+.about-hero {
+  background: linear-gradient(rgba(15,23,42,.75), rgba(15,23,42,.85)), url('https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1600&auto=format&fit=crop') no-repeat center/cover;
+  min-height: 70vh;
+  padding: 12rem 0 8rem 0; // top padding accounts for fixed header!
+  color: #ffffff;
+  position: relative;
+  text-align: center;
+}
+.about-hero-title {
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.15;
+  font-weight: 800;
+  font-size: 3.5rem;
+  @media (max-width: 768px) { font-size: 2.2rem; }
+}
+.about-hero-text {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+.welcome-badge {
+  letter-spacing: 2px;
+  background-color: $primary !important;
+  font-size: 0.85rem;
+  border-radius: 30px;
+}
+
+// Framework Story
+.story-title {
+  font-family: 'Outfit', sans-serif;
+  color: $dark;
+  line-height: 1.2;
+}
+.story-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #475569 !important;
+}
+
+// Methodologies Stack
+.methodology-card {
+  background: #ffffff;
+  border-left: 4px solid $primary;
+  padding: 1.25rem;
+  border-radius: 0 16px 16px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  transition: $transition;
+  &:hover {
+    transform: translateX(8px);
+    box-shadow: 0 8px 20px rgba(22, 163, 74, 0.08);
+  }
+}
+
+// Milestone Timeline
+.timeline-container {
+  position: relative;
+  padding-left: 2rem;
+  border-left: 2px solid rgba(22, 163, 74, 0.15);
+  margin-left: 1rem;
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 3rem;
+  &:last-child { margin-bottom: 0; }
+}
+.timeline-badge {
+  position: absolute;
+  left: -2.65rem;
+  top: 1.5rem;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 4px solid $primary;
+  z-index: 2;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.15);
+  transition: $transition;
+}
+.timeline-item:hover .timeline-badge {
+  background: $primary;
+  transform: scale(1.25);
+}
+.timeline-year {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: $primary;
+  margin-bottom: 0.5rem;
+}
+.timeline-content-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: $transition;
+  &:hover {
+    border-color: rgba(22, 163, 74, 0.2);
+    box-shadow: $shadow-hover;
+  }
+}
+
+// House Cards
+.house-card {
+  border-radius: 20px;
+  padding: 2.25rem;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  transition: $transition;
+  z-index: 1;
+
+  p {
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.95;
+    transition: $transition;
+  }
+
+  &.house-pegasus {
+    background: linear-gradient(135deg, #B45309 0%, #78350F 100%); // Amber/Gold
+    &::before { background: radial-gradient(circle at top right, rgba(251, 191, 36, 0.15), transparent 70%); }
+  }
+  &.house-phoenix {
+    background: linear-gradient(135deg, #B91C1C 0%, #7F1D1D 100%); // Red
+    &::before { background: radial-gradient(circle at top right, rgba(239, 68, 68, 0.15), transparent 70%); }
+  }
+  &.house-orion {
+    background: linear-gradient(135deg, #1D4ED8 0%, #1E3A8A 100%); // Blue
+    &::before { background: radial-gradient(circle at top right, rgba(96, 165, 250, 0.15), transparent 70%); }
+  }
+  &.house-centaur {
+    background: linear-gradient(135deg, #047857 0%, #064E3B 100%); // Emerald Green
+    &::before { background: radial-gradient(circle at top right, rgba(52, 211, 153, 0.15), transparent 70%); }
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.15);
+    &::before { opacity: 0.8; }
+  }
+
+  .house-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+}
+
+// Affiliation Badges
+.partner-logo-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  transition: $transition;
+  &:hover {
+    border-color: rgba(22, 163, 74, 0.25);
+    box-shadow: $shadow-hover;
+    transform: scale(1.03);
+  }
+  .partner-icon {
+    color: $primary;
+    margin-bottom: 0.75rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .story-title { font-size: 1.75rem; }
+}

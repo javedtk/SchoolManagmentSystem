@@ -1,0 +1,202 @@
+$primary: #16A34A;
+$primary-hover: #15803D;
+$dark: #0F172A;
+$light: rgba(22, 163, 74, 0.05);
+$gold: #F59E0B;
+$transition: all 0.3s ease;
+$shadow-hover: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+:host { display: block; }
+
+// Hero Section Styles
+.services-hero {
+  background: linear-gradient(rgba(15,23,42,.75), rgba(15,23,42,.85)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1600&auto=format&fit=crop') no-repeat center/cover;
+  min-height: 70vh;
+  padding: 12rem 0 8rem 0; // top padding accounts for fixed header!
+  color: #ffffff;
+  position: relative;
+  text-align: center;
+}
+.services-hero-title {
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.15;
+  font-weight: 800;
+  font-size: 3.5rem;
+  @media (max-width: 768px) { font-size: 2.2rem; }
+}
+.services-hero-text {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+.welcome-badge {
+  letter-spacing: 2px;
+  background-color: $primary !important;
+  font-size: 0.85rem;
+  border-radius: 30px;
+}
+
+// Left block checklist
+.story-content {
+  .subtitle {
+    letter-spacing: 1px;
+  }
+  .story-title {
+    color: $dark;
+    font-family: 'Outfit', sans-serif;
+  }
+  .story-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #475569 !important;
+  }
+}
+
+.commit-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  color: #475569;
+  .commit-check {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: $light;
+    color: $primary;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+  }
+}
+
+// Facility Cards
+.facility-premium-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 2rem;
+  transition: $transition;
+  height: 100%;
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(22, 163, 74, 0.2);
+    box-shadow: $shadow-hover;
+    .facility-icon-wrapper {
+      background: $primary;
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+  }
+
+  .facility-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: $light;
+    color: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: $transition;
+    flex-shrink: 0;
+  }
+
+  h4 {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #475569;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+}
+
+// Amenities card
+.amenity-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #E2E8F0;
+  padding: 2.25rem;
+  text-align: center;
+  height: 100%;
+  transition: $transition;
+  &:hover {
+    transform: translateY(-8px);
+    border-color: rgba(22, 163, 74, 0.25);
+    box-shadow: $shadow-hover;
+    .amenity-icon {
+      background: $primary;
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+  }
+  .amenity-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: $light;
+    color: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem auto;
+    transition: $transition;
+  }
+  h4 {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+  }
+  p {
+    color: #475569;
+    font-size: 0.9rem;
+  }
+}
+
+// Commitment items card
+.commitment-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #E2E8F0;
+  padding: 2.25rem;
+  height: 100%;
+  transition: $transition;
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(22, 163, 74, 0.2);
+    box-shadow: $shadow-hover;
+  }
+  .commit-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    color: $dark;
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    i {
+      color: $primary;
+    }
+  }
+  p {
+    color: #475569;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .services-hero-title { font-size: 2.2rem; }
+}

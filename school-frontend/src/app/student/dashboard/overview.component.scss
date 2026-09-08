@@ -1,0 +1,316 @@
+// ── Color tokens ─────────────────────────────────────────────
+$g900: #052e16;
+$g800: #14532d;
+$g700: #15803d;
+$g600: #16a34a;
+$g500: #22c55e;
+$g400: #4ade80;
+$g100: #dcfce7;
+$g50:  #f0fdf4;
+$white: #ffffff;
+
+// ═══════════════════════════════════════════════════════════════
+// SUMMARY GRIDS & CARD LAYOUTS
+// ═══════════════════════════════════════════════════════════════
+.summary-grid {
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.summary-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;                // matched with teacher cards
+  padding: 0.6rem 1.1rem;     // tighter padding for locked 84px height
+  height: 84px;               // lock card height for a compact and uniform layout
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+
+  // ── Green gradient card ──────────────────────────────────
+  &.stat-card-green {
+    background: linear-gradient(135deg, $g700 0%, $g600 100%);
+    box-shadow: 0 8px 28px rgba(22, 163, 74, 0.32);
+    border: none;
+
+    &:hover { box-shadow: 0 16px 36px rgba(22, 163, 74, 0.42); }
+
+    .card-icon {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      span { color: #fff; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.8); }
+    .card-badge {
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .card-watermark { color: rgba(255,255,255,0.06); }
+  }
+
+  // ── White card with green accent ─────────────────────────
+  &.stat-card-white {
+    background: #fff;
+    border: 1px solid rgba(22, 163, 74, 0.15);
+    box-shadow: 0 4px 18px rgba(22, 163, 74, 0.08);
+
+    &:hover {
+      border-color: $g600;
+      box-shadow: 0 10px 28px rgba(22, 163, 74, 0.18);
+    }
+
+    .card-icon {
+      background: $g50;
+      border: 1px solid rgba(22, 163, 74, 0.2);
+      span { color: $g600; }
+    }
+    .card-body h3 { color: #0f172a; }
+    .card-body p  { color: #475569; }
+    .card-badge.badge-green {
+      background: $g100;
+      color: $g700;
+      border: 1px solid rgba(22, 163, 74, 0.25);
+    }
+    .card-badge.badge-orange {
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+    .card-badge {
+      background: $g50;
+      color: $g700;
+      border: 1px solid rgba(22, 163, 74, 0.2);
+    }
+  }
+
+  // ── Teal card ──────────────────────────────────────────
+  &.stat-card-teal {
+    background: linear-gradient(135deg, #0f4c5c 0%, #0e7490 100%);
+    box-shadow: 0 8px 24px rgba(14, 116, 144, 0.3);
+    border: none;
+
+    &:hover { box-shadow: 0 14px 32px rgba(14, 116, 144, 0.42); }
+
+    .card-icon {
+      background: rgba(103, 232, 249, 0.15);
+      border: 1px solid rgba(103, 232, 249, 0.3);
+      span { color: #67e8f9; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.75); }
+    .card-badge.badge-teal {
+      background: rgba(103, 232, 249, 0.18);
+      color: #67e8f9;
+      border: 1px solid rgba(103, 232, 249, 0.3);
+    }
+    .card-watermark { color: rgba(103, 232, 249, 0.07); }
+  }
+
+  // ── Amber card ──────────────────────────────────────────
+  &.stat-card-amber {
+    background: linear-gradient(135deg, #78350f 0%, #b45309 100%);
+    box-shadow: 0 8px 24px rgba(180, 83, 9, 0.3);
+    border: none;
+
+    &:hover { box-shadow: 0 14px 32px rgba(180, 83, 9, 0.42); }
+
+    .card-icon {
+      background: rgba(252, 211, 77, 0.15);
+      border: 1px solid rgba(252, 211, 77, 0.3);
+      span { color: #fcd34d; }
+    }
+    .card-body h3 { color: #fff; }
+    .card-body p  { color: rgba(255,255,255,0.75); }
+    .card-badge.badge-amber {
+      background: rgba(252, 211, 77, 0.18);
+      color: #fcd34d;
+      border: 1px solid rgba(252, 211, 77, 0.3);
+    }
+    .card-watermark { color: rgba(252, 211, 77, 0.07); }
+  }
+
+  // ── Shared sub-elements ──────────────────────────────────
+  .card-icon {
+    width: 42px;              // adjusted to look centered and compact
+    height: 42px;             // adjusted to look centered and compact
+    border-radius: 11px;      // rounded corner styling
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    span { font-size: 1.4rem; } // perfectly scaled icon
+  }
+
+  .card-body {
+    flex: 1;
+    min-width: 0;             // allows text truncation or wrapping without overflow
+
+    h3 {
+      font-size: 1.35rem;     // fit text like Grade 10-A perfectly on one line
+      font-weight: 800;
+      line-height: 1.0;
+      margin-bottom: 0.1rem;
+      white-space: nowrap;    // prevents number/text from wrapping to two lines
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    p {
+      font-size: 0.74rem;     // matched with teacher cards
+      font-weight: 500;
+      margin-bottom: 0.3rem;  // perfect spacing
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.64rem;       // matched with teacher cards
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;  // matched with teacher cards
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+
+    span.material-icons { font-size: 0.74rem; } // matched with teacher cards
+  }
+
+  .card-watermark {
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    font-size: 5.5rem !important; // reduced watermark size
+    pointer-events: none;
+    line-height: 1;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DETAILS & TABLES SECTION
+// ═══════════════════════════════════════════════════════════════
+.glass-card {
+  background: #fff;
+  border: 1px solid rgba(22, 163, 74, 0.12);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(22, 163, 74, 0.04);
+  transition: all 0.25s ease;
+
+  &:hover {
+    border-color: rgba(22, 163, 74, 0.25);
+    box-shadow: 0 10px 30px rgba(22, 163, 74, 0.08);
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(22, 163, 74, 0.08);
+    padding-bottom: 0.75rem;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 18px;
+      background: linear-gradient(180deg, #16a34a, #047857);
+      border-radius: 4px;
+    }
+  }
+}
+
+// Table styling
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  
+  thead tr {
+    background: linear-gradient(135deg, #047857 0%, #16a34a 100%) !important;
+  }
+  
+  th {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #fff !important;
+    border: none;
+  }
+  
+  td {
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  
+  tbody tr {
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: rgba(22, 163, 74, 0.03);
+    }
+    
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
+}
+
+.badge-active {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(22, 163, 74, 0.06);
+  border: 1px solid rgba(22, 163, 74, 0.15);
+  color: #16a34a;
+}

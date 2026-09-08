@@ -1,0 +1,381 @@
+// Design Tokens
+$g900: #052e16;
+$g800: #14532d;
+$g700: #15803d;
+$g600: #16a34a;
+$g500: #22c55e;
+$g400: #4ade80;
+$g100: #dcfce7;
+$g50:  #f0fdf4;
+
+$text:        #0f172a;
+$text-sub:    #475569;
+$text-muted:  #94a3b8;
+$border:      #e2e8f0;
+$white:       #ffffff;
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Relative container helper for absolute status badge
+.relative-container {
+  position: relative !important;
+}
+
+// Absolute status badge styling
+.absolute-badge {
+  position: absolute !important;
+  top: 1rem !important;
+  right: 1rem !important;
+  z-index: 10 !important;
+}
+
+// Sidebar Column Styling
+.profile-sidebar-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-card {
+  padding: 2.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .admin-name {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: $text;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .admin-email {
+    font-size: 0.85rem;
+    color: $text-sub;
+    margin: 0.25rem 0 0 0;
+    font-weight: 500;
+  }
+
+  .role-badge-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .role-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.76rem;
+    font-weight: 700;
+    background: rgba(22, 163, 74, 0.08);
+    border: 1px solid rgba(22, 163, 74, 0.15);
+    color: $g700;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+
+    .material-icons {
+      font-size: 0.95rem;
+      color: $g600;
+    }
+  }
+}
+
+// Avatar upload area with hover overlay
+.avatar-upload-zone {
+  position: relative;
+  cursor: pointer;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  padding: 4px;
+  background: linear-gradient(135deg, $g600, $g400);
+  box-shadow: 0 8px 24px rgba(22, 163, 74, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.03);
+    box-shadow: 0 12px 32px rgba(22, 163, 74, 0.25);
+    
+    .avatar-overlay {
+      opacity: 1;
+    }
+  }
+}
+
+.avatar-preview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .fallback-avatar {
+    color: $text-muted;
+    .material-icons {
+      font-size: 4rem;
+    }
+  }
+}
+
+.avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.65);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: $white;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+
+  .material-icons {
+    font-size: 1.5rem;
+    margin-bottom: 2px;
+  }
+
+  p {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+    color: $white !important;
+  }
+}
+
+// Meta item styling
+.card-header-compact {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .material-icons {
+    font-size: 1.35rem;
+    color: $g600;
+  }
+
+  h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0;
+  }
+
+  p {
+    font-size: 0.75rem;
+    color: $text-sub;
+    margin: 0.1rem 0 0 0;
+  }
+}
+
+.divider {
+  border: 0;
+  border-top: 1.5px solid $border;
+  margin: 1rem 0;
+}
+
+.details-meta-card {
+  padding: 1.25rem 1.5rem;
+
+  .meta-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.1rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .material-icons {
+      font-size: 1.15rem;
+      color: $text-muted;
+      margin-top: 0.15rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: $text-muted;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.15rem;
+    }
+
+    span {
+      font-size: 0.85rem;
+      color: $text-sub;
+      font-weight: 600;
+    }
+
+    .locked-value {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      
+      .lock-icon {
+        font-size: 0.95rem;
+        color: $text-muted;
+        cursor: help;
+        margin: 0;
+      }
+    }
+  }
+}
+
+// Main Column Styling
+.profile-main-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Form Styling
+.file-picker-custom {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.85rem;
+  border: 1.5px dashed $border;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: $text-sub;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $g600;
+    background: rgba(22, 163, 74, 0.02);
+    color: $g700;
+  }
+
+  .material-icons {
+    font-size: 1.15rem;
+  }
+}
+
+// Premium Solid Buttons style mapping
+.btn-premium-solid {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.35rem !important;
+  padding: 0.55rem 1.25rem !important;
+  border-radius: 10px !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15) !important;
+
+  .material-icons {
+    font-size: 1.05rem !important;
+    color: #ffffff !important;
+    vertical-align: middle !important;
+  }
+
+  &.btn-green {
+    background: linear-gradient(135deg, #16a34a, #15803d) !important;
+    &:hover {
+      background: linear-gradient(135deg, #15803d, #14532d) !important;
+      box-shadow: 0 6px 16px rgba(22, 163, 74, 0.3) !important;
+      transform: translateY(-1.5px) !important;
+    }
+    &:active {
+      transform: translateY(0) !important;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.65 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+// Access Matrix Permissions Checklist
+.permissions-card {
+  padding: 1.5rem;
+  background: $white !important;
+  border: 1px solid $border !important;
+  box-shadow: none !important;
+
+  .divider {
+    border-top: 1.5px solid $border !important;
+  }
+}
+
+.permissions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.permission-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.85rem 1.1rem;
+  background: rgba(22, 163, 74, 0.05);
+  border: 1px solid rgba(22, 163, 74, 0.15);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(22, 163, 74, 0.09);
+    border-color: rgba(22, 163, 74, 0.28);
+    transform: translateX(2px);
+  }
+
+  .check-icon {
+    font-size: 1.25rem;
+    color: $g700;
+    margin-top: 0.1rem;
+  }
+
+  strong {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: $text;
+    margin-bottom: 0.15rem;
+  }
+
+  p {
+    font-size: 0.78rem;
+    color: $text-sub !important;
+    line-height: 1.4;
+    margin: 0;
+  }
+}

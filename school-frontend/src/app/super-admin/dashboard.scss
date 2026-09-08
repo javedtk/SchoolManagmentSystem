@@ -1,0 +1,525 @@
+// ── Design tokens ──────────────────────────────────────────────
+$green-900:  #052e16;
+$green-800:  #14532d;
+$green-700:  #15803d;
+$green-600:  #16a34a;
+$green-500:  #22c55e;
+$green-400:  #4ade80;
+$green-100:  #dcfce7;
+$green-50:   #f0fdf4;
+
+$white:       #ffffff;
+$bg-main:     #f0fdf4;   // very light green tint for the main area
+$bg-card:     #ffffff;
+$border-soft: rgba(22, 163, 74, 0.15);
+
+$text-primary:   #0f172a;
+$text-secondary: #475569;
+$text-muted:     #94a3b8;
+
+// ── Layout wrapper ─────────────────────────────────────────────
+.dashboard-wrapper {
+  display: flex;
+  height: 100vh;          // lock to viewport — no overflow on the wrapper
+  overflow: hidden;       // prevent wrapper from scrolling at all
+  background: $bg-main;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SIDEBAR – rich green gradient
+// ═══════════════════════════════════════════════════════════════
+.dashboard-sidebar {
+  width: 260px;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #0a3d1f;     // deep solid green — no gradient noise
+  border-right: none;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  box-shadow: 4px 0 28px rgba(5, 30, 15, 0.5);
+  position: relative;
+
+  // ── Header / logo ────────────────────────────────────────────
+  .sidebar-header {
+    height: 80px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    gap: 0.6rem;
+
+    .logo-icon {
+      font-size: 2.2rem;
+      color: $green-400;
+      filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.5));
+    }
+
+    .logo-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: $white;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+
+      span { color: $green-400; }
+    }
+  }
+
+  // ── User brief ───────────────────────────────────────────────
+  .user-brief {
+    padding: 0.7rem 1.25rem;   // reduced from 1.25rem
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.15);
+
+    .user-avatar {
+      width: 36px;             // reduced from 44px
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(74, 222, 128, 0.15);
+      border: 2px solid rgba(74, 222, 128, 0.4);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      span {
+        font-size: 1.4rem;     // reduced from 1.8rem
+        color: $green-400;
+      }
+    }
+
+    .user-info {
+      h4 {
+        font-size: 0.85rem;
+        color: $white;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+      p {
+        font-size: 0.72rem;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 0.05rem;
+      }
+    }
+  }
+
+  // ── Nav links ────────────────────────────────────────────────
+  .sidebar-nav {
+    flex: 1;
+    padding: 1rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    overflow-y: auto;
+
+    // Custom scrollbar
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      color: rgba(255, 255, 255, 0.65);
+      font-weight: 500;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+
+      span.material-icons {
+        font-size: 1.2rem;
+        flex-shrink: 0;
+        transition: transform 0.2s;
+      }
+
+      &:hover {
+        color: $white;
+        background: rgba(255, 255, 255, 0.08);
+
+        span.material-icons {
+          transform: translateX(2px);
+          color: $green-400;
+        }
+      }
+
+      &.active {
+        background: rgba(74, 222, 128, 0.18);
+        color: $green-400;
+        font-weight: 700;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 4px;
+          height: 65%;
+          background: $green-400;
+          border-radius: 0 4px 4px 0;
+          box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+        }
+
+        span.material-icons {
+          color: $green-400;
+          filter: drop-shadow(0 0 4px rgba(74, 222, 128, 0.5));
+        }
+      }
+    }
+  }
+
+  // ── Sidebar footer / Logout ───────────────────────────────────
+  .sidebar-footer {
+    padding: 0.6rem 0.85rem;   // reduced padding
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    .logout-btn {
+      width: 100%;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+      padding: 0.4rem 0.75rem;  // reduced from 0.65rem
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      font-weight: 600;
+      font-size: 0.82rem;       // slightly smaller text
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: rgba(239, 68, 68, 0.22);
+        border-color: #ef4444;
+        color: $white;
+      }
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MAIN CONTENT AREA
+// ═══════════════════════════════════════════════════════════════
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  padding: 0;              // header goes edge-to-edge
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(22, 163, 74, 0.15);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+
+  .header-left h2 {
+    font-size: 1.6rem;
+    color: $text-primary;
+    letter-spacing: 0.05em;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+
+    .icon-btn {
+      color: $text-secondary;
+      cursor: pointer;
+      &:hover { color: $green-600; }
+    }
+  }
+}
+
+.tab-panel-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1.75rem 2rem;   // content has its own breathing room
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STATS CARDS — green gradient + white variants
+// ═══════════════════════════════════════════════════════════════
+.summary-grid {
+  .summary-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.6rem 1.5rem;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+
+    // Card 1 – solid green gradient
+    &:nth-child(1) {
+      background: linear-gradient(135deg, $green-700 0%, $green-600 100%);
+      border: none;
+      box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3);
+
+      &:hover { box-shadow: 0 16px 32px rgba(22, 163, 74, 0.4); }
+
+      .card-icon {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        span { color: $white; }
+      }
+      h3, p { color: $white; }
+      p { opacity: 0.85; }
+
+      &::after {
+        content: '';
+        position: absolute;
+        right: -20px;
+        top: -20px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.07);
+      }
+    }
+
+    // Card 2 – white with green accent
+    &:nth-child(2) {
+      background: $white;
+      border: 1px solid $border-soft;
+      box-shadow: 0 4px 16px rgba(22, 163, 74, 0.08);
+
+      &:hover {
+        border-color: $green-600;
+        box-shadow: 0 8px 24px rgba(22, 163, 74, 0.15);
+      }
+
+      .card-icon {
+        background: $green-50;
+        border: 1px solid rgba(22, 163, 74, 0.25);
+        span { color: $green-600; }
+      }
+      h3 { color: $text-primary; }
+      p  { color: $text-secondary; }
+    }
+
+    // Card 3 – deep green
+    &:nth-child(3) {
+      background: linear-gradient(135deg, $green-900 0%, $green-800 100%);
+      border: none;
+      box-shadow: 0 8px 24px rgba(5, 46, 22, 0.35);
+
+      &:hover { box-shadow: 0 16px 32px rgba(5, 46, 22, 0.45); }
+
+      .card-icon {
+        background: rgba(74, 222, 128, 0.15);
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        span { color: $green-400; }
+      }
+      h3 { color: $white; }
+      p  { color: rgba(255, 255, 255, 0.7); }
+
+      &::after {
+        content: '';
+        position: absolute;
+        right: -20px;
+        top: -20px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgba(74, 222, 128, 0.06);
+      }
+    }
+
+    // Card 4 – white with green accent
+    &:nth-child(4) {
+      background: $white;
+      border: 1px solid $border-soft;
+      box-shadow: 0 4px 16px rgba(22, 163, 74, 0.08);
+
+      &:hover {
+        border-color: $green-600;
+        box-shadow: 0 8px 24px rgba(22, 163, 74, 0.15);
+      }
+
+      .card-icon {
+        background: $green-50;
+        border: 1px solid rgba(22, 163, 74, 0.25);
+        span { color: $green-700; }
+      }
+      h3 { color: $text-primary; }
+      p  { color: $text-secondary; }
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      span {
+        font-size: 1.8rem;
+      }
+    }
+
+    h3 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 0.15rem;
+      line-height: 1;
+    }
+
+    p {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CHART / LOWER CARDS
+// ═══════════════════════════════════════════════════════════════
+.progress-ring-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  gap: 0.5rem;
+
+  span {
+    font-size: 3.5rem;
+    color: $green-500;
+    filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.35));
+  }
+
+  h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: $green-700;
+  }
+
+  p {
+    font-size: 0.85rem;
+    color: $text-secondary;
+    text-align: center;
+  }
+}
+
+.bar-chart-mock {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1rem 0;
+
+  .bar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    span {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: $text-secondary;
+    }
+
+    .bar-progress {
+      height: 10px;
+      background: $green-100;
+      border-radius: 5px;
+      overflow: hidden;
+
+      .bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, $green-600, $green-400);
+        border-radius: 5px;
+        transition: width 0.6s ease;
+      }
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════
+.action-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  &.filter-bar {
+    background: $bg-card;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(22, 163, 74, 0.15);
+    gap: 1.5rem;
+
+    .form-group { margin-bottom: 0; }
+  }
+}
+
+.flex-row {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+
+  label { white-space: nowrap; }
+
+  .form-control {
+    width: auto;
+    min-width: 180px;
+  }
+}
+
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.max-width-680 {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.mr-2 { margin-right: 0.5rem; }
+.mr-3 { margin-right: 0.75rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 0.75rem; }
+.mt-4 { margin-top: 1rem; }
+.mb-3 { margin-bottom: 0.75rem; }
+.ml-auto { margin-left: auto; }
+.w-100 { width: 100%; }
+.text-center { text-align: center; }
+.text-danger { color: #EF4444 !important; }
+.gap-2 { gap: 0.75rem; }
+.btn-small {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+}

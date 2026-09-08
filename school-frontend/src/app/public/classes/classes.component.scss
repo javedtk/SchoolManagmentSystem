@@ -1,0 +1,225 @@
+$primary: #16A34A;
+$primary-hover: #15803D;
+$dark: #0F172A;
+$light: rgba(22, 163, 74, 0.05);
+$gold: #F59E0B;
+$transition: all 0.3s ease;
+$shadow-hover: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+:host { display: block; }
+
+// Hero Section Styles
+.class-hero {
+  background: linear-gradient(rgba(15,23,42,.75), rgba(15,23,42,.85)), url('https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=1600&auto=format&fit=crop') no-repeat center/cover;
+  min-height: 70vh;
+  padding: 12rem 0 8rem 0; // top padding accounts for fixed header!
+  color: #ffffff;
+  position: relative;
+  text-align: center;
+}
+.class-hero-title {
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.15;
+  font-weight: 800;
+  font-size: 3.5rem;
+  @media (max-width: 768px) { font-size: 2.2rem; }
+}
+.class-hero-text {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+.welcome-badge {
+  letter-spacing: 2px;
+  background-color: $primary !important;
+  font-size: 0.85rem;
+  border-radius: 30px;
+}
+
+// Class Card Styles
+.class-premium-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  transition: $transition;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: rgba(22, 163, 74, 0.2);
+    box-shadow: $shadow-hover;
+    .card-img-wrapper img {
+      transform: scale(1.08);
+    }
+  }
+
+  .card-img-wrapper {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: #e2e8f0;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: $transition;
+    }
+  }
+
+  .card-body {
+    padding: 2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .class-title {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+    font-weight: 800;
+    font-size: 1.35rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .class-meta-list {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed #E2E8F0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      font-size: 0.95rem;
+      color: #475569;
+
+      .meta-icon {
+        color: $primary;
+        margin-right: 0.75rem;
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  .class-desc {
+    color: #64748B !important;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-top: 0.5rem;
+  }
+}
+
+.empty-feed-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 4rem 2rem;
+  text-align: center;
+  p {
+    color: #475569;
+    font-size: 1.1rem;
+  }
+}
+
+// Career Tracks Card Styles
+.track-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 2.25rem;
+  transition: $transition;
+  height: 100%;
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(22, 163, 74, 0.25);
+    box-shadow: $shadow-hover;
+    .track-icon {
+      background: $primary;
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+  }
+  .track-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: $light;
+    color: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    transition: $transition;
+  }
+  h4 {
+    font-family: 'Outfit', sans-serif;
+    color: $dark;
+    font-weight: 700;
+  }
+}
+
+// Evaluation Grid Card Styles
+.eval-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem;
+  border-top: 4px solid $primary;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  height: 100%;
+  transition: $transition;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $shadow-hover;
+  }
+  .eval-pct {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: $primary;
+    margin-bottom: 0.5rem;
+  }
+}
+
+// FAQ Accordion Styles
+.faq-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.faq-item {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: $transition;
+  &:hover {
+    border-color: rgba(22, 163, 74, 0.2);
+  }
+  .faq-question {
+    padding: 1.25rem 1.5rem;
+    font-weight: 700;
+    color: $dark;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #F8FAFC;
+    transition: $transition;
+    &:hover {
+      background: #F1F5F9;
+    }
+  }
+  .faq-answer {
+    padding: 1.25rem 1.5rem;
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    border-top: 1px solid #E2E8F0;
+    background: #ffffff;
+  }
+}

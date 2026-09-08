@@ -1,0 +1,39 @@
+@if (isModal) {
+  <div class="alert-modal-overlay" (click)="onCancel()">
+    <div class="alert-modal-content glass-card" [class]="'alert-modal-' + type" (click)="$event.stopPropagation()">
+      <div class="alert-modal-header">
+        <div class="alert-icon-wrapper" [class]="type">
+          <span class="material-icons alert-icon">{{ icon }}</span>
+        </div>
+        <div class="alert-title-wrapper">
+          <h3>{{ title || 'Confirm Action' }}</h3>
+          <span class="alert-subtitle">Aether Admin Portal</span>
+        </div>
+      </div>
+      <div class="alert-modal-body">
+        <p>{{ message }}</p>
+      </div>
+      <div class="alert-modal-footer">
+        @if (showCancel) {
+          <button type="button" class="btn-alert-action btn-alert-cancel" (click)="onCancel()">{{ cancelText }}</button>
+        }
+        <button type="button" class="btn-alert-action btn-alert-confirm" [class]="type" (click)="onConfirm()">{{ confirmText }}</button>
+      </div>
+    </div>
+  </div>
+} @else {
+  @if (message) {
+    <div class="alert-banner" [class]="'alert-' + type">
+      <span class="material-icons alert-icon">{{ icon }}</span>
+      <div class="alert-banner-content">
+        @if (title) {
+          <strong class="alert-title">{{ title }}: </strong>
+        }
+        <span>{{ message }}</span>
+      </div>
+      <button type="button" class="alert-close-btn" (click)="onCancel()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+  }
+}

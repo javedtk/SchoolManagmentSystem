@@ -1,0 +1,119 @@
+/* Fee receipt and payments styles */
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fee-payment-modal {
+  max-width: 800px !important;
+  width: 95%;
+}
+
+.payment-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.payment-option-card {
+  border: 2px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 1.25rem;
+  cursor: pointer;
+  background: #ffffff;
+  transition: all 0.25s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  &:hover {
+    border-color: rgba(22, 163, 74, 0.4);
+    box-shadow: 0 4px 15px rgba(22, 163, 74, 0.05);
+    transform: translateY(-2px);
+  }
+
+  &.active-card {
+    border-color: #16A34A;
+    background: rgba(22, 163, 74, 0.02);
+
+    .card-radio-btn {
+      border-color: #16A34A;
+      background: #16A34A;
+      box-shadow: inset 0 0 0 3px #ffffff;
+    }
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #F1F5F9;
+    
+    strong {
+      color: #0F172A;
+      font-size: 0.95rem;
+    }
+  }
+
+  .card-radio-btn {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid #CBD5E1;
+    display: inline-block;
+    transition: all 0.2s ease;
+  }
+}
+
+.qr-container-box {
+  background: #F8FAFC;
+  border: 1px dashed #CBD5E1;
+  border-radius: 8px;
+  
+  .qr-preview-img {
+    max-height: 100px;
+    object-fit: contain;
+    border-radius: 4px;
+    transition: transform 0.2s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+.upi-container-box, .bank-details-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.upi-code-text {
+  background: #DCFCE7;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.badge-pending {
+  background: #FEF3C7;
+  color: #D97706;
+  padding: 0.35rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 1px solid #FDE68A;
+}

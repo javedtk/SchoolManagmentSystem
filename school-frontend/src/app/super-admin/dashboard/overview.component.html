@@ -1,0 +1,200 @@
+<div class="dashboard-summary">
+
+  <!-- ─── Row 1: Primary Stats (4 cards) ────────────────────── -->
+  <div class="grid-4 summary-grid">
+
+    <!-- Students -->
+    <div class="summary-card stat-card-green">
+      <div class="card-icon">
+        <span class="material-icons">people</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.students }}</h3>
+        <p>Enrolled Students</p>
+        <span class="card-badge">
+          <span class="material-icons">trending_up</span> Active
+        </span>
+      </div>
+      <div class="card-watermark material-icons">people</div>
+    </div>
+
+    <!-- Teachers -->
+    <div class="summary-card stat-card-white">
+      <div class="card-icon">
+        <span class="material-icons">badge</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.teachers }}</h3>
+        <p>Active Faculty</p>
+        <span class="card-badge badge-green">
+          <span class="material-icons">verified</span> Verified
+        </span>
+      </div>
+    </div>
+
+    <!-- Fees Collected -->
+    <div class="summary-card stat-card-dark">
+      <div class="card-icon">
+        <span class="material-icons">monetization_on</span>
+      </div>
+      <div class="card-body">
+        <h3>Rs.{{ stats.feesCollected }}</h3>
+        <p>Fees Collected</p>
+        <span class="card-badge">
+          <span class="material-icons">payments</span> Revenue
+        </span>
+      </div>
+      <div class="card-watermark material-icons">monetization_on</div>
+    </div>
+
+    <!-- Fees Pending -->
+    <div class="summary-card stat-card-white">
+      <div class="card-icon">
+        <span class="material-icons">money_off</span>
+      </div>
+      <div class="card-body">
+        <h3>Rs.{{ stats.feesPending }}</h3>
+        <p>Fees Outstanding</p>
+        <span class="card-badge badge-orange">
+          <span class="material-icons">warning</span> Pending
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─── Row 2: Secondary Stats (4 cards) ──────────────────── -->
+  <div class="grid-4 summary-grid secondary-grid">
+
+    <!-- Total Classes -->
+    <div class="summary-card stat-card-teal">
+      <div class="card-icon">
+        <span class="material-icons">class</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.classes }}</h3>
+        <p>Total Classes</p>
+        <span class="card-badge badge-teal">
+          <span class="material-icons">school</span> Academic
+        </span>
+      </div>
+      <div class="card-watermark material-icons">class</div>
+    </div>
+
+    <!-- Pending Admissions -->
+    <div class="summary-card stat-card-amber">
+      <div class="card-icon">
+        <span class="material-icons">pending_actions</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.pendingAdmissions }}</h3>
+        <p>Pending Admissions</p>
+        <span class="card-badge badge-amber">
+          <span class="material-icons">hourglass_empty</span> Awaiting
+        </span>
+      </div>
+      <div class="card-watermark material-icons">pending_actions</div>
+    </div>
+
+    <!-- Job Applications -->
+    <div class="summary-card stat-card-indigo">
+      <div class="card-icon">
+        <span class="material-icons">work</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.jobApplications }}</h3>
+        <p>Job Applications</p>
+        <span class="card-badge badge-indigo">
+          <span class="material-icons">description</span> Review
+        </span>
+      </div>
+      <div class="card-watermark material-icons">work</div>
+    </div>
+
+    <!-- Total Subjects -->
+    <div class="summary-card stat-card-rose">
+      <div class="card-icon">
+        <span class="material-icons">menu_book</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.subjects ?? 0 }}</h3>
+        <p>Total Subjects</p>
+        <span class="card-badge badge-rose">
+          <span class="material-icons">auto_stories</span> Syllabus
+        </span>
+      </div>
+      <div class="card-watermark material-icons">menu_book</div>
+    </div>
+
+  </div>
+
+  <!-- ─── Row 3: Extended Stats (4 cards) ───────────────────── -->
+  <div class="grid-4 summary-grid tertiary-grid">
+
+    <!-- Total Events -->
+    <div class="summary-card stat-card-emerald">
+      <div class="card-icon">
+        <span class="material-icons">event</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.events ?? 0 }}</h3>
+        <p>Total Events</p>
+        <span class="card-badge badge-emerald">
+          <span class="material-icons">celebration</span> Scheduled
+        </span>
+      </div>
+      <div class="card-watermark material-icons">event</div>
+    </div>
+
+    <!-- Open Jobs -->
+    <div class="summary-card stat-card-violet">
+      <div class="card-icon">
+        <span class="material-icons">business_center</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.openJobs ?? 0 }}</h3>
+        <p>Open Positions</p>
+        <span class="card-badge badge-violet">
+          <span class="material-icons">how_to_reg</span> Hiring
+        </span>
+      </div>
+      <div class="card-watermark material-icons">business_center</div>
+    </div>
+
+    <!-- Total Exams -->
+    <div class="summary-card stat-card-orange">
+      <div class="card-icon">
+        <span class="material-icons">assignment</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.exams ?? 0 }}</h3>
+        <p>Total Exams</p>
+        <span class="card-badge badge-orange-alt">
+          <span class="material-icons">grade</span> Results
+        </span>
+      </div>
+      <div class="card-watermark material-icons">assignment</div>
+    </div>
+
+    <!-- Gallery Albums -->
+    <div class="summary-card stat-card-slate">
+      <div class="card-icon">
+        <span class="material-icons">photo_library</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ stats.albums ?? 0 }}</h3>
+        <p>Gallery Albums</p>
+        <span class="card-badge badge-slate">
+          <span class="material-icons">collections</span> Media
+        </span>
+      </div>
+      <div class="card-watermark material-icons">photo_library</div>
+    </div>
+
+  </div>
+
+  <!-- ─── Analytics & Charts Section ───────────────────────── -->
+  <app-dashboard-charts [stats]="stats" [charts]="charts">
+  </app-dashboard-charts>
+
+</div>

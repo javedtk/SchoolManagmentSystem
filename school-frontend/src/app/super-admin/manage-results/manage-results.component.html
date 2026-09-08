@@ -1,0 +1,294 @@
+<div class="module-wrapper">
+
+  <!-- ── Page Header ──────────────────────────────────────── -->
+  <div class="module-header">
+    <div class="module-title">
+      <span class="material-icons">grade</span>
+      <div>
+        <h2>Exams & Results</h2>
+        <p>Define academic exam terms and manage student performance reports</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button (click)="openExamModal()" class="action-btn btn-admit">
+        <span class="material-icons">add</span>
+        Define Exam Term
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Filter Bar ────────────────────────────────────────── -->
+  <div class="filter-bar">
+    <div class="form-group flex-row align-items-center" style="flex-direction: row; gap: 0.5rem; margin-bottom: 0; align-items: center;">
+      <label style="white-space: nowrap; font-weight: 700; font-size: 0.8rem; color: #475569; margin: 0; display: flex; align-items: center; gap: 0.25rem;">
+        <span class="material-icons" style="font-size: 0.95rem; color: #16a34a;">assignment</span>
+        Select Exam:
+      </label>
+      <select class="form-control" [value]="selectedExamId || 'null'" (change)="onExamChange($event)" style="min-width: 220px; font-size: 0.83rem; padding: 0.45rem 0.75rem; border-radius: 8px;">
+        <option value="null">-- Select Exam --</option>
+        @for (e of exams; track e.id) {
+          <option [value]="e.id">{{ e.name }} ({{ e.academic_year }})</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group flex-row align-items-center" style="flex-direction: row; gap: 0.5rem; margin-bottom: 0; align-items: center;">
+      <label style="white-space: nowrap; font-weight: 700; font-size: 0.8rem; color: #475569; margin: 0; display: flex; align-items: center; gap: 0.25rem;">
+        <span class="material-icons" style="font-size: 0.95rem; color: #16a34a;">class</span>
+        Class:
+      </label>
+      <select class="form-control" [value]="selectedClassId || 'null'" (change)="onClassChange($event)" style="min-width: 180px; font-size: 0.83rem; padding: 0.45rem 0.75rem; border-radius: 8px;">
+        <option value="null">-- Select Class --</option>
+        @for (c of classes; track c.id) {
+          <option [value]="c.id">{{ c.name }} - {{ c.section }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- Results Count -->
+    <div class="filter-actions" style="margin-left: auto;">
+      <span class="result-count" style="font-size: 0.78rem; color: #94a3b8;">
+        @if (selectedExamId && selectedClassId) {
+          Found <strong>{{ groupedStudents.length }}</strong> students
+        } @else {
+          Select filters to view results
+        }
+      </span>
+    </div>
+  </div>
+
+  <!-- ── Table ─────────────────────────────────────────────── -->
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Admission No</th>
+          <th>Student Name</th>
+          <th>Total Obtained</th>
+          <th>Max Marks</th>
+          <th>Overall Grade</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (res of groupedStudents; track res.student_id; let i = $index) {
+          <tr class="data-row">
+            <td class="row-index">{{ i + 1 }}</td>
+            <td class="mono font-bold">{{ res.admissionNo }}</td>
+            <td class="student-cell">
+              <div class="avatar-name">
+                @if (res.profileImage) {
+                  <img [src]="'http://localhost:5000/' + res.profileImage" class="avatar-img-circle" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" />
+                } @else {
+                  <div class="avatar-circle">{{ res.studentName.charAt(0) }}</div>
+                }
+                <span>{{ res.studentName }}</span>
+              </div>
+            </td>
+            <td style="font-weight: 600;">{{ res.totalObtained }}</td>
+            <td class="mono" style="color: #64748b;">{{ res.maxTotal }}</td>
+            <td>
+              <span class="badge-active status-approved">
+                <span class="status-dot"></span>
+                {{ res.overallGrade || 'N/A' }}
+              </span>
+            </td>
+            <td class="actions-cell">
+              <button (click)="openStudentBreakdown(res)" class="action-btn btn-admit" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25);" title="View Detailed Subject Marks">
+                <span class="material-icons">visibility</span>
+                View
+              </button>
+              <button (click)="emailReport.emit(res.student_id)" class="action-btn btn-admit" style="background: linear-gradient(135deg, #0284c7, #0369a1); box-shadow: 0 2px 8px rgba(3, 105, 161, 0.25);" title="Email PDF Report Card">
+                <span class="material-icons">email</span>
+                Email PDF
+              </button>
+              <a [href]="getDownloadUrl(res.student_id)" target="_blank" class="action-btn btn-admit" title="Download PDF Report Card">
+                <span class="material-icons">download</span>
+                Download PDF
+              </a>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" class="empty-state">
+              <span class="material-icons">grade</span>
+              <p>
+                @if (!selectedExamId || !selectedClassId) {
+                  Select both Exam and Class filters above to display results.
+                } @else {
+                  No student results recorded for this exam and class.
+                }
+              </p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- EXAM TERM MODAL -->
+@if (activeModal === 'exam') {
+  <div class="modal-overlay" (click)="setModal.emit(null)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">grade</span>
+          </div>
+          <div>
+            <h3>Define Exam Term</h3>
+            <p>Setup a new examination session and grading range</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="setModal.emit(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="submitExam()">
+          
+          <div class="form-group mb-3">
+            <label>
+              <span class="material-icons">description</span>
+              Exam Term Name
+            </label>
+            <input type="text" class="form-control" placeholder="e.g. Mid-Term 1 Exam" [(ngModel)]="examForm.name" name="ex_name" required />
+          </div>
+
+          <div class="form-group mb-3">
+            <label>
+              <span class="material-icons">calendar_today</span>
+              Academic Year
+            </label>
+            <input type="text" class="form-control" placeholder="e.g. 2026-2027" [(ngModel)]="examForm.academic_year" name="ex_year" required />
+          </div>
+
+          <div class="form-row mb-3">
+            <div class="form-group">
+              <label>
+                <span class="material-icons">date_range</span>
+                Start Date
+              </label>
+              <input type="date" class="form-control" [(ngModel)]="examForm.start_date" name="ex_start" />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <span class="material-icons">date_range</span>
+                End Date
+              </label>
+              <input type="date" class="form-control" [(ngModel)]="examForm.end_date" name="ex_end" />
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" (click)="setModal.emit(null)">
+              <span class="material-icons">close</span> Cancel
+            </button>
+            <button type="submit" class="btn-confirm">
+              <span class="material-icons">save</span> Create Term
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- VIEW STUDENT MARKS BREAKDOWN MODAL -->
+@if (viewingStudent) {
+  <div class="modal-overlay" (click)="closeStudentBreakdown()">
+    <div class="modal-box" (click)="$event.stopPropagation()" style="max-width: 600px;">
+      
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">visibility</span>
+          </div>
+          <div>
+            <h3>Marks Breakdown</h3>
+            <p>Detailed subject-wise report for {{ viewingStudent.studentName }}</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="closeStudentBreakdown()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 1.5rem;">
+        <!-- Student Info Summary Card -->
+        <div class="student-summary-card" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            @if (viewingStudent.profileImage) {
+              <img [src]="'http://localhost:5000/' + viewingStudent.profileImage" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;" />
+            } @else {
+              <div class="avatar-circle" style="width: 45px; height: 45px; font-size: 1.1rem; border-radius: 50%; background: linear-gradient(135deg, #15803d, #22c55e); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700; text-transform: uppercase;">{{ viewingStudent.studentName.charAt(0) }}</div>
+            }
+            <div>
+              <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #0f172a;">{{ viewingStudent.studentName }}</h4>
+              <p style="margin: 0; font-size: 0.78rem; color: #64748b;">Admission No: <span class="mono" style="font-weight: 600;">{{ viewingStudent.admissionNo }}</span></p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 1rem;">
+            <div style="text-align: right;">
+              <span style="display: block; font-size: 0.7rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Total Marks</span>
+              <span style="font-size: 1.1rem; font-weight: 700; color: #16a34a;">{{ viewingStudent.totalObtained }} <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 500;">/ {{ viewingStudent.maxTotal }}</span></span>
+            </div>
+            <div style="text-align: right; border-left: 1px solid #e2e8f0; padding-left: 1rem;">
+              <span style="display: block; font-size: 0.7rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Overall Grade</span>
+              <span class="badge-active status-approved" style="display: inline-flex; margin-top: 0.15rem;">
+                <span class="status-dot"></span>
+                {{ viewingStudent.overallGrade }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subjects Table -->
+        <div class="table-wrapper" style="border-radius: 10px; margin-bottom: 0;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="padding: 0.5rem 0.75rem; font-size: 0.7rem;">Subject</th>
+                <th style="padding: 0.5rem 0.75rem; font-size: 0.7rem;">Marks Obtained</th>
+                <th style="padding: 0.5rem 0.75rem; font-size: 0.7rem;">Max Marks</th>
+                <th style="padding: 0.5rem 0.75rem; font-size: 0.7rem;">Grade</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (sub of viewingStudent.subjects; track sub.subjectCode) {
+                <tr class="data-row">
+                  <td style="padding: 0.5rem 0.75rem; font-size: 0.78rem;">
+                    <span class="class-chip" style="font-size: 0.7rem;">
+                      {{ sub.subjectName }} <span class="mono" style="opacity: 0.75; font-size: 0.68rem;">({{ sub.subjectCode }})</span>
+                    </span>
+                  </td>
+                  <td style="padding: 0.5rem 0.75rem; font-size: 0.78rem; font-weight: 600;">{{ sub.marksObtained }}</td>
+                  <td class="mono" style="padding: 0.5rem 0.75rem; font-size: 0.78rem; color: #64748b;">{{ sub.maxMarks }}</td>
+                  <td style="padding: 0.5rem 0.75rem; font-size: 0.78rem;">
+                    <span class="badge-active status-approved">
+                      <span class="status-dot"></span>
+                      {{ sub.grade }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="padding: 0.75rem 1.5rem; margin-top: 0;">
+        <button type="button" class="btn-cancel" (click)="closeStudentBreakdown()">
+          <span class="material-icons">close</span> Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

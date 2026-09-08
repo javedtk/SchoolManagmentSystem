@@ -1,0 +1,137 @@
+<section class="charts-section">
+
+  <div class="charts-section-header">
+    <h2 class="section-title">
+      <span class="material-icons">insights</span>
+      Analytics & Reports
+    </h2>
+    <span class="section-subtitle">Real-time metrics across all school operations</span>
+  </div>
+
+  <!-- Row 1: 4 charts -->
+  <div class="charts-grid charts-grid-4">
+
+    <!-- 1. Gender Distribution Doughnut -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-green"></span>
+          Gender Distribution
+        </div>
+        <span class="material-icons chart-icon">people</span>
+      </div>
+      <div class="chart-wrap chart-wrap-sm">
+        <canvas #genderPie></canvas>
+      </div>
+    </div>
+
+    <!-- 2. Attendance Rate Doughnut -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-emerald"></span>
+          Attendance Rate
+        </div>
+        <span class="material-icons chart-icon">event_available</span>
+      </div>
+      <div class="chart-wrap chart-wrap-sm attendance-wrap">
+        <canvas #attendanceDough></canvas>
+        <div class="attendance-center-label">
+          <strong>{{ charts.attendanceRate ?? 100 }}%</strong>
+          <span>Present</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Fee Collection Bar -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-amber"></span>
+          Fee Overview
+        </div>
+        <span class="material-icons chart-icon">payments</span>
+      </div>
+      <div class="chart-wrap chart-wrap-sm">
+        <canvas #feeBar></canvas>
+      </div>
+    </div>
+
+    <!-- 4. Enrollment Trend Line -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-teal"></span>
+          Enrollment Trend
+        </div>
+        <span class="material-icons chart-icon">trending_up</span>
+      </div>
+      <div class="chart-wrap chart-wrap-sm">
+        <canvas #studentLine></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Row 2: 4 charts -->
+  <div class="charts-grid charts-grid-4 charts-row-2">
+
+    <!-- 5. Resource Distribution Polar -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-violet"></span>
+          Resource Distribution
+        </div>
+        <span class="material-icons chart-icon">donut_large</span>
+      </div>
+      <div class="chart-wrap chart-wrap-md">
+        <canvas #categoryPolar></canvas>
+      </div>
+    </div>
+
+    <!-- 6. Academic Performance Radar -->
+    <div class="chart-card chart-card-wide">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-green"></span>
+          Academic Performance
+        </div>
+        <span class="material-icons chart-icon">school</span>
+      </div>
+      <div class="chart-wrap chart-wrap-md">
+        <canvas #examRadar></canvas>
+      </div>
+    </div>
+
+    <!-- 7. Job Pipeline Bar -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-indigo"></span>
+          Hiring Pipeline
+        </div>
+        <span class="material-icons chart-icon">work</span>
+      </div>
+      <div class="chart-wrap chart-wrap-md">
+        <canvas #jobFunnel></canvas>
+      </div>
+    </div>
+
+    <!-- 8. Admission Conversion Grouped Bar -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-card-title">
+          <span class="chart-dot dot-teal"></span>
+          Admissions Quarterly
+        </div>
+        <span class="material-icons chart-icon">campaign</span>
+      </div>
+      <div class="chart-wrap chart-wrap-md">
+        <canvas #enrollmentBar></canvas>
+      </div>
+    </div>
+
+  </div>
+
+</section>

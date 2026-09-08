@@ -1,0 +1,205 @@
+<div class="gallery-container">
+  @if (!selectedAlbum()) {
+    <div class="action-header">
+      <h3>School Albums</h3>
+      <button (click)="openAlbumModal()" class="btn-primary">
+        <span class="material-icons">add_a_photo</span><span>Create Album</span>
+      </button>
+    </div>
+
+    <div class="grid-3 mt-3">
+      @for (album of albums(); track album.id) {
+        <div class="glass-card album-card" (click)="viewAlbum(album.id)">
+          <div class="album-cover">
+            @if (album.cover_image) {
+              <img [src]="'http://localhost:5000/' + album.cover_image" alt="{{ album.title }}" />
+            } @else {
+              <div class="no-cover">
+                <span class="material-icons">collections</span>
+              </div>
+            }
+          </div>
+          <div class="album-info text-center">
+            <h4>{{ album.title }}</h4>
+            <div class="album-actions mt-2">
+              <button (click)="openEditAlbumModal(album, $event)" class="btn-edit">
+                <span class="material-icons">edit</span><span>Edit</span>
+              </button>
+              <button (click)="deleteAlbum(album.id, $event)" class="btn-delete">
+                <span class="material-icons">delete</span><span>Delete</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div class="glass-card text-center p-5 col-span-3">
+          <span class="material-icons large-icon">collections</span>
+          <p class="mt-2">No photo albums created yet. Click "Create Album" to start.</p>
+        </div>
+      }
+    </div>
+  } @else {
+    <!-- Album details view -->
+    <div class="action-header">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <button (click)="closeAlbumView()" class="btn-secondary">
+          <span class="material-icons">arrow_back</span><span>Back to Albums</span>
+        </button>
+        <h3>{{ selectedAlbum()?.title }}</h3>
+      </div>
+      <button (click)="openMediaModal()" class="btn-primary">
+        <span class="material-icons">file_upload</span><span>Upload Media</span>
+      </button>
+    </div>
+
+    <div class="grid-4 mt-4">
+      @for (media of selectedAlbum()?.Media; track media.id) {
+        <div class="glass-card media-card">
+          <div class="media-preview">
+            @if (media.type === 'video') {
+              <video [src]="'http://localhost:5000/' + media.file_url" controls></video>
+            } @else {
+              <img [src]="'http://localhost:5000/' + media.file_url" alt="{{ media.caption }}" />
+            }
+          </div>
+          <div class="media-info">
+            <p>{{ media.caption || 'Untitled' }}</p>
+            <button (click)="deleteMedia(media.id)" class="btn-outline btn-small text-danger mt-2">
+              <span class="material-icons">delete</span><span>Remove</span>
+            </button>
+          </div>
+        </div>
+      } @empty {
+        <div class="glass-card text-center p-5 col-span-4">
+          <span class="material-icons large-icon">photo_library</span>
+          <p class="mt-2">No media uploaded to this album yet.</p>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- CREATE/EDIT ALBUM MODAL -->
+@if (activeModal() === 'album') {
+  <div class="modal-overlay" (click)="activeModal.set(null)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">collections</span>
+          </div>
+          <div>
+            <h3>{{ editingAlbumId() ? 'Edit Photo Album' : 'Create Photo Album' }}</h3>
+            <p>{{ editingAlbumId() ? 'Modify album details and cover image' : 'Setup a new visual catalog album' }}</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="activeModal.set(null)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <form (ngSubmit)="createAlbum()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label><span class="material-icons">title</span>Album Title</label>
+            <input type="text" class="form-control" [(ngModel)]="albumForm.title" name="album_title" required placeholder="Enter album title" />
+          </div>
+          <div class="form-group">
+            <label><span class="material-icons">image</span>Cover Image</label>
+            <input type="file" class="form-control" (change)="onCoverFileSelected($event)" accept="image/*" />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="activeModal.set(null)">
+            <span class="material-icons">close</span><span>Cancel</span>
+          </button>
+          <button type="submit" class="btn-confirm">
+            <span class="material-icons">save</span><span>{{ editingAlbumId() ? 'Save Changes' : 'Create Album' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- UPLOAD MEDIA MODAL -->
+@if (activeModal() === 'media') {
+  <div class="modal-overlay" (click)="mediaUploadProgress() === null && activeModal.set(null)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <span class="material-icons">file_upload</span>
+          </div>
+          <div>
+            <h3>Upload Media to Album</h3>
+            <p>Upload new photo or video files to this album</p>
+          </div>
+        </div>
+        <button class="modal-close" (click)="mediaUploadProgress() === null && activeModal.set(null)" [disabled]="mediaUploadProgress() !== null">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <form (ngSubmit)="uploadMedia()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label><span class="material-icons">attach_file</span>Choose File</label>
+            <input type="file" class="form-control" (change)="onMediaFileSelected($event)" required [disabled]="mediaUploadProgress() !== null" />
+          </div>
+          <div class="form-group">
+            <label><span class="material-icons">short_text</span>Caption</label>
+            <input type="text" class="form-control" [(ngModel)]="mediaForm.caption" name="media_caption" placeholder="Enter a short caption" [disabled]="mediaUploadProgress() !== null" />
+          </div>
+          <div class="form-group">
+            <label><span class="material-icons">category</span>Media Type</label>
+            <select class="form-control" [(ngModel)]="mediaForm.type" name="media_type" [disabled]="mediaUploadProgress() !== null">
+              <option value="image">Image</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+
+          @if (mediaUploadProgress() !== null) {
+            <div class="upload-progress-container">
+              <div class="d-flex align-items-center justify-content-between mb-1">
+                <span class="progress-label">
+                  <span class="material-icons rotating-sync">sync</span>
+                  Uploading Media Assets...
+                </span>
+                <span class="progress-percent">{{ mediaUploadProgress() }}%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" [style.width.%]="mediaUploadProgress()"></div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="activeModal.set(null)" [disabled]="mediaUploadProgress() !== null">
+            <span class="material-icons">close</span><span>Cancel</span>
+          </button>
+          <button type="submit" class="btn-confirm" [disabled]="!mediaFile || mediaUploadProgress() !== null">
+            <span class="material-icons">cloud_upload</span><span>Upload</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- Custom Confirmation Alert Dialog Modal -->
+@if (confirmDialog()) {
+  <app-custom-alert
+    [isModal]="true"
+    [showCancel]="true"
+    [title]="confirmDialog()?.title || 'Confirm Action'"
+    [message]="confirmDialog()?.message || ''"
+    [type]="confirmDialog()?.type || 'warning'"
+    [confirmText]="confirmDialog()?.confirmText || 'OK'"
+    [cancelText]="confirmDialog()?.cancelText || 'Cancel'"
+    (confirm)="confirmDialog()?.onConfirm(); confirmDialog.set(null)"
+    (close)="confirmDialog.set(null)">
+  </app-custom-alert>
+}

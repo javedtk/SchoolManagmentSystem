@@ -1,0 +1,451 @@
+// Theme Palette Variables
+$border-color: #E2E8F0;
+$cyan: #16A34A;
+$cyan-hover: #15803D;
+$gold: #047857;
+$gold-hover: #065F46;
+$text-primary: #0F172A;
+$text-secondary: #475569;
+$text-muted: #94A3B8;
+$error: #EF4444;
+
+// ==========================================
+// PUBLIC NAVBAR HEADER
+// ==========================================
+.public-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  z-index: 100;
+  transition: all 0.3s ease;
+
+  .header-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0.85rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+
+    .logo-icon {
+      font-size: 2.2rem;
+      color: $cyan;
+      background: linear-gradient(135deg, $cyan, $gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 8px rgba(22, 163, 74, 0.25));
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: $text-primary;
+      letter-spacing: -0.03em;
+
+      span {
+        color: $cyan;
+        background: linear-gradient(135deg, $cyan, $gold);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+      }
+    }
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+
+    a {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: $text-secondary;
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        color: $cyan;
+        background: rgba(22, 163, 74, 0.05);
+      }
+
+      &.active {
+        color: $cyan;
+        background: rgba(22, 163, 74, 0.08);
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 2px;
+          left: 15%;
+          width: 70%;
+          height: 3px;
+          background: $cyan;
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+
+    .start-btn {
+      padding: 0.55rem 1.25rem;
+      font-size: 0.9rem;
+      border-radius: 30px;
+    }
+  }
+}
+
+// ==========================================
+// PORTAL MAIN HEADER
+// ==========================================
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.main-header {
+  background: #0a3d1f; // green same as sidebar color
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 1.35rem 2rem;      // increased vertical padding
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(5, 30, 15, 0.15);
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 28px;
+      background: linear-gradient(180deg, #16a34a, #4ade80);
+      border-radius: 4px;
+      box-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: #ffffff;
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .icon-btn {
+      font-size: 1.5rem;
+      color: rgba(255, 255, 255, 0.75);
+      padding: 0.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #4ade80;
+      }
+    }
+
+    .btn-secondary {
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.35) !important;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: #ffffff !important;
+        transform: translateY(-2px);
+      }
+    }
+
+    .notification-container {
+      position: relative;
+      display: inline-flex;
+
+      .notification-badge {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 8px;
+        height: 8px;
+        background: $error;
+        border: 1.5px solid #FFFFFF;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      .notification-dropdown {
+        position: absolute;
+        top: calc(100% + 12px);
+        right: -8px;
+        width: 360px;
+        background: #FFFFFF;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+        border: 1px solid #E2E8F0;
+        z-index: 1000;
+        overflow: hidden;
+        animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: -6px;
+          right: 18px;
+          width: 12px;
+          height: 12px;
+          background: #FFFFFF;
+          border-left: 1px solid #E2E8F0;
+          border-top: 1px solid #E2E8F0;
+          transform: rotate(45deg);
+        }
+
+        .dropdown-header {
+          padding: 1rem 1.25rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-bottom: 1px solid #F1F5F9;
+
+          h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: $text-primary;
+          }
+
+          .clear-btn {
+            background: none;
+            border: none;
+            color: $cyan;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: all 0.2s;
+
+            &:hover {
+              background: rgba(22, 163, 74, 0.08);
+              color: $cyan-hover;
+            }
+          }
+        }
+
+        .dropdown-body {
+          max-height: 380px;
+          overflow-y: auto;
+
+          &::-webkit-scrollbar {
+            width: 6px;
+          }
+          &::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          &::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 3px;
+          }
+          &::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+          }
+        }
+
+        .notification-item {
+          display: flex;
+          gap: 0.85rem;
+          padding: 1rem 1.25rem;
+          border-bottom: 1px solid #F8FAFC;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+
+          &:hover {
+            background-color: #F8FAFC;
+          }
+
+          &.unread {
+            background-color: rgba(22, 163, 74, 0.03);
+
+            &:hover {
+              background-color: rgba(22, 163, 74, 0.06);
+            }
+          }
+
+          .notif-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #F1F5F9;
+            color: $text-secondary;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid #E2E8F0;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+
+            .material-icons {
+              font-size: 1.25rem;
+            }
+          }
+
+          .notif-content {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            min-width: 0;
+
+            .notif-title-row {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 0.5rem;
+
+              .notif-title {
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: $text-primary;
+              }
+
+              .unread-indicator {
+                width: 6px;
+                height: 6px;
+                background-color: $cyan;
+                border-radius: 50%;
+                flex-shrink: 0;
+              }
+            }
+
+            .notif-desc {
+              margin: 0.2rem 0 0.4rem;
+              font-size: 0.8rem;
+              color: $text-secondary;
+              line-height: 1.4;
+              word-break: break-word;
+            }
+
+            .notif-time {
+              font-size: 0.72rem;
+              color: $text-muted;
+              font-weight: 500;
+            }
+          }
+        }
+
+        .notif-empty {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 3rem 2rem;
+          color: $text-muted;
+          text-align: center;
+
+          .material-icons {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #CBD5E1;
+          }
+
+          p {
+            margin: 0;
+            font-size: 0.85rem;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .btn-small {
+      padding: 0.45rem 1rem;
+      font-size: 0.85rem;
+      border-radius: 30px;
+    }
+
+    .header-user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .material-icons {
+        font-size: 1.5rem;
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+// Notification pulse animation
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 5px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}

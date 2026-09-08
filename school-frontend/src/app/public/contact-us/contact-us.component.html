@@ -1,0 +1,221 @@
+<section class="contact-hero text-white d-flex align-items-center justify-content-center text-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <span class="badge bg-success welcome-badge mb-3 px-3 py-2 text-uppercase font-weight-bold">
+          Aether Academy | Connect
+        </span>
+        <h1 class="display-3 font-weight-bold contact-hero-title mb-4 text-white">
+          Contact Us
+        </h1>
+        <p class="lead contact-hero-text mb-0">
+          Have questions about school enrollment, academic schedules, or upcoming campus events? Our administrative team is here to support you.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Form & Info Details -->
+<section class="section-padding bg-white">
+  <div class="container">
+    <div class="row g-5 align-items-start">
+      
+      <!-- Info Details -->
+      <div class="col-lg-6">
+        <div class="contact-info-card">
+          <span class="subtitle d-inline-block mb-2 text-success text-uppercase fw-bold" style="letter-spacing: 1px;">Get in Touch</span>
+          <h2 class="display-6 fw-bold mb-4" style="color: var(--dark-color, #0F172A); font-family: 'Outfit', sans-serif;">Reach Our Team</h2>
+          <p class="text-muted mb-4 story-text" style="font-size: 1.05rem; line-height: 1.8;">
+            Have questions about enrolment, schedules, or events? Send us a message and our team will support you.
+          </p>
+
+          <div class="info-list">
+            <div class="info-item-box">
+              <div class="info-icon-badge">
+                <span class="material-icons">place</span>
+              </div>
+              <div>
+                <h4>Campus Address</h4>
+                <p class="mb-0">123 Neon Glow Boulevard, Cyber City</p>
+              </div>
+            </div>
+            <div class="info-item-box">
+              <div class="info-icon-badge">
+                <span class="material-icons">call</span>
+              </div>
+              <div>
+                <h4>General Inquiries</h4>
+                <p class="mb-0">+1 (555) 123-4567</p>
+              </div>
+            </div>
+            <div class="info-item-box">
+              <div class="info-icon-badge">
+                <span class="material-icons">email</span>
+              </div>
+              <div>
+                <h4>Admissions & Support</h4>
+                <p class="mb-0">contact&#64;aetheracademy.edu</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="col-lg-6">
+        <div class="contact-form-premium-card">
+          <h3 class="fw-bold mb-4" style="color: var(--dark-color, #0F172A); font-family: 'Outfit', sans-serif;">Send Message</h3>
+          
+          @if (contactSuccess) {
+            <div class="alert alert-success d-flex align-items-center gap-2 mb-4">
+              <span class="material-icons">check_circle</span>
+              <span>{{ contactSuccess }}</span>
+            </div>
+          }
+
+          @if (contactError) {
+            <div class="alert alert-danger d-flex align-items-center gap-2 mb-4">
+              <span class="material-icons">error</span>
+              <span>{{ contactError }}</span>
+            </div>
+          }
+
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" class="form-control" placeholder="Enter your full name" [(ngModel)]="contactForm.name" name="name" required />
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" class="form-control" placeholder="Enter your email address" [(ngModel)]="contactForm.email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label>Subject</label>
+              <input type="text" class="form-control" placeholder="Topic of enquiry" [(ngModel)]="contactForm.subject" name="subject" required />
+            </div>
+            <div class="form-group">
+              <label>Message Content</label>
+              <textarea class="form-control" rows="4" placeholder="Explain your message in detail..." [(ngModel)]="contactForm.message" name="message" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-premium w-100 mt-3" [disabled]="contactLoading" style="border-radius: 12px; padding: 0.9rem;">
+              @if (contactLoading) {
+                <span class="material-icons spinning me-2">refresh</span>
+                <span>Sending Message...</span>
+              } @else {
+                <span class="material-icons me-2">mail</span>
+                <span>Send Message</span>
+              }
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Location Branches Grid -->
+<section class="section-padding bg-light">
+  <div class="container">
+    <div class="section-title-wrapper text-center">
+      <span class="subtitle">Our Campuses</span>
+      <h2 class="title">Campus Locations & Hours</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="branch-card">
+          <div class="branch-name">
+            <i class="fas fa-university"></i>
+            <span>Cyber City (Main)</span>
+          </div>
+          <div class="branch-meta">
+            <span><strong>Address:</strong> 123 Neon Glow Blvd, Cyber City</span>
+            <span><strong>Inquiries:</strong> +1 (555) 123-4567</span>
+            <span><strong>Office Hours:</strong> Mon - Fri, 8:00 AM - 4:00 PM</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="branch-card">
+          <div class="branch-name">
+            <i class="fas fa-school"></i>
+            <span>Metro Ext. Campus</span>
+          </div>
+          <div class="branch-meta">
+            <span><strong>Address:</strong> 456 Metro Station Road, Cyber City</span>
+            <span><strong>Inquiries:</strong> +1 (555) 123-4588</span>
+            <span><strong>Office Hours:</strong> Mon - Fri, 8:30 AM - 4:30 PM</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="branch-card">
+          <div class="branch-name">
+            <i class="fas fa-running"></i>
+            <span>Lakeview Sports Complex</span>
+          </div>
+          <div class="branch-meta">
+            <span><strong>Address:</strong> 789 Lakeside Road, Cyber City</span>
+            <span><strong>Inquiries:</strong> +1 (555) 123-4599</span>
+            <span><strong>Facilities Hours:</strong> Sat - Sun, 9:00 AM - 6:00 PM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Emergency & Social Grid Section -->
+<section class="section-padding bg-white">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <!-- Emergency Helpline -->
+      <div class="col-lg-6">
+        <span class="subtitle d-inline-block mb-2 text-danger text-uppercase fw-bold" style="letter-spacing: 1px;">Critical Alerts</span>
+        <h2 class="display-6 fw-bold mb-4" style="color: var(--dark-color, #0F172A); font-family: 'Outfit', sans-serif;">Emergency Helplines</h2>
+        <p class="text-muted mb-4 story-text" style="font-size: 1.05rem; line-height: 1.8;">
+          For immediate health supports, security assistance, or student wellness counseling, contact our dedicated 24/7 care helplines.
+        </p>
+        <div class="d-flex flex-column gap-3">
+          <div class="emergency-box">
+            <h5 class="mb-1">Student Wellness Line</h5>
+            <p class="mb-0"><strong>Phone:</strong> +1 (555) 911-8888 (24/7 counseling support)</p>
+          </div>
+          <div class="emergency-box">
+            <h5 class="mb-1">Campus Security Desk</h5>
+            <p class="mb-0"><strong>Phone:</strong> +1 (555) 911-7777 (Immediate security dispatch)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Media Networks -->
+      <div class="col-lg-6">
+        <span class="subtitle d-inline-block mb-2 text-success text-uppercase fw-bold" style="letter-spacing: 1px;">Stay Tuned</span>
+        <h2 class="display-6 fw-bold mb-4" style="color: var(--dark-color, #0F172A); font-family: 'Outfit', sans-serif;">Social Communications</h2>
+        <p class="text-muted mb-4 story-text" style="font-size: 1.05rem; line-height: 1.8;">
+          Join our global community circles online to stay up-to-date with student achievement feeds, sports milestones, and campus calendar timelines.
+        </p>
+        <div class="social-grid-container">
+          <div class="social-item-card">
+            <i class="fab fa-linkedin-in social-icon d-block"></i>
+            <span>LinkedIn</span>
+          </div>
+          <div class="social-item-card">
+            <i class="fab fa-twitter social-icon d-block"></i>
+            <span>Twitter</span>
+          </div>
+          <div class="social-item-card">
+            <i class="fab fa-youtube social-icon d-block"></i>
+            <span>YouTube</span>
+          </div>
+          <div class="social-item-card">
+            <i class="fab fa-instagram social-icon d-block"></i>
+            <span>Instagram</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
