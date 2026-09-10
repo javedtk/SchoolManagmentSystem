@@ -1,7 +1,32 @@
+# # Dependencies
+# node_modules/
+
+# # Environment variables / secrets
+# .env
+# .env.*
+# !.env.example
+
+# # Logs
+# *.log
+# logs/
+
+# # Build output
+# dist/
+# build/
+
+# # OS files
+# .DS_Store
+# Thumbs.db
+
+# # VS Code local settings
+# .vscode/
+
+# # Coverage
+# coverage/
 # Dependencies
 node_modules/
 
-# Environment variables / secrets
+# Environment / Secrets
 .env
 .env.*
 !.env.example
@@ -10,16 +35,9 @@ node_modules/
 *.log
 logs/
 
-# Build output
+# Build
 dist/
 build/
 
-# OS files
-.DS_Store
-Thumbs.db
-
-# VS Code local settings
-.vscode/
-
-# Coverage
-coverage/
+# Uploads (optional)
+# uploads/
